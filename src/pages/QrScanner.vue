@@ -5,22 +5,14 @@
 
       <div v-if="!hasPermission" class="permission-denied">
         <van-empty :description="$t('scan.noCamera')" />
-        <van-button type="primary" round block @click="handleManualInput">{{ $t('scan.manualInput') }}</van-button>
+        <van-button type="primary" round block @click="handleBack">{{ $t('nav.back') }}</van-button>
       </div>
     </div>
 
     <div class="bottom-actions">
-      <div class="bottom-left" @click="handleManualInput">
-        <van-icon name="edit" size="18" />
-        <span>{{ $t('scan.manualInput') }}</span>
-      </div>
       <div class="bottom-center" v-if="torchAvailable" @click="toggleTorch">
         <van-icon name="bulb-o" size="24" :class="{ 'torch-on': torchOn }" />
         <span>{{ $t('scan.flashlight') }}</span>
-      </div>
-      <div class="bottom-right" @click="handleClose">
-        <van-icon name="cross" size="18" />
-        <span>{{ $t('nav.back') }}</span>
       </div>
     </div>
   </div>
@@ -72,7 +64,7 @@ async function startScanning() {
 
   listener = await BarcodeScanner.addListener('barcodesScanned', async (result) => {
     if (result.barcodes && result.barcodes.length > 0) {
-      localStorage.setItem('qr_result', result.barcodes[0].rawValue)
+      window.dispatchEvent(new CustomEvent('scanCodeResult', { detail: result.barcodes[0].rawValue }))
       await cleanup()
       router.back()
     }
@@ -95,6 +87,7 @@ async function startScanning() {
 
   timeoutTimer = setTimeout(async () => {
     showToast(t('scan.timeout'))
+    window.dispatchEvent(new CustomEvent('scanCodeResult', { detail: '' }))
     await cleanup()
   }, 30000)
 }
@@ -114,17 +107,10 @@ async function cleanup() {
   try { await BarcodeScanner.stopScan() } catch {}
 }
 
-async function handleClose() {
+async function handleBack() {
+  window.dispatchEvent(new CustomEvent('scanCodeResult', { detail: '' }))
   await cleanup()
   router.back()
-}
-
-function handleManualInput() {
-  const value = window.prompt(t('scan.inputPlaceholder'))
-  if (value && value.trim()) {
-    localStorage.setItem('qr_result', value.trim())
-    router.back()
-  }
 }
 </script>
 
@@ -172,7 +158,7 @@ function handleManualInput() {
 
 .bottom-actions {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   padding: 24px 32px 48px;
   background: rgba(0, 0, 0, 0.6);
