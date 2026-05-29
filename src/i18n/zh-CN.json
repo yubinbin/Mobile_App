@@ -36,5 +36,16 @@
   "loading": "加载中...",
   "empty": "暂无内容",
 
+  "scan.title": "扫描二维码",
+  "scan.hint": "将二维码放入框内即可扫描",
+  "scan.manualInput": "手动输入",
+  "scan.inputTitle": "输入二维码内容",
+  "scan.inputPlaceholder": "请输入二维码内容",
+  "scan.inputConfirm": "确定",
+  "scan.noCamera": "需要相机权限才能扫码",
+  "scan.cameraFail": "相机启动失败",
+  "scan.timeout": "未检测到二维码",
+  "scan.flashlight": "手电筒",
+
   "version": "v1.0.7"
 }

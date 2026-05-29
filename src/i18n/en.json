@@ -36,5 +36,16 @@
   "loading": "Loading...",
   "empty": "No content",
 
+  "scan.title": "Scan QR Code",
+  "scan.hint": "Place the QR code within the frame to scan",
+  "scan.manualInput": "Manual Input",
+  "scan.inputTitle": "Enter QR Code Content",
+  "scan.inputPlaceholder": "Please enter QR code content",
+  "scan.inputConfirm": "Confirm",
+  "scan.noCamera": "Camera permission is required to scan",
+  "scan.cameraFail": "Camera failed to start",
+  "scan.timeout": "No QR code detected",
+  "scan.flashlight": "Flashlight",
+
   "version": "v1.0.7"
 }

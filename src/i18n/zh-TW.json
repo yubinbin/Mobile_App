@@ -36,5 +36,16 @@
   "loading": "載入中...",
   "empty": "暫無內容",
 
+  "scan.title": "掃描二維碼",
+  "scan.hint": "將二維碼放入框內即可掃描",
+  "scan.manualInput": "手動輸入",
+  "scan.inputTitle": "輸入二維碼內容",
+  "scan.inputPlaceholder": "請輸入二維碼內容",
+  "scan.inputConfirm": "確定",
+  "scan.noCamera": "需要相機權限才能掃碼",
+  "scan.cameraFail": "相機啟動失敗",
+  "scan.timeout": "未檢測到二維碼",
+  "scan.flashlight": "手電筒",
+
   "version": "v1.0.7"
 }
