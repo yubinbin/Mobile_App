@@ -1,0 +1,40 @@
+{
+  "login.username": "請輸入用戶名",
+  "login.password": "請輸入密碼",
+  "login.autoLogin": "自動登入",
+  "login.button": "登入",
+  "login.footer": "copyright © 2021 寧波弘訊軟件開發有限公司",
+
+  "nav.back": "返回",
+  "nav.projectTitle": "弘設匯",
+  "nav.userCenter": "個人中心",
+
+  "user.userId": "用戶ID",
+  "user.username": "用戶名",
+  "user.version": "應用版本",
+  "user.logout": "登出",
+  "user.logoutConfirm": "確定要登出嗎？",
+  "user.language": "語言",
+  "user.unknown": "未知用戶",
+
+  "lang.label": "語言",
+  "lang.zhCN": "简体中文",
+  "lang.zhTW": "繁體中文",
+  "lang.en": "English",
+
+  "dialog.title": "提示",
+
+  "error.validate": "請輸入用戶名",
+  "error.validatePwd": "請輸入密碼",
+  "error.wrongPwd": "帳號或密碼錯誤",
+  "error.userNotFound": "用戶不存在或密碼錯誤",
+  "error.network": "伺服器連接失敗",
+  "error.kicked": "您的帳號在其他設備登入，已被強制下線",
+  "error.reLogin": "重新登入",
+  "error.loadFail": "頁面載入失敗，請檢查網絡連接",
+
+  "loading": "載入中...",
+  "empty": "暫無內容",
+
+  "version": "v1.0.7"
+}

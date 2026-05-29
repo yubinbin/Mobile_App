@@ -1,0 +1,40 @@
+{
+  "login.username": "Username",
+  "login.password": "Password",
+  "login.autoLogin": "Auto Login",
+  "login.button": "Login",
+  "login.footer": "copyright © 2021 Ningbo Hongxun Software Development Co., Ltd.",
+
+  "nav.back": "Back",
+  "nav.projectTitle": "Hong She Hui",
+  "nav.userCenter": "My Profile",
+
+  "user.userId": "User ID",
+  "user.username": "Username",
+  "user.version": "Version",
+  "user.logout": "Logout",
+  "user.logoutConfirm": "Are you sure you want to logout?",
+  "user.language": "Language",
+  "user.unknown": "Unknown",
+
+  "lang.label": "Language",
+  "lang.zhCN": "简体中文",
+  "lang.zhTW": "繁體中文",
+  "lang.en": "English",
+
+  "dialog.title": "Tips",
+
+  "error.validate": "Please enter username",
+  "error.validatePwd": "Please enter password",
+  "error.wrongPwd": "Incorrect username or password",
+  "error.userNotFound": "User not found or wrong password",
+  "error.network": "Server connection failed",
+  "error.kicked": "Your account has been logged in on another device",
+  "error.reLogin": "Re-login",
+  "error.loadFail": "Page load failed, please check network",
+
+  "loading": "Loading...",
+  "empty": "No content",
+
+  "version": "v1.0.7"
+}

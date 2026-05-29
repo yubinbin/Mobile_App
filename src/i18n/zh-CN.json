@@ -1,0 +1,40 @@
+{
+  "login.username": "请输入用户名",
+  "login.password": "请输入密码",
+  "login.autoLogin": "自动登录",
+  "login.button": "登录",
+  "login.footer": "copyright © 2021 宁波弘讯软件开发有限公司",
+
+  "nav.back": "返回",
+  "nav.projectTitle": "弘设汇",
+  "nav.userCenter": "个人中心",
+
+  "user.userId": "用户ID",
+  "user.username": "用户名",
+  "user.version": "应用版本",
+  "user.logout": "退出登录",
+  "user.logoutConfirm": "确定要退出登录吗？",
+  "user.language": "语言",
+  "user.unknown": "未知用户",
+
+  "lang.label": "语言",
+  "lang.zhCN": "简体中文",
+  "lang.zhTW": "繁體中文",
+  "lang.en": "English",
+
+  "dialog.title": "提示",
+
+  "error.validate": "请输入用户名",
+  "error.validatePwd": "请输入密码",
+  "error.wrongPwd": "账号或密码错误",
+  "error.userNotFound": "用户不存在或密码错误",
+  "error.network": "服务器连接失败",
+  "error.kicked": "您的账号在其他设备登录，已被强制下线",
+  "error.reLogin": "重新登录",
+  "error.loadFail": "页面加载失败，请检查网络连接",
+
+  "loading": "加载中...",
+  "empty": "暂无内容",
+
+  "version": "v1.0.7"
+}
