@@ -39,14 +39,18 @@ const torchAvailable = ref(false)
 const torchOn = ref(false)
 let timeoutTimer = null
 let listener = null
+let isMounted = false
 
 onMounted(async () => {
+  isMounted = true
   try {
     const { camera } = await BarcodeScanner.checkPermissions()
+    if (!isMounted) return
     if (camera === 'granted') {
       await startScanning()
     } else {
       const { camera: newStatus } = await BarcodeScanner.requestPermissions()
+      if (!isMounted) return
       if (newStatus === 'granted') {
         await startScanning()
       } else {
@@ -54,20 +58,21 @@ onMounted(async () => {
       }
     }
   } catch {
-    showToast(t('scan.cameraFail'))
+    if (isMounted) showToast(t('scan.cameraFail'))
   }
 })
 
 onUnmounted(async () => {
+  isMounted = false
   await cleanup()
 })
 
 async function startScanning() {
   hasPermission.value = true
 
-  listener = await BarcodeScanner.addListener('barcodeScanned', async (result) => {
-    if (result.barcode && result.barcode.rawValue) {
-      localStorage.setItem('qr_result', result.barcode.rawValue)
+  listener = await BarcodeScanner.addListener('barcodesScanned', async (result) => {
+    if (result.barcodes && result.barcodes.length > 0) {
+      localStorage.setItem('qr_result', result.barcodes[0].rawValue)
       await cleanup()
       router.back()
     }
@@ -76,13 +81,15 @@ async function startScanning() {
   try {
     await BarcodeScanner.startScan()
     try {
-      torchAvailable.value = true
+      const { available } = await BarcodeScanner.isTorchAvailable()
+      torchAvailable.value = available
     } catch {
       torchAvailable.value = false
     }
   } catch {
     showToast(t('scan.cameraFail'))
     hasPermission.value = false
+    await cleanup()
     return
   }
 
