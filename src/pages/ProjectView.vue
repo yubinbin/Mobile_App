@@ -8,7 +8,6 @@
         </div>
       </template>
       <template #right>
-        <van-icon name="scan" size="20" class="nav-scan" @click="goScan" />
         <img src="@/assets/images/user.png" class="nav-avatar" @click="goUserInfo" />
       </template>
     </van-nav-bar>
@@ -82,12 +81,16 @@ onMounted(() => {
     const pid = projectOID || '10238'
     projectUrl.value = `${base}/app/ttcEngineDefalut?ttcVersion=2.6.0&projectOID=${pid}&userOID=${uid}&access_token=${token}`
   }
+  window.addEventListener('message', onMessage)
+  window.addEventListener('scanCodeResult', onScanResult)
   loading.value = false
 })
 
 onUnmounted(() => {
   window.removeEventListener('popstate', onPopState)
   if (timer) clearInterval(timer)
+  window.removeEventListener('message', onMessage)
+  window.removeEventListener('scanCodeResult', onScanResult)
 })
 
 const onIframeLoad = () => {
@@ -117,8 +120,22 @@ const goUserInfo = () => {
   router.push('/user-info')
 }
 
-const goScan = () => {
-  router.push('/qr-scanner')
+const onMessage = (event) => {
+  if (event.origin !== 'https://tmx.tmiot.com.cn') return
+  const { action } = event.data || {}
+  if (action === 'scanCode') {
+    router.push('/qr-scanner')
+  }
+}
+
+const onScanResult = (event) => {
+  const iframe = iframeRef.value
+  if (iframe && iframe.contentWindow) {
+    iframe.contentWindow.postMessage(
+      { action: 'scanCodeResult', data: { result: event.detail } },
+      'https://tmx.tmiot.com.cn'
+    )
+  }
 }
 </script>
 
@@ -129,6 +146,5 @@ const goScan = () => {
 .status-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 16px; }
 .loading-text { color: #666; margin-top: 8px; }
 .nav-left { display: flex; align-items: center; gap: 4px; cursor: pointer; }
-.nav-scan { margin-right: 16px; cursor: pointer; color: #2c5aa0; }
 .nav-avatar { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; }
 </style>
