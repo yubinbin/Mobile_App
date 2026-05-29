@@ -16,6 +16,11 @@ const routes = [
     component: () => import('../pages/UserInfo.vue'),
     meta: { requiresAuth: true },
   },
+  {
+    path: '/qr-scanner',
+    component: () => import('../pages/QrScanner.vue'),
+    meta: { requiresAuth: true },
+  },
   { path: '/', redirect: '/project-view' },
   { path: '/:catchAll(.*)*', redirect: '/login' },
 ]
