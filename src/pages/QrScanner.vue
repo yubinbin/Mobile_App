@@ -32,9 +32,11 @@ const torchOn = ref(false)
 let timeoutTimer = null
 let listener = null
 let isMounted = false
+let resultDispatched = false
 
 onMounted(async () => {
   isMounted = true
+  resultDispatched = false
   try {
     const { camera } = await BarcodeScanner.checkPermissions()
     if (!isMounted) return
@@ -56,6 +58,9 @@ onMounted(async () => {
 
 onUnmounted(async () => {
   isMounted = false
+  if (!resultDispatched) {
+    window.dispatchEvent(new CustomEvent('scanCodeResult', { detail: '' }))
+  }
   await cleanup()
 })
 
@@ -65,6 +70,7 @@ async function startScanning() {
   listener = await BarcodeScanner.addListener('barcodesScanned', async (result) => {
     if (result.barcodes && result.barcodes.length > 0) {
       const value = result.barcodes[0].rawValue || result.barcodes[0].displayValue
+      resultDispatched = true
       window.dispatchEvent(new CustomEvent('scanCodeResult', { detail: value }))
       await cleanup()
       router.back()
@@ -87,9 +93,11 @@ async function startScanning() {
   }
 
   timeoutTimer = setTimeout(async () => {
+    resultDispatched = true
     showToast(t('scan.timeout'))
     window.dispatchEvent(new CustomEvent('scanCodeResult', { detail: '' }))
     await cleanup()
+    router.back()
   }, 30000)
 }
 
@@ -109,6 +117,7 @@ async function cleanup() {
 }
 
 async function handleBack() {
+  resultDispatched = true
   window.dispatchEvent(new CustomEvent('scanCodeResult', { detail: '' }))
   await cleanup()
   router.back()
