@@ -64,7 +64,8 @@ async function startScanning() {
 
   listener = await BarcodeScanner.addListener('barcodesScanned', async (result) => {
     if (result.barcodes && result.barcodes.length > 0) {
-      window.dispatchEvent(new CustomEvent('scanCodeResult', { detail: result.barcodes[0].rawValue }))
+      const value = result.barcodes[0].rawValue || result.barcodes[0].displayValue
+      window.dispatchEvent(new CustomEvent('scanCodeResult', { detail: value }))
       await cleanup()
       router.back()
     }
