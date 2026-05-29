@@ -8,6 +8,7 @@
         </div>
       </template>
       <template #right>
+        <van-icon name="scan" size="20" class="nav-scan" @click="goScan" />
         <img src="@/assets/images/user.png" class="nav-avatar" @click="goUserInfo" />
       </template>
     </van-nav-bar>
@@ -115,6 +116,10 @@ const handleBack = () => {
 const goUserInfo = () => {
   router.push('/user-info')
 }
+
+const goScan = () => {
+  router.push('/qr-scanner')
+}
 </script>
 
 <style scoped>
@@ -124,5 +129,6 @@ const goUserInfo = () => {
 .status-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 16px; }
 .loading-text { color: #666; margin-top: 8px; }
 .nav-left { display: flex; align-items: center; gap: 4px; cursor: pointer; }
+.nav-scan { margin-right: 16px; cursor: pointer; color: #2c5aa0; }
 .nav-avatar { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; }
 </style>
