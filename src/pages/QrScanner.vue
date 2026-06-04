@@ -24,6 +24,7 @@ import { useRouter } from 'vue-router'
 import { showToast } from 'vant'
 import { BarcodeScanner } from '@capacitor-mlkit/barcode-scanning'
 import { t } from '../i18n'
+import { scanState } from '../utils/scanState.js'
 
 const router = useRouter()
 const hasPermission = ref(false)
@@ -58,9 +59,6 @@ onMounted(async () => {
 
 onUnmounted(async () => {
   isMounted = false
-  if (!resultDispatched) {
-    window.dispatchEvent(new CustomEvent('scanCodeResult', { detail: '' }))
-  }
   await cleanup()
 })
 
@@ -71,7 +69,7 @@ async function startScanning() {
     if (result.barcodes && result.barcodes.length > 0) {
       const value = result.barcodes[0].rawValue || result.barcodes[0].displayValue
       resultDispatched = true
-      window.dispatchEvent(new CustomEvent('scanCodeResult', { detail: value }))
+      scanState.pendingResult = value
       await cleanup()
       router.back()
     }
@@ -93,11 +91,8 @@ async function startScanning() {
   }
 
   timeoutTimer = setTimeout(async () => {
-    resultDispatched = true
     showToast(t('scan.timeout'))
-    window.dispatchEvent(new CustomEvent('scanCodeResult', { detail: '' }))
-    await cleanup()
-    router.back()
+    await exitWithEmptyResult()
   }, 30000)
 }
 
@@ -116,11 +111,15 @@ async function cleanup() {
   try { await BarcodeScanner.stopScan() } catch {}
 }
 
-async function handleBack() {
+async function exitWithEmptyResult() {
   resultDispatched = true
-  window.dispatchEvent(new CustomEvent('scanCodeResult', { detail: '' }))
+  scanState.pendingResult = ''
   await cleanup()
   router.back()
+}
+
+async function handleBack() {
+  await exitWithEmptyResult()
 }
 </script>
 

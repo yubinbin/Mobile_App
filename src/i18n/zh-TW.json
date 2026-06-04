@@ -16,6 +16,10 @@
   "user.logoutConfirm": "確定要登出嗎？",
   "user.language": "語言",
   "user.unknown": "未知用戶",
+  "user.about": "關於",
+  "user.langSwitch": "語言切換",
+  "user.company": "弘訊科技",
+  "user.dept": "研發中心",
 
   "lang.label": "語言",
   "lang.zhCN": "简体中文",

@@ -1,7 +1,18 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx vite *)"
+      "Bash(npx vite *)",
+      "Bash(ls -la)",
+      "Bash(dir)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(pnpm add *)",
+      "Bash(npx cap *)",
+      "Bash(node *)",
+      "Bash(ls android/app/build.gradle)",
+      "Bash(grep -l \"barcode\\\\|mlkit\" android/**/*.gradle android/**/*.xml)",
+      "Bash(git push *)",
+      "Bash(git commit -m 'fix: QrScanner 超时添加返回导航，系统返回键派发空结果 *)"
     ]
   }
 }

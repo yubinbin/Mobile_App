@@ -1,6 +1,7 @@
+import { baseUrl } from './urlValues.js'
+
 const TOKEN_KEY = 'access_token'
 const USER_KEY = 'user_info'
-const baseUrl = 'https://tmplascloud.com'
 
 export const getToken = () => localStorage.getItem(TOKEN_KEY)
 export const setToken = (token) => localStorage.setItem(TOKEN_KEY, token)
@@ -19,6 +20,16 @@ export const clearAuth = () => {
   }
 }
 
+// 校验响应状态和 token 有效性
+const validateResponse = async (res) => {
+  if (res.status === 401) { clearAuth(); throw new Error('登录已失效') }
+  const data = await res.json()
+  if (data.code === 'tm.err.foil.tokenInvalid' || data.code === 'tm.err.foil.tokenWhiteListInvalid') {
+    clearAuth(); throw new Error('账号异地登录')
+  }
+  return data
+}
+
 // 发起带认证的请求
 export const authRequest = async (url, options = {}) => {
   const token = getToken()
@@ -28,12 +39,7 @@ export const authRequest = async (url, options = {}) => {
 
   try {
     const res = await fetch(url, { ...options, headers })
-    if (res.status === 401) { clearAuth(); throw new Error('登录已失效') }
-    const data = await res.json()
-    if (data.code === 'tm.err.foil.tokenInvalid' || data.code === 'tm.err.foil.tokenWhiteListInvalid') {
-      clearAuth(); throw new Error('账号异地登录')
-    }
-    return data
+    return await validateResponse(res)
   } catch (err) {
     if (err.name === 'TypeError' && err.message.includes('Failed to fetch')) {
       return authRequestWithProxy(url, options)
@@ -50,12 +56,7 @@ const authRequestWithProxy = async (url, options = {}) => {
   const proxyUrl = `/api${path}?access_token=${encodeURIComponent(token)}`
   const headers = { 'content-type': 'application/json', 'yujiang-from-app': 'true', ...options.headers }
   const res = await fetch(proxyUrl, { ...options, headers })
-  if (res.status === 401) { clearAuth(); throw new Error('登录已失效') }
-  const data = await res.json()
-  if (data.code === 'tm.err.foil.tokenInvalid' || data.code === 'tm.err.foil.tokenWhiteListInvalid') {
-    clearAuth(); throw new Error('账号异地登录')
-  }
-  return data
+  return validateResponse(res)
 }
 
 // 获取RSA加密后的密码

@@ -1,29 +1,41 @@
 <template>
   <div class="user-page">
-    <van-nav-bar :title="$t('nav.userCenter')" left-arrow @click-left="handleBack" fixed placeholder />
-
-    <div class="user-content">
-      <div class="avatar-section">
-        <img src="@/assets/images/user.png" class="user-avatar" />
-        <p class="user-name">{{ userInfo?.Name || userInfo?.userAID || userInfo?.AID || $t('user.unknown') }}</p>
+    <div class="header">
+      <van-icon name="arrow-left" class="back-btn" @click="handleBack" />
+      <span class="header-title">{{ $t('nav.userCenter') }}</span>
+      <div class="user-profile">
+        <img src="@/assets/images/user.png" class="avatar" />
+        <div class="user-info">
+          <p class="user-name">{{ userInfo?.Name || userInfo?.userAID || userInfo?.AID || $t('user.unknown') }}</p>
+          <p class="user-dept">{{ $t('user.company') }} - {{ $t('user.dept') }}</p>
+        </div>
       </div>
+    </div>
 
-      <div class="info-list">
+    <div class="content">
+      <van-cell-group inset class="menu-group">
+        <van-cell is-link @click="showLangPicker = true">
+          <template #title>
+            <span class="menu-icon lang-icon">文<sub>A</sub></span>
+            <span class="menu-text">{{ $t('user.langSwitch') }}</span>
+          </template>
+        </van-cell>
+        <van-cell is-link>
+          <template #title>
+            <van-icon name="info-o" class="menu-icon info-icon" />
+            <span class="menu-text">{{ $t('user.about') }}</span>
+          </template>
+        </van-cell>
+      </van-cell-group>
+
+      <div class="logout-wrap">
         <van-cell-group inset>
-          <van-cell :title="$t('user.userId')" :value="userInfo?.AID || '-'" />
-          <van-cell :title="$t('user.username')" :value="userInfo?.Name || '-'" />
-          <van-cell :title="$t('user.version')" :value="$t('version')" />
+          <van-cell class="logout-cell" @click="handleLogout">
+            <template #title>
+              <span class="logout-text">{{ $t('user.logout') }}</span>
+            </template>
+          </van-cell>
         </van-cell-group>
-      </div>
-
-      <div class="info-list">
-        <van-cell-group inset>
-          <van-cell :title="$t('lang.label')" is-link :value="langLabel" @click="showLangPicker = true" />
-        </van-cell-group>
-      </div>
-
-      <div class="logout-section">
-        <van-button type="danger" block round @click="handleLogout">{{ $t('user.logout') }}</van-button>
       </div>
     </div>
 
@@ -46,23 +58,13 @@ const showLangPicker = ref(false)
 
 const langOptions = computed(() => [
   { text: t('lang.zhCN'), value: 'zh-CN' },
-  { text: t('lang.zhTW'), value: 'zh-TW' },
-  { text: t('lang.en'), value: 'en' },
+  { text: t('lang.zhTW'), value: 'zh-HK' },
+  { text: t('lang.en'), value: 'en-US' },
 ])
 
-const langIndex = computed(() => {
-  const cur = getLocale()
-  return langOptions.value.findIndex(o => o.value === cur)
-})
+const langIndex = computed(() => langOptions.value.findIndex(o => o.value === getLocale()))
 
-const langLabel = computed(() => {
-  const opt = langOptions.value.find(o => o.value === getLocale())
-  return opt ? opt.text : ''
-})
-
-onMounted(() => {
-  userInfo.value = getUserInfo() || {}
-})
+onMounted(() => { userInfo.value = getUserInfo() || {} })
 
 const handleBack = () => router.back()
 
@@ -82,11 +84,29 @@ const handleLogout = () => {
 </script>
 
 <style scoped>
-.user-page { min-height: 100vh; background: #f7f8fa; }
-.user-content { padding: 16px; }
-.avatar-section { display: flex; flex-direction: column; align-items: center; padding: 32px 0; }
-.user-avatar { width: 72px; height: 72px; border-radius: 50%; background: #e5e5e5; }
-.user-name { margin-top: 12px; font-size: 18px; color: #333; font-weight: 500; }
-.info-list { margin-bottom: 16px; }
-.logout-section { padding: 0 16px; }
+.user-page { min-height: 100vh; background: #f0f2f7; display: flex; flex-direction: column; }
+
+.header {
+  background: linear-gradient(160deg, #1a6bbf 0%, #1255a0 100%);
+  padding: 48px 20px 32px;
+  position: relative;
+}
+.back-btn { position: absolute; top: 52px; left: 16px; font-size: 20px; color: #fff; }
+.header-title { display: block; text-align: center; font-size: 18px; color: #fff; font-weight: 500; margin-bottom: 24px; }
+.user-profile { display: flex; align-items: center; gap: 14px; padding: 0 4px; }
+.avatar { width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.3); }
+.user-name { font-size: 22px; font-weight: bold; color: #fff; margin: 0 0 4px; }
+.user-dept { font-size: 14px; color: rgba(255,255,255,0.85); margin: 0; }
+
+.content { flex: 1; padding: 20px 16px; display: flex; flex-direction: column; }
+.menu-group { margin-bottom: 0; }
+
+.menu-icon { font-size: 20px; color: #1a6bbf; margin-right: 10px; vertical-align: middle; }
+.lang-icon { font-size: 15px; font-weight: bold; color: #1a6bbf; display: inline-block; margin-right: 10px; vertical-align: middle; }
+.info-icon { vertical-align: middle; }
+.menu-text { font-size: 15px; color: #333; vertical-align: middle; }
+
+.logout-wrap { margin-top: auto; padding-top: 16px; }
+.logout-cell { text-align: center; }
+.logout-text { color: #f05050; font-size: 16px; display: block; text-align: center; }
 </style>

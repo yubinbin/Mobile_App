@@ -39,77 +39,76 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, onActivated, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getToken, getUserInfo } from '../utils/auth.js'
-import { t } from '../i18n'
+import { t, locale } from '../i18n'
+import { baseUrl, projectOID, ttcVersion } from '../utils/urlValues.js'
+import { scanState } from '../utils/scanState.js'
 
 const route = useRoute()
 const router = useRouter()
 
+const iframeRef = ref(null)
 const projectUrl = ref('')
 const loading = ref(true)
 const error = ref('')
 const canGoBack = ref(false)
 
-let baseLen = 0
-let timer = null
+function setLang(url) {
+  const u = new URL(url)
+  u.searchParams.set('lang', locale.value)
+  return u.toString()
+}
 
 onMounted(() => {
   const token = getToken()
   if (!token) { router.replace('/login'); return }
 
-  baseLen = history.length
-  history.replaceState({ root: true }, '', window.location.href)
-  window.addEventListener('popstate', onPopState)
-
-  // 定时检测 history 增长，兼容 iframe 内 pushState / location 跳转
-  timer = setInterval(() => {
-    if (baseLen > 0 && history.length > baseLen) {
-      canGoBack.value = true
-    }
-  }, 500)
-
-  const { projectOID, userOID, webUrl, projectUrl: directUrl } = route.query
+  const { userOID, projectUrl: directUrl } = route.query
 
   if (directUrl) {
-    projectUrl.value = directUrl
+    projectUrl.value = setLang(directUrl)
   } else {
     const savedUser = getUserInfo()
     const uid = userOID || savedUser?.userAID || 'default'
-    const base = webUrl || 'https://tmplascloud.com'
-    const pid = projectOID || '10238'
-    projectUrl.value = `${base}/app/ttcEngineDefalut?ttcVersion=2.6.0&projectOID=${pid}&userOID=${uid}&access_token=${token}`
+    projectUrl.value = setLang(`${baseUrl}/app/ttcEngineDefalut?ttcVersion=${ttcVersion}&projectOID=${projectOID}&userOID=${uid}&access_token=${token}`)
   }
   window.addEventListener('message', onMessage)
-  window.addEventListener('scanCodeResult', onScanResult)
   loading.value = false
 })
 
+watch(locale, () => {
+  if (projectUrl.value) projectUrl.value = setLang(projectUrl.value)
+})
+
 onUnmounted(() => {
-  window.removeEventListener('popstate', onPopState)
-  if (timer) clearInterval(timer)
   window.removeEventListener('message', onMessage)
-  window.removeEventListener('scanCodeResult', onScanResult)
+})
+
+onActivated(() => {
+  if (scanState.pendingResult !== null) {
+    const result = scanState.pendingResult
+    scanState.pendingResult = null
+    const iframe = iframeRef.value
+    console.log('ProjectView - onActivated - 处理扫码结果:', result)
+    if (iframe && iframe.contentWindow) {
+      console.log('ProjectView - onActivated - 向iframe发送扫码结果:', result)
+      iframe.contentWindow.postMessage(
+        { action: 'scanCodeResult', data: { result } },
+        baseUrl
+      )
+    }
+  }
 })
 
 const onIframeLoad = () => {
   loading.value = false
-  // iframe 首次加载完成后，把当前 history 长度作为新的基线
-  baseLen = history.length
 }
 
 const onIframeError = () => {
   error.value = t('error.loadFail')
   loading.value = false
-}
-
-const onPopState = (e) => {
-  if (e.state && e.state.root) {
-    canGoBack.value = false
-    baseLen = history.length
-    history.replaceState({ root: true }, '', window.location.href)
-  }
 }
 
 const handleBack = () => {
@@ -121,22 +120,19 @@ const goUserInfo = () => {
 }
 
 const onMessage = (event) => {
-  if (event.origin !== 'https://tmx.tmiot.com.cn') return
-  const { action } = event.data || {}
+  console.log('Received message from iframe: ', event)
+  if (event.origin !== baseUrl) {
+    return
+  }
+  const { action, type, url } = event.data || {}
+  if (type === 'URL_CHANGE') {
+    canGoBack.value = url.includes('/?pageId=')
+  }
   if (action === 'scanCode') {
     router.push('/qr-scanner')
   }
 }
 
-const onScanResult = (event) => {
-  const iframe = iframeRef.value
-  if (iframe && iframe.contentWindow) {
-    iframe.contentWindow.postMessage(
-      { action: 'scanCodeResult', data: { result: event.detail } },
-      'https://tmx.tmiot.com.cn'
-    )
-  }
-}
 </script>
 
 <style scoped>

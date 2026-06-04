@@ -16,6 +16,10 @@
   "user.logoutConfirm": "确定要退出登录吗？",
   "user.language": "语言",
   "user.unknown": "未知用户",
+  "user.about": "关于",
+  "user.langSwitch": "语言切换",
+  "user.company": "弘讯科技",
+  "user.dept": "研发中心",
 
   "lang.label": "语言",
   "lang.zhCN": "简体中文",

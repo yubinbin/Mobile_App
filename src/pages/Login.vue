@@ -66,6 +66,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { showToast, showDialog } from 'vant'
 import { t } from '../i18n'
+import { loginRSA, login, baseUrl, projectOID, ttcVersion, loginSocket } from '../utils/urlValues.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -81,6 +82,8 @@ onMounted(() => {
     window.loginSocket.close()
     window.loginSocket = null
   }
+
+  window.addEventListener('forceLogout', handleForceLogout)
 
   const saved = localStorage.getItem('LoginData')
   if (saved) {
@@ -102,14 +105,13 @@ const doLogin = async () => {
 
   loading.value = true
   try {
-    const rsaUrl = `https://tmplascloud.com/biz/tmIoTCloud/Interface/loginRSA?password=${encodeURIComponent(pwd)}`
+    const rsaUrl = `${loginRSA}?password=${encodeURIComponent(pwd)}`
     const rsaRes = await fetch(rsaUrl, { headers: { 'content-type': 'application/json', 'yujiang-from-app': 'true' } })
     const bytes = await rsaRes.arrayBuffer()
     const rsaPwd = new TextDecoder().decode(bytes)
 
-    const loginUrl = 'https://tmplascloud.com/app/account/login'
     const params = { userAID: uid, encryptedPassword: rsaPwd, rememberMe: true, loginType: 'userID', _: Date.now().toString(), terminalType: 2 }
-    const loginRes = await fetch(loginUrl, {
+    const loginRes = await fetch(login, {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'yujiang-from-app': 'true' },
       body: JSON.stringify(params),
@@ -141,10 +143,8 @@ const doLogin = async () => {
 
     connectSocket(uid, token)
 
-    const projectOID = '10238'
-    const baseUrl = 'https://tmplascloud.com'
-    const projectUrl = encodeURIComponent(`${baseUrl}/app/ttcEngineDefalut?ttcVersion=2.6.0&projectOID=${projectOID}&access_token=${token}`)
-    window.location.replace(`#/project-view?projectOID=${projectOID}&userOID=${uid}&webUrl=${baseUrl}&projectUrl=${projectUrl}`)
+    const projectUrl = encodeURIComponent(`${baseUrl}/app/ttcEngineDefalut?ttcVersion=${ttcVersion}&projectOID=${projectOID}&access_token=${token}`)
+    window.location.replace(`#/project-view?userOID=${uid}&projectUrl=${projectUrl}`)
   } catch (err) {
     console.error('login error:', err)
     showToast(t('error.network'))
@@ -155,7 +155,7 @@ const doLogin = async () => {
 
 const connectSocket = (uid, token) => {
   try {
-    const ws = new WebSocket(`wss://tmplascloud.com?token=${token}`)
+    const ws = new WebSocket(`${loginSocket}?token=${token}`)
     let heartbeat = null
 
     ws.onopen = () => {

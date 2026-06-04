@@ -16,6 +16,10 @@
   "user.logoutConfirm": "Are you sure you want to logout?",
   "user.language": "Language",
   "user.unknown": "Unknown",
+  "user.about": "About",
+  "user.langSwitch": "Language",
+  "user.company": "Hongxun Tech",
+  "user.dept": "R&D Center",
 
   "lang.label": "Language",
   "lang.zhCN": "简体中文",
