@@ -51,5 +51,14 @@
   "scan.timeout": "No QR code detected",
   "scan.flashlight": "Flashlight",
 
-  "version": "v1.0.7"
+  "version": "v1.0.7",
+
+  "about.platform": "Development platform",
+  "about.owner": "Version owned",
+  "about.address": "Address",
+  "about.contact": "Contact person",
+  "about.phone": "Telephone",
+  "about.fax": "Fax",
+  "about.mail": "Mail",
+  "about.version": "Version number"
 }

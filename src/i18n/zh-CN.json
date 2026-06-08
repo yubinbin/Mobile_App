@@ -51,5 +51,14 @@
   "scan.timeout": "未检测到二维码",
   "scan.flashlight": "手电筒",
 
-  "version": "v1.0.7"
+  "version": "v1.0.7",
+
+  "about.platform": "开发平台",
+  "about.owner": "版本所有",
+  "about.address": "地址",
+  "about.contact": "联系人",
+  "about.phone": "电话",
+  "about.fax": "传真",
+  "about.mail": "邮箱",
+  "about.version": "版本号"
 }

@@ -1,14 +1,12 @@
 <template>
   <div class="project-view-page">
-    <van-nav-bar :title="$t('nav.projectTitle')" fixed placeholder>
+    <van-nav-bar :title="$t('nav.projectTitle')" fixed placeholder style="--van-nav-bar-background: #006dd8; --van-nav-bar-title-text-color: #fff; --van-nav-bar-icon-color: #fff; --van-nav-bar-height: 44px; --van-nav-bar-title-font-size: 17px;">
       <template #left>
-        <div v-show="canGoBack" class="nav-left" @click="handleBack">
-          <van-icon name="arrow-left" size="18" />
-          <span>{{ $t('nav.back') }}</span>
-        </div>
+        <van-icon v-show="canGoBack" name="arrow-left" size="18" color="#fff" @click="handleBack" />
       </template>
       <template #right>
-        <img src="@/assets/images/user.png" class="nav-avatar" @click="goUserInfo" />
+        <!-- <van-icon v-show="!canGoBack" name="../assets/images/user.png" @click="goUserInfo" size="26" /> -->
+        <img v-show="!canGoBack" @click="goUserInfo" src="@/assets/images/user.png" class="user-img" />
       </template>
     </van-nav-bar>
 
@@ -141,6 +139,6 @@ const onMessage = (event) => {
 .web-view { width: 100%; height: 100%; border: none; }
 .status-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 16px; }
 .loading-text { color: #666; margin-top: 8px; }
-.nav-left { display: flex; align-items: center; gap: 4px; cursor: pointer; }
-.nav-avatar { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; }
+.user-img { width: 26px; height: 26px; vertical-align: middle; }
+:deep(.van-hairline--bottom::after) { border-bottom-width: 0; }
 </style>

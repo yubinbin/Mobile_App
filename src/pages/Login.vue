@@ -67,6 +67,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { showToast, showDialog } from 'vant'
 import { t } from '../i18n'
 import { loginRSA, login, baseUrl, projectOID, ttcVersion, loginSocket } from '../utils/urlValues.js'
+import { setToken, setUserInfo, clearAuth } from '../utils/auth.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -131,8 +132,8 @@ const doLogin = async () => {
       return
     }
 
-    localStorage.setItem('access_token', token)
-    localStorage.setItem('user_info', JSON.stringify(userInfo))
+    setToken(token)
+    setUserInfo(userInfo)
     localStorage.setItem('CurrentUser', JSON.stringify(userInfo))
 
     if (autoLogin.value) {
@@ -166,8 +167,7 @@ const connectSocket = (uid, token) => {
     }
 
     ws.onmessage = () => {
-      localStorage.removeItem('access_token')
-      localStorage.removeItem('user_info')
+      clearAuth()
       if (ws) ws.close()
       showDialog({ title: t('dialog.title'), message: t('error.kicked'), confirmButtonText: t('error.reLogin') }).then(() => {
         router.push({ path: '/login', query: { exitApp: 'true' } })

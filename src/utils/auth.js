@@ -1,15 +1,15 @@
 import { baseUrl } from './urlValues.js'
 
-const TOKEN_KEY = 'access_token'
-const USER_KEY = 'user_info'
+let _token = null
+let _userInfo = null
 
-export const getToken = () => localStorage.getItem(TOKEN_KEY)
-export const setToken = (token) => localStorage.setItem(TOKEN_KEY, token)
-export const removeToken = () => localStorage.removeItem(TOKEN_KEY)
-export const getUserInfo = () => { try { const s = localStorage.getItem(USER_KEY); return s ? JSON.parse(s) : null } catch { return null } }
-export const setUserInfo = (info) => localStorage.setItem(USER_KEY, JSON.stringify(info))
-export const removeUserInfo = () => localStorage.removeItem(USER_KEY)
-export const isLoggedIn = () => !!getToken()
+export const getToken = () => _token
+export const setToken = (token) => { _token = token }
+export const removeToken = () => { _token = null }
+export const getUserInfo = () => _userInfo
+export const setUserInfo = (info) => { _userInfo = info }
+export const removeUserInfo = () => { _userInfo = null }
+export const isLoggedIn = () => !!_token
 
 export const clearAuth = () => {
   removeToken()
