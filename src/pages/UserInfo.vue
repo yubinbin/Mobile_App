@@ -24,6 +24,13 @@
         </van-cell>
       </van-cell-group>
       <van-cell-group inset class="menu-group" style="margin-top: 8px;">
+        <van-cell is-link @click="handleCheckUpdate" style="--van-cell-vertical-padding: 19px;">
+          <template #title>
+            <span class="menu-text" style="margin-left: 34px;">{{ $t('update.checkUpdate') }}</span>
+          </template>
+        </van-cell>
+      </van-cell-group>
+      <van-cell-group inset class="menu-group" style="margin-top: 8px;">
         <van-cell is-link @click="router.push('/about')" style="--van-cell-vertical-padding: 19px;">
           <template #title>
             <img src="@/assets/images/关于.png" class="menu-img" />
@@ -51,6 +58,7 @@ import { useRouter } from 'vue-router'
 import { getUserInfo, clearAuth } from '../utils/auth.js'
 import { showConfirmDialog } from 'vant'
 import { setLocale, getLocale, t } from '../i18n'
+import { checkManually } from '../utils/appUpdater.js'
 
 const router = useRouter()
 const userInfo = ref({})
@@ -71,6 +79,10 @@ const handleBack = () => router.back()
 const onLangConfirm = ({ selectedOptions }) => {
   setLocale(selectedOptions[0].value)
   showLangPicker.value = false
+}
+
+const handleCheckUpdate = () => {
+  checkManually()
 }
 
 const handleLogout = () => {
