@@ -27,6 +27,7 @@ let touchStartX = 0
 let touchStartY = 0
 let touchStartTime = 0
 let backButtonHandle = null
+let lastBackTime = 0
 
 function onTouchStart(e) {
   touchStartX = e.touches[0].clientX
@@ -46,6 +47,10 @@ function onTouchEnd(e) {
 }
 
 function triggerBack() {
+  const now = Date.now()
+  if (now - lastBackTime < 400) return
+  lastBackTime = now
+
   const current = router.currentRoute.value.path
   if (current !== '/project-view' && current !== '/login') {
     router.back()
