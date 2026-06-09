@@ -13,6 +13,7 @@ import { StatusBar, Style } from '@capacitor/status-bar'
 import { App } from '@capacitor/app'
 import { Capacitor } from '@capacitor/core'
 import { handleHomeSwipe } from './utils/swipeBack.js'
+import { checkOnLaunch } from './utils/appUpdater.js'
 
 if (Capacitor.isNativePlatform()) {
   StatusBar.setOverlaysWebView({ overlay: false })
@@ -59,6 +60,7 @@ onMounted(async () => {
   if (Capacitor.isNativePlatform()) {
     backButtonHandle = await App.addListener('backButton', triggerBack)
   }
+  checkOnLaunch()
 })
 
 onUnmounted(() => {
