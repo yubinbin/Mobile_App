@@ -43,6 +43,7 @@ import { getToken, getUserInfo } from '../utils/auth.js'
 import { t, locale } from '../i18n'
 import { baseUrl, projectOID, ttcVersion } from '../utils/urlValues.js'
 import { scanState } from '../utils/scanState.js'
+import { navState } from '../utils/navState.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -125,6 +126,7 @@ const onMessage = (event) => {
   const { action, type, url } = event.data || {}
   if (type === 'URL_CHANGE') {
     canGoBack.value = url.includes('/?pageId=')
+    navState.canGoBack = canGoBack.value
   }
   if (action === 'scanCode') {
     router.push('/qr-scanner')

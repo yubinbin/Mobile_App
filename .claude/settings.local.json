@@ -12,7 +12,19 @@
       "Bash(ls android/app/build.gradle)",
       "Bash(grep -l \"barcode\\\\|mlkit\" android/**/*.gradle android/**/*.xml)",
       "Bash(git push *)",
-      "Bash(git commit -m 'fix: QrScanner 超时添加返回导航，系统返回键派发空结果 *)"
+      "Bash(git commit -m 'fix: QrScanner 超时添加返回导航，系统返回键派发空结果 *)",
+      "Bash(git -C D:/work/source/mobile_app add docs/superpowers/specs/2026-06-09-version-update-design.md .gitignore)",
+      "Bash(git -C D:/work/source/mobile_app commit -m '设计文档：版本更新功能 *)",
+      "Bash(git -C D:/work/source/mobile_app add docs/superpowers/plans/2026-06-09-version-update.md)",
+      "Bash(git -C D:/work/source/mobile_app commit -m '实现计划：版本更新功能 *)",
+      "Bash(git -C D:/work/source/mobile_app add src/i18n/zh-CN.json src/i18n/zh-TW.json src/i18n/en.json)",
+      "Bash(git -C D:/work/source/mobile_app commit -m 'feat: 添加版本更新国际化文案 *)",
+      "Bash(git -C D:/work/source/mobile_app add src/utils/appUpdater.js)",
+      "Bash(git -C D:/work/source/mobile_app commit -m 'feat: 添加版本更新核心模块 appUpdater.js *)",
+      "Bash(git -C D:/work/source/mobile_app add src/App.vue)",
+      "Bash(git -C D:/work/source/mobile_app commit -m 'feat: App.vue 启动时自动检查版本更新 *)",
+      "Bash(git -C D:/work/source/mobile_app add src/pages/UserInfo.vue)",
+      "Bash(git -C D:/work/source/mobile_app commit -m 'feat: UserInfo 添加检查更新菜单项 *)"
     ]
   }
 }

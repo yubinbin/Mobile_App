@@ -13,6 +13,7 @@ import { StatusBar, Style } from '@capacitor/status-bar'
 import { App } from '@capacitor/app'
 import { Capacitor } from '@capacitor/core'
 import { handleHomeSwipe } from './utils/swipeBack.js'
+import { navState } from './utils/navState.js'
 import { checkOnLaunch } from './utils/appUpdater.js'
 
 if (Capacitor.isNativePlatform()) {
@@ -50,15 +51,22 @@ function triggerBack() {
   if (backLock) return
   backLock = true
 
-  const pathBefore = router.currentRoute.value.path
+  if (navState.canGoBack) {
+    history.back()
+    backLock = false
+    return
+  }
+
+  const currentPath = router.currentRoute.value.path
+  if (currentPath === '/project-view' || currentPath === '/login') {
+    handleHomeSwipe()
+    backLock = false
+    return
+  }
+
   router.back()
     .catch(() => {})
-    .finally(() => {
-      if (router.currentRoute.value.path === pathBefore) {
-        handleHomeSwipe()
-      }
-      backLock = false
-    })
+    .finally(() => { backLock = false })
 }
 
 onMounted(async () => {
