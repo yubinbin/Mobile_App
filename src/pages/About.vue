@@ -17,13 +17,22 @@
       <p>{{ $t('about.fax') }}：029-35697841</p>
       <p>{{ $t('about.mail') }}：xian@techamtion.com.cn</p>
     </div>
-    <div class="version">{{ $t('about.version') }}:v1.0.7</div>
+    <div class="version">
+      <p>{{ $t('about.version') }}:v1.0.7</p>
+      <p class="check-update" @click="handleCheckUpdate">{{ $t('update.checkUpdate') }}</p>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { checkManually } from '../utils/appUpdater.js'
+
 const router = useRouter()
+
+const handleCheckUpdate = () => {
+  checkManually()
+}
 </script>
 
 <style scoped>
@@ -52,5 +61,12 @@ const router = useRouter()
   font-size: 12px;
   color: gray;
   line-height: 20px;
+}
+
+.check-update {
+  margin-top: 6px;
+  color: #006dd8;
+  text-decoration: underline;
+  cursor: pointer;
 }
 </style>
