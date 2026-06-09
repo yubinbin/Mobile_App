@@ -7,7 +7,7 @@
     </van-nav-bar>
 
     <div class="user-profile">
-      <img src="@/assets/images/默认头像.png" class="avatar" />
+      <img src="@/assets/images/defaultAvatar.png" class="avatar" />
       <div class="user-info">
         <p class="user-name">{{ userInfo?.Name || userInfo?.AID || $t('user.unknown') }}</p>
         <p class="user-dept">{{ userInfo?.org?.data?.Name }}</p>
@@ -18,7 +18,7 @@
       <van-cell-group inset class="menu-group">
         <van-cell is-link @click="showLangPicker = true" style="--van-cell-vertical-padding: 19px;">
           <template #title>
-            <img src="@/assets/images/语言.png" class="menu-img" />
+            <img src="@/assets/images/language.png" class="menu-img" />
             <span class="menu-text">{{ $t('user.langSwitch') }}</span>
           </template>
         </van-cell>
@@ -26,14 +26,15 @@
       <van-cell-group inset class="menu-group" style="margin-top: 8px;">
         <van-cell is-link @click="handleCheckUpdate" style="--van-cell-vertical-padding: 19px;">
           <template #title>
-            <span class="menu-text" style="margin-left: 34px;">{{ $t('update.checkUpdate') }}</span>
+            <img src="@/assets/images/checkUpdate.png" class="menu-img" />
+            <span class="menu-text">{{ $t('update.checkUpdate') }}</span>
           </template>
         </van-cell>
       </van-cell-group>
       <van-cell-group inset class="menu-group" style="margin-top: 8px;">
         <van-cell is-link @click="router.push('/about')" style="--van-cell-vertical-padding: 19px;">
           <template #title>
-            <img src="@/assets/images/关于.png" class="menu-img" />
+            <img src="@/assets/images/about.png" class="menu-img" />
             <span class="menu-text">{{ $t('user.about') }}</span>
           </template>
         </van-cell>
