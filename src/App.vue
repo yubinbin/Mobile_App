@@ -7,12 +7,63 @@
 </template>
 
 <script setup>
+import { onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { StatusBar, Style } from '@capacitor/status-bar'
+import { App } from '@capacitor/app'
 import { Capacitor } from '@capacitor/core'
+import { handleHomeSwipe } from './utils/swipeBack.js'
 
 if (Capacitor.isNativePlatform()) {
   StatusBar.setOverlaysWebView({ overlay: false })
   StatusBar.setBackgroundColor({ color: '#006dd8' })
   StatusBar.setStyle({ style: Style.Light })
 }
+
+const router = useRouter()
+
+let touchStartX = 0
+let touchStartY = 0
+let touchStartTime = 0
+let backButtonHandle = null
+
+function onTouchStart(e) {
+  touchStartX = e.touches[0].clientX
+  touchStartY = e.touches[0].clientY
+  touchStartTime = Date.now()
+}
+
+function onTouchEnd(e) {
+  const deltaX = e.changedTouches[0].clientX - touchStartX
+  const deltaY = e.changedTouches[0].clientY - touchStartY
+  const elapsed = Date.now() - touchStartTime
+
+  if (Math.abs(deltaX) < 60 || Math.abs(deltaX) < Math.abs(deltaY) || elapsed === 0) return
+  if (Math.abs(deltaX) / elapsed < 0.3) return
+
+  triggerBack()
+}
+
+function triggerBack() {
+  const current = router.currentRoute.value.path
+  if (current !== '/project-view' && current !== '/login') {
+    router.back()
+    return
+  }
+  handleHomeSwipe()
+}
+
+onMounted(async () => {
+  document.addEventListener('touchstart', onTouchStart, { passive: true })
+  document.addEventListener('touchend', onTouchEnd, { passive: true })
+  if (Capacitor.isNativePlatform()) {
+    backButtonHandle = await App.addListener('backButton', triggerBack)
+  }
+})
+
+onUnmounted(() => {
+  document.removeEventListener('touchstart', onTouchStart)
+  document.removeEventListener('touchend', onTouchEnd)
+  backButtonHandle?.remove()
+})
 </script>
