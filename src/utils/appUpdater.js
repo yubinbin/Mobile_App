@@ -123,11 +123,11 @@ export async function checkManually() {
   if (checking) return
 
   checking = true
-  showToast({ message: t('update.checking'), forbidClick: true, duration: 0 })
+  const loadingToast = showToast({ message: t('update.checking'), forbidClick: true, duration: 0 })
 
   try {
     const info = await fetchVersionInfo()
-    showToast.clear()
+    loadingToast.close()
 
     if (!info || !info.version) {
       showToast(t('update.checkFailed'))
@@ -142,7 +142,7 @@ export async function checkManually() {
 
     showUpdateDialog(info)
   } catch {
-    showToast.clear()
+    loadingToast.close()
     showToast(t('update.checkFailed'))
   } finally {
     checking = false
