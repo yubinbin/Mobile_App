@@ -51,6 +51,18 @@
   "scan.timeout": "未檢測到二維碼",
   "scan.flashlight": "手電筒",
 
+  "update.newVersion": "發現新版本",
+  "update.forceTitle": "版本已過期",
+  "update.forceMsg": "當前版本已停止服務，請立即更新",
+  "update.currentVersion": "當前版本",
+  "update.changelog": "更新內容",
+  "update.updateNow": "立即更新",
+  "update.later": "稍後再說",
+  "update.checking": "正在檢查更新...",
+  "update.alreadyLatest": "當前已是最新版本",
+  "update.checkFailed": "檢查更新失敗，請稍後重試",
+  "update.checkUpdate": "檢查更新",
+
   "version": "v1.0.7",
 
   "about.platform": "開發平臺",

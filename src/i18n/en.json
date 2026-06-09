@@ -51,6 +51,18 @@
   "scan.timeout": "No QR code detected",
   "scan.flashlight": "Flashlight",
 
+  "update.newVersion": "New Version Available",
+  "update.forceTitle": "Version Expired",
+  "update.forceMsg": "This version is no longer supported. Please update now.",
+  "update.currentVersion": "Current Version",
+  "update.changelog": "What's New",
+  "update.updateNow": "Update Now",
+  "update.later": "Later",
+  "update.checking": "Checking for updates...",
+  "update.alreadyLatest": "You're up to date",
+  "update.checkFailed": "Update check failed, please try again",
+  "update.checkUpdate": "Check for Updates",
+
   "version": "v1.0.7",
 
   "about.platform": "Development platform",
