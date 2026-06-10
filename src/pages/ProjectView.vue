@@ -5,7 +5,6 @@
         <van-icon v-show="canGoBack" name="arrow-left" size="18" color="#fff" @click="handleBack" />
       </template>
       <template #right>
-        <!-- <van-icon v-show="!canGoBack" name="../assets/images/user.png" @click="goUserInfo" size="26" /> -->
         <img v-show="!canGoBack" @click="goUserInfo" src="@/assets/images/user.png" class="user-img" />
       </template>
     </van-nav-bar>
@@ -118,16 +117,19 @@ const goUserInfo = () => {
   router.push('/user-info')
 }
 
+// 监听来自iframe的消息
 const onMessage = (event) => {
   console.log('Received message from iframe: ', event)
   if (event.origin !== baseUrl) {
     return
   }
   const { action, type, url } = event.data || {}
+  // 路由改变
   if (type === 'URL_CHANGE') {
     canGoBack.value = url.includes('/?pageId=')
     navState.canGoBack = canGoBack.value
   }
+  // 扫码请求
   if (action === 'scanCode') {
     router.push('/qr-scanner')
   }

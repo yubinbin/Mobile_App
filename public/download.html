@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>版本更新</title>
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: #f5f6f8;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 420px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      padding: 40px 28px 32px;
+      text-align: center;
+    }
+
+    .logo {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 16px;
+      background: linear-gradient(135deg, #006dd8, #0052a3);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo svg {
+      width: 40px;
+      height: 40px;
+    }
+
+    .brand {
+      font-size: 13px;
+      color: #999;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .title {
+      font-size: 22px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 6px;
+    }
+
+    .version-tag {
+      display: inline-block;
+      background: #e8f2ff;
+      color: #006dd8;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 3px 12px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+
+    .changelog-card {
+      background: #f8f9fb;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 28px;
+      text-align: left;
+    }
+
+    .changelog-card .cl-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .changelog-card .cl-title::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 16px;
+      background: #006dd8;
+      border-radius: 2px;
+    }
+
+    .changelog-card .cl-list {
+      list-style: none;
+      font-size: 13px;
+      color: #666;
+      line-height: 1.8;
+    }
+
+    .changelog-card .cl-list li {
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .changelog-card .cl-list li::before {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 11px;
+      width: 5px;
+      height: 5px;
+      background: #006dd8;
+      border-radius: 50%;
+    }
+
+    .btn-download {
+      display: block;
+      width: 100%;
+      height: 48px;
+      line-height: 48px;
+      background: linear-gradient(135deg, #006dd8, #005cc0);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 24px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.1s;
+      -webkit-appearance: none;
+      letter-spacing: 1px;
+    }
+
+    .btn-download:active {
+      opacity: 0.85;
+      transform: scale(0.98);
+    }
+
+    .btn-download.downloading {
+      background: #52c41a;
+      pointer-events: none;
+    }
+
+    .btn-ios {
+      display: block;
+      width: 100%;
+      height: 48px;
+      line-height: 48px;
+      background: #fff;
+      color: #006dd8;
+      font-size: 16px;
+      font-weight: 600;
+      border: 1.5px solid #006dd8;
+      border-radius: 24px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s;
+      -webkit-appearance: none;
+      margin-top: 12px;
+      letter-spacing: 1px;
+    }
+
+    .btn-ios:active {
+      opacity: 0.7;
+    }
+
+    .dual-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-tip {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #bbb;
+      line-height: 1.6;
+    }
+
+    .error-msg {
+      color: #e74c3c;
+      font-size: 14px;
+      padding: 20px 0;
+      text-align: center;
+    }
+
+    .error-msg .icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page" id="page">
+  <!-- Logo -->
+  <div class="logo">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 4L36 12V28L20 36L4 28V12L20 4Z" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M20 14L28 18V26L20 30L12 26V18L20 14Z" fill="white" opacity="0.9"/>
+      <circle cx="20" cy="22" r="3" fill="#006dd8"/>
+    </svg>
+  </div>
+  <div class="brand">弘设汇</div>
+
+  <!-- 内容区 -->
+  <div id="content"></div>
+</div>
+
+<script>
+(function () {
+  function getParam(name) {
+    var url = new URL(window.location.href)
+    return url.searchParams.get(name) || ''
+  }
+
+  var version = getParam('version')
+  var changelog = getParam('changelog')
+  var downloadUrl = getParam('downloadUrl')
+  var iosUrl = getParam('iosUrl')
+
+  var contentEl = document.getElementById('content')
+
+  // ====== 错误：缺少必要参数 ======
+  if (!version || !downloadUrl) {
+    contentEl.innerHTML =
+      '<div class="error-msg">' +
+      '<div class="icon">⚠️</div>' +
+      '<p>页面参数不完整</p>' +
+      '<p style="color:#999;font-size:12px;margin-top:8px;">请联系管理员获取正确的更新链接</p>' +
+      '</div>'
+    return
+  }
+
+  // ====== 渲染更新日志 ======
+  var changelogHTML = ''
+  if (changelog) {
+    var lines = changelog.split('\n').filter(function (line) { return line.trim() !== '' })
+    var listItems = lines.map(function (line) { return '<li>' + escapeHTML(line) + '</li>' }).join('')
+    changelogHTML =
+      '<div class="changelog-card">' +
+      '<div class="cl-title">更新内容</div>' +
+      '<ul class="cl-list">' + listItems + '</ul>' +
+      '</div>'
+  }
+
+  // ====== 设备检测 ======
+  var ua = navigator.userAgent || ''
+  var isIOS = /iPhone|iPad|iPod/i.test(ua)
+  var isAndroid = /Android/i.test(ua)
+
+  // ====== 渲染页面主体 ======
+  var html =
+    '<h1 class="title">发现新版本</h1>' +
+    '<span class="version-tag">v' + escapeHTML(version) + '</span>' +
+    changelogHTML
+
+  if (isIOS) {
+    // iOS：跳转 App Store 或下载
+    if (iosUrl) {
+      html += '<a class="btn-download" href="' + escapeAttr(iosUrl) + '">前往 App Store</a>'
+    } else {
+      html += '<a class="btn-download" href="' + escapeAttr(downloadUrl) + '">下载最新版本</a>'
+    }
+    html += '<p class="footer-tip">点击按钮前往 App Store 下载最新版本</p>'
+  } else if (isAndroid) {
+    // Android：直接下载 APK
+    html +=
+      '<button class="btn-download" id="btnDownload" onclick="onDownload()">下载 Android 版</button>' +
+      '<p class="footer-tip">点击下载按钮开始下载，请留意通知栏进度</p>'
+  } else {
+    // 未知设备：显示两个按钮
+    html +=
+      '<div class="dual-buttons">' +
+      '<a class="btn-download" href="' + escapeAttr(downloadUrl) + '">下载 Android 版</a>' +
+      (iosUrl ? '<a class="btn-ios" href="' + escapeAttr(iosUrl) + '">前往 App Store（iOS）</a>' : '') +
+      '</div>' +
+      '<p class="footer-tip">请根据您的设备选择对应的下载方式</p>'
+  }
+
+  contentEl.innerHTML = html
+
+  // ====== Android 下载按钮点击处理 ======
+  if (isAndroid) {
+    window.onDownload = function () {
+      var btn = document.getElementById('btnDownload')
+      if (btn) {
+        btn.textContent = '下载已开始，请查看通知栏'
+        btn.classList.add('downloading')
+      }
+      // 延迟跳转，让按钮状态先更新
+      setTimeout(function () {
+        window.location.href = downloadUrl
+      }, 200)
+    }
+  }
+})()
+
+function escapeHTML(str) {
+  var div = document.createElement('div')
+  div.appendChild(document.createTextNode(str))
+  return div.innerHTML
+}
+
+function escapeAttr(str) {
+  return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+</script>
+
+</body>
+</html>
