@@ -8,7 +8,6 @@ const statusBarColors = {
   '/project-view': '#006dd8',
   '/user-info': '#006dd8',
   '/about': '#006dd8',
-  '/qr-scanner': '#000000',
 }
 
 const routes = [
@@ -29,11 +28,6 @@ const routes = [
   {
     path: '/about',
     component: () => import('../pages/About.vue'),
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/qr-scanner',
-    component: () => import('../pages/QrScanner.vue'),
     meta: { requiresAuth: true },
   },
   { path: '/', redirect: '/project-view' },
