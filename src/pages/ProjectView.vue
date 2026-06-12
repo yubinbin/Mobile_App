@@ -94,7 +94,7 @@ onActivated(() => {
       console.log('ProjectView - onActivated - 向iframe发送扫码结果:', result)
       iframe.contentWindow.postMessage(
         { action: 'scanCodeResult', data: { result } },
-        baseUrl
+        'http://localhost'
       )
     }
   }

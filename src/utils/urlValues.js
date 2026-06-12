@@ -9,7 +9,7 @@
 // export const ttcVersion = '2.1.4' // 版本号
 
 export const baseUrl = 'http://192.168.10.191:8209' // 测试
-export const projectOID = '9913' // 项目id
+export const projectOID = '9907' // 项目id
 export const ttcVersion = '2.1.4' // 版本号
 
 export const login = `${baseUrl}/app/account/login`
