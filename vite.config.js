@@ -14,7 +14,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://tmplascloud.com',
+        target: 'http://1.82.232.147:8209',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
         headers: { 'yujiang-from-app': 'true' },

@@ -18,7 +18,7 @@
       <p>{{ $t('about.mail') }}：xian@techamtion.com.cn</p>
     </div>
     <div class="version">
-      <p>{{ $t('about.version') }}:v1.0.7</p>
+      <p>{{ $t('about.version') }}:{{ appVersion }}</p>
       <p class="check-update" @click="handleCheckUpdate">{{ $t('update.checkUpdate') }}</p>
     </div>
   </div>
@@ -27,6 +27,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { checkManually } from '../utils/appUpdater.js'
+import { appVersion } from '../utils/urlValues.js'
 
 const router = useRouter()
 

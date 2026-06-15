@@ -63,8 +63,6 @@
   "update.checkFailed": "检查更新失败，请稍后重试",
   "update.checkUpdate": "检查更新",
 
-  "version": "v1.0.7",
-
   "about.platform": "开发平台",
   "about.owner": "版本所有",
   "about.address": "地址",

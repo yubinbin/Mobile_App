@@ -1,7 +1,7 @@
 import { showConfirmDialog, showDialog, showToast } from 'vant'
 import { t } from '../i18n'
 import { isLoggedIn, authRequest } from './auth.js'
-import { baseUrl } from './urlValues.js'
+import { baseUrl, appVersion } from './urlValues.js'
 
 let checking = false
 
@@ -22,18 +22,18 @@ export function compareVersion(a, b) {
   return 0
 }
 
-/** 从 i18n 读取当前版本 */
+/** 当前应用版本 */
 function getCurrentVersion() {
-  return t('version') || '0.0.0'
+  return appVersion || '0.0.0'
 }
 
-/** 调用 GET /api/app/version，5 秒超时 */
+/** 调用更新检查接口，5 秒超时 */
 async function fetchVersionInfo() {
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), 5000)
 
   try {
-    const data = await authRequest(`${baseUrl}/app/version`, {
+    const data = await authRequest(`${baseUrl}/biz/tmIoTCloud/Interface/updateAppVersion`, {
       signal: controller.signal,
     })
     return data

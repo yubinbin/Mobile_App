@@ -3,7 +3,7 @@
     <div class="safe-area-top"></div>
 
     <div class="logo-section">
-      <img src="@/assets/images/logo.png" alt="弘塑云" class="logo-img" />
+      <img src="@/assets/images/logo.png" alt="弘设汇" class="logo-img" />
     </div>
 
     <div class="form-section">
@@ -55,7 +55,7 @@
     </div>
 
     <div class="footer">
-      <p class="version">{{ $t('version') }}</p>
+      <p class="version">{{ appVersion }}</p>
       <p class="copyright">{{ $t('login.footer') }}</p>
     </div>
   </div>
@@ -66,7 +66,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { showToast, showDialog } from 'vant'
 import { t } from '../i18n'
-import { loginRSA, login, baseUrl, projectOID, ttcVersion, loginSocket } from '../utils/urlValues.js'
+import { loginRSA, login, baseUrl, projectOID, ttcVersion, loginSocket, appVersion } from '../utils/urlValues.js'
 import { setToken, setUserInfo, clearAuth } from '../utils/auth.js'
 
 const route = useRoute()

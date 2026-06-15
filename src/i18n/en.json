@@ -63,8 +63,6 @@
   "update.checkFailed": "Update check failed, please try again",
   "update.checkUpdate": "Check for Updates",
 
-  "version": "v1.0.7",
-
   "about.platform": "Development platform",
   "about.owner": "Version owned",
   "about.address": "Address",

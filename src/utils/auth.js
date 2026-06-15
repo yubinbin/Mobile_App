@@ -1,3 +1,4 @@
+import { Capacitor, CapacitorHttp } from '@capacitor/core'
 import { baseUrl } from './urlValues.js'
 
 let _token = null
@@ -36,6 +37,29 @@ export const authRequest = async (url, options = {}) => {
   if (!token) throw new Error('未登录')
 
   const headers = { 'content-type': 'application/json', 'x-access-token': token, 'yujiang-from-app': 'true', ...options.headers }
+
+  // 原生 App 走 CapacitorHttp，绕过 WebView 的跨域限制（无 Vite 代理）
+  if (Capacitor.isNativePlatform()) {
+    const method = (options.method || 'GET').toUpperCase()
+    const res = await CapacitorHttp.request({
+      url,
+      method,
+      headers,
+      data: options.body ? JSON.parse(options.body) : undefined,
+    })
+    if (res.status === 401) { clearAuth(); throw new Error('登录已失效') }
+    let data
+    try {
+      data = typeof res.data === 'string' ? JSON.parse(res.data) : res.data
+    } catch (e) {
+      const snippet = typeof res.data === 'string' ? res.data.slice(0, 200) : String(res.data)
+      throw new Error(`状态码${res.status}，返回非JSON：${snippet}`)
+    }
+    if (data && (data.code === 'tm.err.foil.tokenInvalid' || data.code === 'tm.err.foil.tokenWhiteListInvalid')) {
+      clearAuth(); throw new Error('账号异地登录')
+    }
+    return data
+  }
 
   try {
     const res = await fetch(url, { ...options, headers })
