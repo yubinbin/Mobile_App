@@ -5,15 +5,15 @@
 // export const projectOID = '10591' // 项目id
 // export const ttcVersion = '2.6.0' // 版本号
 
-// export const baseUrl = 'http://1.82.232.147:8209' // 测试环境2
-// export const projectOID = '10973' // 项目id
-// export const ttcVersion = '2.1.4' // 版本号
-// export const loginSocket = `ws://1.82.232.147:8209`
+export const baseUrl = 'http://1.82.232.147:8209' // 测试环境2
+export const projectOID = '10994' // 项目id
+export const ttcVersion = '2.7.0' // 版本号
+export const loginSocket = `ws://1.82.232.147:8209`
 
-export const baseUrl = 'http://192.168.20.169:8209' // 测试环境3
-export const projectOID = '10591' // 项目id
-export const ttcVersion = '2.6.0' // 版本号
-export const loginSocket = `ws://192.168.20.169:8209`
+// export const baseUrl = 'http://192.168.20.169:8209' // 测试环境3
+// export const projectOID = '10591' // 项目id
+// export const ttcVersion = '2.6.0' // 版本号
+// export const loginSocket = `ws://192.168.20.169:8209`
 
 // export const baseUrl = 'http://192.168.10.191:8209' // 测试组件
 // export const projectOID = '9907' // 项目id

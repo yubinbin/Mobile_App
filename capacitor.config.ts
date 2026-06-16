@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.example.myvueapp',
-  appName: '弘设汇',
+  appId: 'cn.com.tmiot.hongsuyun',
+  appName: '弘塑云',
   webDir: 'dist',
   server: {
     androidScheme: 'http',

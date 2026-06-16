@@ -22,6 +22,40 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    flavorDimensions "version"
+    productFlavors {
+        // 定义第一个App，名字可以随意，比如 appOne
+        tic {
+            // 指定这个 flavor 属于哪个维度
+            dimension "version"
+
+            // 1. 设置唯一的 applicationId (包名)[reference:5]
+            // 这是两台手机能否同时安装两个App的关键，必须不同[reference:6]
+            applicationId "cn.com.tmiot.tic"
+
+            // 2. 动态设置应用名称[reference:7]
+            // 这会在编译时生成一个名为 "app_name" 的字符串资源
+            resValue "string", "app_name", "弘设汇"
+
+            // 3. 设置清单文件占位符[reference:8]
+            // 这里定义了一个名为 "app_icon" 的变量，供 AndroidManifest.xml 使用
+            manifestPlaceholders = [app_icon: "@mipmap/ic_launcher"]
+        }
+
+        // 定义第二个App
+        tpc {
+            dimension "version"
+
+            // 包名必须和 appOne 不同[reference:9]
+            applicationId "cn.com.tmiot.tpc"
+
+            // 不同的应用名称
+            resValue "string", "app_name", "弘塑云"
+
+            // 指向不同的图标资源
+            manifestPlaceholders = [app_icon: "@mipmap/ic_launcher"]
+        }
+    }
 }
 
 repositories {
