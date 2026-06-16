@@ -16,10 +16,12 @@ import { handleHomeSwipe } from './utils/swipeBack.js'
 import { navState } from './utils/navState.js'
 import { checkOnLaunch } from './utils/appUpdater.js'
 
-if (Capacitor.isNativePlatform()) {
-  StatusBar.setOverlaysWebView({ overlay: false })
-  StatusBar.setBackgroundColor({ color: '#006dd8' })
-  StatusBar.setStyle({ style: Style.Light })
+function initStatusBar() {
+  if (Capacitor.isNativePlatform()) {
+    StatusBar.setOverlaysWebView({ overlay: false })
+    StatusBar.setBackgroundColor({ color: '#006dd8' })
+    StatusBar.setStyle({ style: Style.Light })
+  }
 }
 
 const router = useRouter()
@@ -70,6 +72,7 @@ function triggerBack() {
 }
 
 onMounted(async () => {
+  initStatusBar()
   document.addEventListener('touchstart', onTouchStart, { passive: true })
   document.addEventListener('touchend', onTouchEnd, { passive: true })
   if (Capacitor.isNativePlatform()) {
