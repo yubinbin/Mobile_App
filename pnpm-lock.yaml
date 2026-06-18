@@ -10,41 +10,47 @@ importers:
     dependencies:
       '@capacitor-mlkit/barcode-scanning':
         specifier: ^8.1.0
-        version: 8.1.0(@capacitor/core@8.3.4)
+        version: 8.1.0(@capacitor/core@8.4.0)
       '@capacitor/android':
         specifier: ^8.3.4
-        version: 8.3.4(@capacitor/core@8.3.4)
+        version: 8.3.4(@capacitor/core@8.4.0)
       '@capacitor/app':
         specifier: ^8.1.0
-        version: 8.1.0(@capacitor/core@8.3.4)
+        version: 8.1.0(@capacitor/core@8.4.0)
       '@capacitor/cli':
-        specifier: ^8.3.4
-        version: 8.3.4
+        specifier: ^8.4.0
+        version: 8.4.0
       '@capacitor/core':
-        specifier: ^8.3.4
-        version: 8.3.4
+        specifier: ^8.4.0
+        version: 8.4.0
+      '@capacitor/ios':
+        specifier: ^8.4.0
+        version: 8.4.0(@capacitor/core@8.4.0)
       '@capacitor/status-bar':
         specifier: ^8.0.2
-        version: 8.0.2(@capacitor/core@8.3.4)
+        version: 8.0.2(@capacitor/core@8.4.0)
       vant:
         specifier: ^4.9.24
-        version: 4.9.24(vue@3.5.35)
+        version: 4.9.24(vue@3.5.35(typescript@6.0.3))
       vue:
         specifier: ^3.5.32
-        version: 3.5.35
+        version: 3.5.35(typescript@6.0.3)
       vue-router:
         specifier: ^5.0.7
-        version: 5.1.0(@vue/compiler-sfc@3.5.35)(vite@4.5.14(@types/node@25.9.1))(vue@3.5.35)
+        version: 5.1.0(@vue/compiler-sfc@3.5.35)(vite@4.5.14(@types/node@25.9.1))(vue@3.5.35(typescript@6.0.3))
     devDependencies:
       '@vitejs/plugin-vue':
         specifier: ^6.0.6
-        version: 6.0.7(vite@4.5.14(@types/node@25.9.1))(vue@3.5.35)
+        version: 6.0.7(vite@4.5.14(@types/node@25.9.1))(vue@3.5.35(typescript@6.0.3))
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
       vite:
         specifier: ^4.3.9
         version: 4.5.14(@types/node@25.9.1)
       vite-plugin-vue-devtools:
         specifier: ^8.1.1
-        version: 8.1.2(vite@4.5.14(@types/node@25.9.1))(vue@3.5.35)
+        version: 8.1.2(vite@4.5.14(@types/node@25.9.1))(vue@3.5.35(typescript@6.0.3))
 
 packages:
 
@@ -224,13 +230,18 @@ packages:
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
 
-  '@capacitor/cli@8.3.4':
-    resolution: {integrity: sha512-QEmyNdiDDVNYl0Mahm7YTVA/3t2tKcy7FWYDapeKGavS6HDNHZSjyTVwQpUXQbDZrrs/PS2Wau3Aii+LIFwm/A==}
+  '@capacitor/cli@8.4.0':
+    resolution: {integrity: sha512-5Z9RKHxiqJYRTLrfMeZmzR4qrlg5B85MxsWZ5goyXsLkO3bgpW9a1qV/6fR1SX9s5gwLza5y7PZVwITl/hDJ7g==}
     engines: {node: '>=22.0.0'}
     hasBin: true
 
-  '@capacitor/core@8.3.4':
-    resolution: {integrity: sha512-CqRQCkb6HXxcx/N7s+hHTN6ef2CmamFiRMITwm4qB840ph56mS42bzUgn6tKCP+RZjdDweiRHj9ytDDeN6jFag==}
+  '@capacitor/core@8.4.0':
+    resolution: {integrity: sha512-LrS1xPIrqLtJABBIPDGXxxKmI9OyesrzWw8DiHbxhSC9JoiLUleUAJlX1a0LWIVLRbuY4Szgf9huFeRqYH2SAQ==}
+
+  '@capacitor/ios@8.4.0':
+    resolution: {integrity: sha512-tnwstEdbTJ2nHAfoAwnurXgYRscWeLY+IIGdz69o24gN2Crfj9Xc0TWo8L5uFLF1LmpbUywH1IT0U1oHV8c+CA==}
+    peerDependencies:
+      '@capacitor/core': ^8.4.0
 
   '@capacitor/status-bar@8.0.2':
     resolution: {integrity: sha512-WXs8YB8B9eEaPZz+bcdY6t2nForF1FLoj/JU0Dl9RRgQnddnS98FEEyDooQhaY7wivr000j4+SC1FyeJkrFO7A==}
@@ -1023,6 +1034,11 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
+  typescript@6.0.3:
+    resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   ufo@1.6.4:
     resolution: {integrity: sha512-JFNbkD1Svwe0KvGi8GOeLcP4kAWQ609twvCdcHxq1oSL8svv39ZuSvajcD8B+5D0eL4+s1Is2D/O6KN3qcTeRA==}
 
@@ -1402,19 +1418,19 @@ snapshots:
       '@babel/helper-string-parser': 8.0.0-rc.6
       '@babel/helper-validator-identifier': 8.0.0-rc.6
 
-  '@capacitor-mlkit/barcode-scanning@8.1.0(@capacitor/core@8.3.4)':
+  '@capacitor-mlkit/barcode-scanning@8.1.0(@capacitor/core@8.4.0)':
     dependencies:
-      '@capacitor/core': 8.3.4
+      '@capacitor/core': 8.4.0
 
-  '@capacitor/android@8.3.4(@capacitor/core@8.3.4)':
+  '@capacitor/android@8.3.4(@capacitor/core@8.4.0)':
     dependencies:
-      '@capacitor/core': 8.3.4
+      '@capacitor/core': 8.4.0
 
-  '@capacitor/app@8.1.0(@capacitor/core@8.3.4)':
+  '@capacitor/app@8.1.0(@capacitor/core@8.4.0)':
     dependencies:
-      '@capacitor/core': 8.3.4
+      '@capacitor/core': 8.4.0
 
-  '@capacitor/cli@8.3.4':
+  '@capacitor/cli@8.4.0':
     dependencies:
       '@ionic/cli-framework-output': 2.2.8
       '@ionic/utils-subprocess': 3.0.1
@@ -1436,13 +1452,17 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@capacitor/core@8.3.4':
+  '@capacitor/core@8.4.0':
     dependencies:
       tslib: 2.8.1
 
-  '@capacitor/status-bar@8.0.2(@capacitor/core@8.3.4)':
+  '@capacitor/ios@8.4.0(@capacitor/core@8.4.0)':
     dependencies:
-      '@capacitor/core': 8.3.4
+      '@capacitor/core': 8.4.0
+
+  '@capacitor/status-bar@8.0.2(@capacitor/core@8.4.0)':
+    dependencies:
+      '@capacitor/core': 8.4.0
 
   '@esbuild/android-arm64@0.18.20':
     optional: true
@@ -1627,17 +1647,17 @@ snapshots:
 
   '@vant/popperjs@1.3.0': {}
 
-  '@vant/use@1.6.0(vue@3.5.35)':
+  '@vant/use@1.6.0(vue@3.5.35(typescript@6.0.3))':
     dependencies:
-      vue: 3.5.35
+      vue: 3.5.35(typescript@6.0.3)
 
-  '@vitejs/plugin-vue@6.0.7(vite@4.5.14(@types/node@25.9.1))(vue@3.5.35)':
+  '@vitejs/plugin-vue@6.0.7(vite@4.5.14(@types/node@25.9.1))(vue@3.5.35(typescript@6.0.3))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
       vite: 4.5.14(@types/node@25.9.1)
-      vue: 3.5.35
+      vue: 3.5.35(typescript@6.0.3)
 
-  '@vue-macros/common@3.1.2(vue@3.5.35)':
+  '@vue-macros/common@3.1.2(vue@3.5.35(typescript@6.0.3))':
     dependencies:
       '@vue/compiler-sfc': 3.5.35
       ast-kit: 2.2.0
@@ -1645,7 +1665,7 @@ snapshots:
       magic-string-ast: 1.0.3
       unplugin-utils: 0.3.1
     optionalDependencies:
-      vue: 3.5.35
+      vue: 3.5.35(typescript@6.0.3)
 
   '@vue/babel-helper-vue-transform-on@1.5.0': {}
 
@@ -1710,11 +1730,11 @@ snapshots:
     dependencies:
       '@vue/devtools-kit': 8.1.2
 
-  '@vue/devtools-core@8.1.2(vue@3.5.35)':
+  '@vue/devtools-core@8.1.2(vue@3.5.35(typescript@6.0.3))':
     dependencies:
       '@vue/devtools-kit': 8.1.2
       '@vue/devtools-shared': 8.1.2
-      vue: 3.5.35
+      vue: 3.5.35(typescript@6.0.3)
 
   '@vue/devtools-kit@8.1.2':
     dependencies:
@@ -1741,11 +1761,11 @@ snapshots:
       '@vue/shared': 3.5.35
       csstype: 3.2.3
 
-  '@vue/server-renderer@3.5.35(vue@3.5.35)':
+  '@vue/server-renderer@3.5.35(vue@3.5.35(typescript@6.0.3))':
     dependencies:
       '@vue/compiler-ssr': 3.5.35
       '@vue/shared': 3.5.35
-      vue: 3.5.35
+      vue: 3.5.35(typescript@6.0.3)
 
   '@vue/shared@3.5.35': {}
 
@@ -2198,6 +2218,8 @@ snapshots:
 
   tslib@2.8.1: {}
 
+  typescript@6.0.3: {}
+
   ufo@1.6.4: {}
 
   undici-types@7.24.6: {}
@@ -2225,12 +2247,12 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vant@4.9.24(vue@3.5.35):
+  vant@4.9.24(vue@3.5.35(typescript@6.0.3)):
     dependencies:
       '@vant/popperjs': 1.3.0
-      '@vant/use': 1.6.0(vue@3.5.35)
+      '@vant/use': 1.6.0(vue@3.5.35(typescript@6.0.3))
       '@vue/shared': 3.5.35
-      vue: 3.5.35
+      vue: 3.5.35(typescript@6.0.3)
 
   vite-dev-rpc@1.1.0(vite@4.5.14(@types/node@25.9.1)):
     dependencies:
@@ -2257,9 +2279,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  vite-plugin-vue-devtools@8.1.2(vite@4.5.14(@types/node@25.9.1))(vue@3.5.35):
+  vite-plugin-vue-devtools@8.1.2(vite@4.5.14(@types/node@25.9.1))(vue@3.5.35(typescript@6.0.3)):
     dependencies:
-      '@vue/devtools-core': 8.1.2(vue@3.5.35)
+      '@vue/devtools-core': 8.1.2(vue@3.5.35(typescript@6.0.3))
       '@vue/devtools-kit': 8.1.2
       '@vue/devtools-shared': 8.1.2
       sirv: 3.0.2
@@ -2295,10 +2317,10 @@ snapshots:
       '@types/node': 25.9.1
       fsevents: 2.3.3
 
-  vue-router@5.1.0(@vue/compiler-sfc@3.5.35)(vite@4.5.14(@types/node@25.9.1))(vue@3.5.35):
+  vue-router@5.1.0(@vue/compiler-sfc@3.5.35)(vite@4.5.14(@types/node@25.9.1))(vue@3.5.35(typescript@6.0.3)):
     dependencies:
       '@babel/generator': 8.0.0-rc.6
-      '@vue-macros/common': 3.1.2(vue@3.5.35)
+      '@vue-macros/common': 3.1.2(vue@3.5.35(typescript@6.0.3))
       '@vue/devtools-api': 8.1.2
       ast-walker-scope: 0.9.0
       chokidar: 5.0.0
@@ -2313,19 +2335,21 @@ snapshots:
       tinyglobby: 0.2.16
       unplugin: 3.0.0
       unplugin-utils: 0.3.1
-      vue: 3.5.35
+      vue: 3.5.35(typescript@6.0.3)
       yaml: 2.9.0
     optionalDependencies:
       '@vue/compiler-sfc': 3.5.35
       vite: 4.5.14(@types/node@25.9.1)
 
-  vue@3.5.35:
+  vue@3.5.35(typescript@6.0.3):
     dependencies:
       '@vue/compiler-dom': 3.5.35
       '@vue/compiler-sfc': 3.5.35
       '@vue/runtime-dom': 3.5.35
-      '@vue/server-renderer': 3.5.35(vue@3.5.35)
+      '@vue/server-renderer': 3.5.35(vue@3.5.35(typescript@6.0.3))
       '@vue/shared': 3.5.35
+    optionalDependencies:
+      typescript: 6.0.3
 
   webpack-virtual-modules@0.6.2: {}
 
