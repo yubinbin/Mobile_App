@@ -3,7 +3,7 @@
     <div class="safe-area-top"></div>
 
     <div class="logo-section">
-      <img src="@/assets/images/logo_hongsuyun.png" alt="弘塑云" class="logo-img" />
+      <img src="@/assets/images/logo_hongshehui.png" alt="弘设汇" class="logo-img" />
     </div>
 
     <div class="form-section">
