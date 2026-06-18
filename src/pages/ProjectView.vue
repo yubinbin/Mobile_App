@@ -1,5 +1,5 @@
 <template>
-  <div class="project-view-page">
+  <div class="project-view-page" :class="{ scanning }">
     <van-nav-bar v-show="!scanning" :title="$t('nav.projectTitle')" style="--van-nav-bar-background: #006dd8; --van-nav-bar-title-text-color: #fff; --van-nav-bar-icon-color: #fff; --van-nav-bar-height: 44px; --van-nav-bar-title-font-size: 17px;">
       <template #left>
         <van-icon name="arrow-left" size="18" color="#fff" @click="handleBack" />
@@ -25,6 +25,7 @@
         ref="iframeRef"
         :src="projectUrl"
         class="web-view"
+        allow="camera; microphone; fullscreen"
         sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
         @load="onIframeLoad"
         @error="onIframeError"
@@ -136,9 +137,10 @@ async function startScan() {
   })
 
   try {
+    document.body.classList.add('barcode-scanning')
     await BarcodeScanner.startScan()
     scanning.value = true
-  } catch { showToast(t('scan.cameraFail')); await stopScan(); return }
+  } catch { document.body.classList.remove('barcode-scanning'); showToast(t('scan.cameraFail')); await stopScan(); return }
 
   scanTimer = setTimeout(() => { showToast(t('scan.timeout')); stopScan() }, 30000)
 }
@@ -147,6 +149,7 @@ async function stopScan() {
   if (scanTimer) { clearTimeout(scanTimer); scanTimer = null }
   if (scanListener) { await scanListener.remove(); scanListener = null }
   try { await BarcodeScanner.stopScan() } catch {}
+  document.body.classList.remove('barcode-scanning')
   scanning.value = false
 }
 
