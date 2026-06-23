@@ -62,6 +62,8 @@
   "update.alreadyLatest": "You're up to date",
   "update.checkFailed": "Update check failed, please try again",
   "update.checkUpdate": "Check for Updates",
+  "update.downloading": "Downloading",
+  "update.downloadFailed": "Download failed, please try again",
 
   "about.platform": "Development platform",
   "about.owner": "Version owned",

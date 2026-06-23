@@ -12,6 +12,8 @@ export const ttcVersion = '2.6.0' // ttc版本号
 
 // 应用版本号（升级时只改这一处）
 export const appVersion = 'v1.0.0'
+// 应用名
+export const appName = 'hongshehui'
 
 export const login = `${baseUrl}/app/account/login`
 export const loginRSA = `${baseUrl}/biz/tmIoTCloud/Interface/loginRSA`

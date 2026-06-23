@@ -1,9 +1,34 @@
 import { showConfirmDialog, showDialog, showToast } from 'vant'
+import { Capacitor, CapacitorHttp } from '@capacitor/core'
 import { t } from '../i18n'
-import { isLoggedIn, authRequest } from './auth.js'
-import { baseUrl, appVersion } from './urlValues.js'
+import { isLoggedIn } from './auth.js'
+import { baseUrl, appVersion, appName } from './urlValues.js'
 
 let checking = false
+
+/** Android 原生下载 APK 并触发安装，非 Android 降级为系统浏览器打开 */
+async function downloadAndInstall(url) {
+  if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== 'android') {
+    window.open(url, '_system')
+    return
+  }
+
+  const plugin = Capacitor.Plugins.ApkInstaller
+  const loadingToast = showToast({ message: `${t('update.downloading')} 0%`, forbidClick: true, duration: 0, type: 'loading' })
+
+  const listener = await plugin.addListener('progress', ({ percent }) => {
+    loadingToast.message = `${t('update.downloading')} ${percent}%`
+  })
+
+  try {
+    await plugin.download({ url })
+  } catch {
+    showToast(t('update.downloadFailed'))
+  } finally {
+    loadingToast.close()
+    listener.remove()
+  }
+}
 
 /**
  * 去掉 v/V 前缀，按 . 分段后逐段比较数字。
@@ -27,18 +52,25 @@ function getCurrentVersion() {
   return appVersion || '0.0.0'
 }
 
-/** 调用更新检查接口，5 秒超时 */
+/** 调用更新检查接口，5 秒超时（免登录接口） */
 async function fetchVersionInfo() {
-  const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), 5000)
+  const url = `https://manage.tmiot.com.cn/app/share/updateAppVersion?app=${appName}`
 
+  if (Capacitor.isNativePlatform()) {
+    const res = await Promise.race([
+      CapacitorHttp.request({ url, method: 'GET' }),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000)),
+    ])
+    return typeof res.data === 'string' ? JSON.parse(res.data) : res.data
+  }
+
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), 5000)
   try {
-    const data = await authRequest(`${baseUrl}/biz/tmIoTCloud/Interface/updateAppVersion`, {
-      signal: controller.signal,
-    })
-    return data
+    const res = await fetch(url, { signal: controller.signal })
+    return await res.json()
   } finally {
-    clearTimeout(timeout)
+    clearTimeout(timer)
   }
 }
 
@@ -71,9 +103,7 @@ function showUpdateDialog(info) {
         closeOnPopstate: false,
       })
         .then(() => {
-          window.open(info.updateUrl, '_system')
-          // 打开链接后重新弹出（用户可能没完成更新）
-          setTimeout(forceShow, 1000)
+          downloadAndInstall(info.updateUrl)
         })
         .catch(() => {
           // 返回键关闭后重新弹出
@@ -90,7 +120,7 @@ function showUpdateDialog(info) {
       cancelButtonText: t('update.later'),
     })
       .then(() => {
-        window.open(info.updateUrl, '_system')
+        downloadAndInstall(info.updateUrl)
       })
       .catch(() => {})
   }
