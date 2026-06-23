@@ -113,6 +113,9 @@ onActivated(() => {
     const uid = savedUser?.userAID || 'default'
     projectUrl.value = setLang(`${baseUrl}/app/ttcEngineDefalut?ttcVersion=${ttcVersion}&projectOID=${projectOID}&userOID=${uid}&access_token=${token}`)
   }
+  // 重新进入项目页时重置历史基准，吸收进出子页造成的 history.length 偏移，
+  // 避免 onPopState 计算的 depth 虚高导致 canGoBack 误判
+  baseHistoryLength = history.length
 })
 
 onUnmounted(() => {

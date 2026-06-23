@@ -53,22 +53,29 @@ function triggerBack() {
   if (backLock) return
   backLock = true
 
-  if (navState.canGoBack) {
+  const currentPath = router.currentRoute.value.path
+
+  // iframe 内部返回仅在项目页生效（canGoBack 是项目页 iframe 的状态，
+  // 其它页面不能用 history.back()，否则可能回退到 iframe 的外部历史项而跳浏览器）
+  if (currentPath === '/project-view' && navState.canGoBack) {
     history.back()
     backLock = false
     return
   }
 
-  const currentPath = router.currentRoute.value.path
   if (currentPath === '/project-view' || currentPath === '/login') {
     handleHomeSwipe()
     backLock = false
     return
   }
 
-  router.back()
-    .catch(() => {})
-    .finally(() => { backLock = false })
+  // app 自有子页面：跳回确定的父页面，不依赖共享历史栈
+  if (currentPath === '/about') {
+    router.replace('/user-info')
+  } else {
+    router.replace('/project-view')
+  }
+  backLock = false
 }
 
 onMounted(async () => {

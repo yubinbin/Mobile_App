@@ -2,7 +2,7 @@
   <div class="about-page">
     <van-nav-bar :title="$t('user.about')" style="--van-nav-bar-background: #006dd8; --van-nav-bar-title-text-color: #fff; --van-nav-bar-icon-color: #fff; --van-nav-bar-height: 44px; --van-nav-bar-title-font-size: 17px;">
       <template #left>
-        <van-icon name="arrow-left" size="18" color="#fff" @click="router.back()" />
+        <van-icon name="arrow-left" size="18" color="#fff" @click="router.replace('/user-info')" />
       </template>
     </van-nav-bar>
 

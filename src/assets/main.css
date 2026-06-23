@@ -2,3 +2,9 @@
 html { background: #006dd8; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-font-smoothing: antialiased; background: #fff; }
 #app { width: 100%; min-height: 100vh; }
+
+/* 扫码时让相机画面从 WebView 背后透出：上层元素全部透明 */
+body.barcode-scanning,
+body.barcode-scanning html,
+body.barcode-scanning #app { background: transparent !important; }
+body.barcode-scanning { --van-background: transparent; }

@@ -75,7 +75,7 @@ const langIndex = computed(() => langOptions.value.findIndex(o => o.value === ge
 
 onMounted(() => { userInfo.value = getUserInfo() || {} })
 
-const handleBack = () => router.back()
+const handleBack = () => router.replace('/project-view')
 
 const onLangConfirm = ({ selectedOptions }) => {
   setLocale(selectedOptions[0].value)
