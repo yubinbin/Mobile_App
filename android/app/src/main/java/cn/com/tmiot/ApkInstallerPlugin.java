@@ -1,4 +1,4 @@
-package com.example.myvueapp;
+package cn.com.tmiot;
 
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
