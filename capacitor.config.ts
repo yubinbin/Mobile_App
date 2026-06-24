@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'cn.com.tmiot.tic',
-  appName: '弘设汇',
+  appId: 'cn.com.tmiot.tpc',
+  appName: '弘塑云',
   webDir: 'dist',
   server: {
     androidScheme: 'http',
