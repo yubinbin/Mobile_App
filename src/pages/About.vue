@@ -6,16 +6,11 @@
       </template>
     </van-nav-bar>
 
-    <!-- <div class="content">
-    </div> -->
     <div class="content">
-      <p>{{ $t('about.platform') }}：tmIoT物联网云平台</p>
-      <p>{{ $t('about.owner') }}：宁波弘讯软件开发有限公司</p>
-      <p>{{ $t('about.address') }}：西安市雁塔区锦业一路宝德云谷国际</p>
-      <p>{{ $t('about.contact') }}：宋先生</p>
-      <p>{{ $t('about.phone') }}：029-35697841</p>
-      <p>{{ $t('about.fax') }}：029-35697841</p>
-      <p>{{ $t('about.mail') }}：xian@techamtion.com.cn</p>
+      <div class="item" v-for="item in items" :key="item.key">
+        <strong>{{ $t(item.key) }}</strong>
+        <span>{{ $t(item.val) }}</span>
+      </div>
     </div>
     <div class="version">
       <p>{{ $t('about.version') }}:{{ appVersion }}</p>
@@ -31,43 +26,34 @@ import { appVersion } from '../utils/urlValues.js'
 
 const router = useRouter()
 
-const handleCheckUpdate = () => {
-  checkManually()
-}
+const items = [
+  { key: 'about.platform', val: 'about.platform.value' },
+  { key: 'about.owner',    val: 'about.owner.value' },
+  { key: 'about.address',  val: 'about.address.value' },
+  { key: 'about.contact',  val: 'about.contact.value' },
+  { key: 'about.phone',    val: 'about.phone.value' },
+  { key: 'about.fax',      val: 'about.fax.value' },
+  { key: 'about.mail',     val: 'about.mail.value' },
+]
+
+const handleCheckUpdate = () => checkManually()
 </script>
 
 <style scoped>
 .about-page { min-height: 100vh; background: #fff; display: flex; flex-direction: column; }
 
-.content {
-  padding: 25px 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
+.content { padding: 25px 30px; display: flex; flex-direction: column; gap: 16px; }
 
-.content p {
-  margin: 0 0 8px 0;
-  font-size: 15px;
-  color: #333;
-  word-break: break-all;
-}
+.item { display: flex; flex-direction: column; gap: 2px; }
+
+.item strong { font-size: 13px; color: #333; }
+
+.item span { font-size: 15px; color: #333; word-break: break-all; }
 
 .version {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 10px;
-  text-align: center;
-  font-size: 12px;
-  color: gray;
-  line-height: 20px;
+  position: fixed; left: 0; right: 0; bottom: 10px;
+  text-align: center; font-size: 12px; color: gray; line-height: 20px;
 }
 
-.check-update {
-  margin-top: 6px;
-  color: #006dd8;
-  text-decoration: underline;
-  cursor: pointer;
-}
+.check-update { margin-top: 6px; color: #006dd8; text-decoration: underline; cursor: pointer; }
 </style>

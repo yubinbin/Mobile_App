@@ -65,12 +65,19 @@
   "update.downloading": "Downloading",
   "update.downloadFailed": "Download failed, please try again",
 
-  "about.platform": "Development platform",
-  "about.owner": "Version owned",
+  "about.platform": "Development Platform",
+  "about.platform.value": "tmIoT® IoT Cloud Platform",
+  "about.owner": "All Rights Reserved",
+  "about.owner.value": "Ningbo Techmation Software Development Co., Ltd. Xi'an Branch",
   "about.address": "Address",
-  "about.contact": "Contact person",
-  "about.phone": "Telephone",
+  "about.address.value": "Unit A, Baode Yungu International, No. 52 Jinye 1st Road, Zhangba Subdistrict, Xi'an High-tech Zone, Shaanxi Province, China",
+  "about.contact": "Contact",
+  "about.contact.value": "Mr. Song",
+  "about.phone": "Tel",
+  "about.phone.value": "029-35697841",
   "about.fax": "Fax",
-  "about.mail": "Mail",
-  "about.version": "Version number"
+  "about.fax.value": "029-35697841",
+  "about.mail": "Email",
+  "about.mail.value": "xian@techamtion.com.cn",
+  "about.version": "Version"
 }

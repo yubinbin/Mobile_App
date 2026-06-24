@@ -66,11 +66,18 @@
   "update.downloadFailed": "下載失敗，請稍後重試",
 
   "about.platform": "開發平臺",
-  "about.owner": "版本所有",
+  "about.platform.value": "tmIoT® 物聯網雲平台",
+  "about.owner": "版權所有",
+  "about.owner.value": "寧波弘訊軟體開發有限公司西安分公司",
   "about.address": "地址",
+  "about.address.value": "陝西省西安市高新區丈八街辦錦業一路52號寶德雲谷國際A座",
   "about.contact": "聯絡人",
+  "about.contact.value": "宋先生",
   "about.phone": "電話",
+  "about.phone.value": "029-35697841",
   "about.fax": "傳真",
+  "about.fax.value": "029-35697841",
   "about.mail": "郵箱",
+  "about.mail.value": "xian@techamtion.com.cn",
   "about.version": "版本號碼"
 }
