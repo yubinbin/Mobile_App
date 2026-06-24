@@ -54,7 +54,8 @@ function getCurrentVersion() {
 
 /** 调用更新检查接口，5 秒超时（免登录接口） */
 async function fetchVersionInfo() {
-  const url = `https://manage.tmiot.com.cn/app/share/updateAppVersion?app=${appName}`
+  const platform = Capacitor.getPlatform()
+  const url = `https://manage.tmiot.com.cn/app/share/updateAppVersion?app=${appName}&platform=${platform}`
 
   if (Capacitor.isNativePlatform()) {
     const res = await Promise.race([
