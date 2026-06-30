@@ -30,7 +30,7 @@
             <span class="menu-text">{{ $t('update.checkUpdate') }}</span>
           </template>
           <template #value>
-            <span class="version-text">v{{ appVersion }}</span>
+            <span class="version-text">{{ appVersion }}</span>
             <span v-if="updateState.hasUpdate" class="update-dot"></span>
           </template>
         </van-cell>
