@@ -8,7 +8,7 @@ import { updateState } from './updateState.js'
 let checking = false
 
 /** Android 原生下载 APK 并触发安装，非 Android 降级为系统浏览器打开 */
-async function downloadAndInstall(url) {
+export async function downloadAndInstall(url) {
   if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== 'android') {
     window.open(url, '_system')
     return
