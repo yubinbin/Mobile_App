@@ -62,6 +62,9 @@
   "update.alreadyLatest": "You're up to date",
   "update.checkFailed": "Update check failed, please try again",
   "update.checkUpdate": "Check for Updates",
+  "update.downloadingTitle": "Downloading Update",
+  "update.downloadFailedMsg": "Download failed, tap to retry",
+  "update.cancel": "Cancel",
   "update.downloading": "Downloading",
   "update.downloadFailed": "Download failed, please try again",
 

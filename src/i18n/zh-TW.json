@@ -62,6 +62,9 @@
   "update.alreadyLatest": "當前已是最新版本",
   "update.checkFailed": "檢查更新失敗，請稍後重試",
   "update.checkUpdate": "檢查更新",
+  "update.downloadingTitle": "正在下載新版本",
+  "update.downloadFailedMsg": "下載失敗，請重試",
+  "update.cancel": "取消",
   "update.downloading": "正在下載",
   "update.downloadFailed": "下載失敗，請稍後重試",
 
