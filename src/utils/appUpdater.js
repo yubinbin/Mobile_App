@@ -3,6 +3,7 @@ import { Capacitor, CapacitorHttp } from '@capacitor/core'
 import { t } from '../i18n'
 import { isLoggedIn } from './auth.js'
 import { baseUrl, appVersion, appName } from './urlValues.js'
+import { updateState } from './updateState.js'
 
 let checking = false
 
@@ -14,18 +15,22 @@ async function downloadAndInstall(url) {
   }
 
   const plugin = Capacitor.Plugins.ApkInstaller
-  const loadingToast = showToast({ message: `${t('update.downloading')} 0%`, forbidClick: true, duration: 0, type: 'loading' })
+  updateState.downloadState = 'downloading'
+  updateState.downloadProgress = 0
+  updateState.downloadedSize = ''
+  updateState.totalSize = ''
 
   const listener = await plugin.addListener('progress', ({ percent }) => {
-    loadingToast.message = `${t('update.downloading')} ${percent}%`
+    updateState.downloadProgress = percent
   })
 
   try {
     await plugin.download({ url })
+    updateState.downloadState = 'completed'
+    updateState.downloadProgress = 100
   } catch {
-    showToast(t('update.downloadFailed'))
+    updateState.downloadState = 'failed'
   } finally {
-    loadingToast.close()
     listener.remove()
   }
 }
@@ -133,12 +138,21 @@ export async function checkOnLaunch() {
   if (checking) return
 
   checking = true
+  updateState.hasUpdate = false
+
   try {
     const info = await fetchVersionInfo()
     if (!info || !info.version) return
 
     const current = getCurrentVersion()
-    if (compareVersion(current, info.version) >= 0) return
+    if (compareVersion(current, info.version) >= 0) {
+      updateState.hasUpdate = false
+      return
+    }
+
+    updateState.hasUpdate = true
+    updateState.updateInfo = info
+    updateState.downloadState = 'idle'
 
     showUpdateDialog(info)
   } catch {
@@ -154,6 +168,8 @@ export async function checkManually() {
   if (checking) return
 
   checking = true
+  updateState.hasUpdate = false
+
   const loadingToast = showToast({ message: t('update.checking'), forbidClick: true, duration: 0 })
 
   try {
@@ -170,6 +186,10 @@ export async function checkManually() {
       showToast(t('update.alreadyLatest'))
       return
     }
+
+    updateState.hasUpdate = true
+    updateState.updateInfo = info
+    updateState.downloadState = 'idle'
 
     showUpdateDialog(info)
   } catch {
