@@ -29,6 +29,10 @@
             <img src="@/assets/images/checkUpdate.png" class="menu-img" />
             <span class="menu-text">{{ $t('update.checkUpdate') }}</span>
           </template>
+          <template #value>
+            <span class="version-text">v{{ appVersion }}</span>
+            <span v-if="updateState.hasUpdate" class="update-dot"></span>
+          </template>
         </van-cell>
       </van-cell-group>
       <van-cell-group inset class="menu-group" style="margin-top: 8px;">
@@ -60,6 +64,8 @@ import { getUserInfo, clearAuth } from '../utils/auth.js'
 import { showConfirmDialog } from 'vant'
 import { setLocale, getLocale, t } from '../i18n'
 import { checkManually } from '../utils/appUpdater.js'
+import { updateState } from '../utils/updateState.js'
+import { appVersion } from '../utils/urlValues.js'
 
 const router = useRouter()
 const userInfo = ref({})
@@ -114,4 +120,13 @@ const handleLogout = () => {
 :deep(.logout-cell .van-cell__title) { color: #f05050; text-align: center; font-size: 16px; }
 
 :deep(.van-hairline--bottom::after) { border-bottom-width: 0; }
+
+.version-text {
+  font-size: 14px; color: #999; margin-right: 6px; vertical-align: middle;
+}
+
+.update-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  background: #FF4444; vertical-align: middle;
+}
 </style>
