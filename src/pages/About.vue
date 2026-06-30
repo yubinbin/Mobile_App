@@ -14,7 +14,10 @@
     </div>
     <div class="version">
       <p>{{ $t('about.version') }}:{{ appVersion }}</p>
-      <p class="check-update" @click="handleCheckUpdate">{{ $t('update.checkUpdate') }}</p>
+      <p class="check-update" @click="handleCheckUpdate">
+    {{ $t('update.checkUpdate') }}
+    <span v-if="updateState.hasUpdate" class="update-dot"></span>
+  </p>
     </div>
   </div>
 </template>
@@ -23,6 +26,7 @@
 import { useRouter } from 'vue-router'
 import { checkManually } from '../utils/appUpdater.js'
 import { appVersion } from '../utils/urlValues.js'
+import { updateState } from '../utils/updateState.js'
 
 const router = useRouter()
 
@@ -56,4 +60,9 @@ const handleCheckUpdate = () => checkManually()
 }
 
 .check-update { margin-top: 6px; color: #006dd8; text-decoration: underline; cursor: pointer; }
+
+.update-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  background: #FF4444; vertical-align: middle; margin-left: 4px;
+}
 </style>
