@@ -18,7 +18,7 @@
         <p v-if="updateState.downloadState === 'failed'" class="download-failed-msg">{{ $t('update.downloadFailedMsg') }}</p>
         <div class="download-actions">
           <van-button v-if="updateState.downloadState === 'downloading'" size="small" plain round @click="cancelDownload">{{ $t('update.cancel') }}</van-button>
-          <van-button v-if="updateState.downloadState === 'failed'" size="small" type="primary" round @click="retryDownload">{{ $t('update.downloadFailedMsg') }}</van-button>
+          <van-button v-if="updateState.downloadState === 'failed'" size="small" type="primary" round @click="retryDownload">{{ $t('update.retry') }}</van-button>
         </div>
       </div>
     </div>
@@ -34,8 +34,7 @@ import { Capacitor } from '@capacitor/core'
 import { handleHomeSwipe } from './utils/swipeBack.js'
 import { navState } from './utils/navState.js'
 import { updateState } from './utils/updateState.js'
-import { downloadAndInstall } from './utils/appUpdater.js'
-import { checkOnLaunch } from './utils/appUpdater.js'
+import { downloadAndInstall, checkOnLaunch, cancelCurrentDownload } from './utils/appUpdater.js'
 
 function initStatusBar() {
   if (Capacitor.isNativePlatform()) {
@@ -100,13 +99,11 @@ function triggerBack() {
 }
 
 function cancelDownload() {
-  updateState.downloadState = 'idle'
-  updateState.downloadProgress = 0
+  cancelCurrentDownload()
 }
 
 function retryDownload() {
   if (updateState.updateInfo?.updateUrl) {
-    updateState.downloadState = 'idle'
     downloadAndInstall(updateState.updateInfo.updateUrl)
   }
 }

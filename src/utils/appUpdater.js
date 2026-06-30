@@ -6,32 +6,79 @@ import { baseUrl, appVersion, appName } from './urlValues.js'
 import { updateState } from './updateState.js'
 
 let checking = false
+let currentDownloadListener = null
+
+/** Format byte count to human-readable string */
+function formatBytes(bytes) {
+  if (bytes == null || isNaN(bytes)) return ''
+  const n = Number(bytes)
+  if (n < 1024) return n + ' B'
+  if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB'
+  return (n / (1024 * 1024)).toFixed(1) + ' MB'
+}
+
+/** Cancel the current download — removes the native listener and resets Vue state */
+export function cancelCurrentDownload() {
+  if (currentDownloadListener) {
+    currentDownloadListener.remove()
+    currentDownloadListener = null
+  }
+  updateState.downloadState = 'idle'
+  updateState.downloadProgress = 0
+  updateState.downloadedSize = ''
+  updateState.totalSize = ''
+}
 
 /** Android 原生下载 APK 并触发安装，非 Android 降级为系统浏览器打开 */
 export async function downloadAndInstall(url) {
+  // Re-entrancy guard: ignore duplicate calls while a download is in progress
+  if (updateState.downloadState === 'downloading') return
+
   if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== 'android') {
     window.open(url, '_system')
     return
   }
 
   const plugin = Capacitor.Plugins.ApkInstaller
+  if (!plugin) {
+    updateState.downloadState = 'failed'
+    return
+  }
+
   updateState.downloadState = 'downloading'
   updateState.downloadProgress = 0
   updateState.downloadedSize = ''
   updateState.totalSize = ''
 
+  // Populate totalSize from API response if available
+  if (updateState.updateInfo?.fileSize) {
+    updateState.totalSize = formatBytes(updateState.updateInfo.fileSize)
+  }
+
   const listener = await plugin.addListener('progress', ({ percent }) => {
+    // Guard: skip updates when download was cancelled
+    if (updateState.downloadState !== 'downloading') return
     updateState.downloadProgress = percent
+    // Calculate downloadedSize from percentage if totalSize is known
+    if (updateState.updateInfo?.fileSize) {
+      const downloaded = (updateState.updateInfo.fileSize * percent) / 100
+      updateState.downloadedSize = formatBytes(downloaded)
+    }
   })
+  currentDownloadListener = listener
 
   try {
     await plugin.download({ url })
     updateState.downloadState = 'completed'
     updateState.downloadProgress = 100
   } catch {
-    updateState.downloadState = 'failed'
+    // Only mark as failed if the download was not cancelled
+    if (updateState.downloadState === 'downloading') {
+      updateState.downloadState = 'failed'
+    }
   } finally {
     listener.remove()
+    currentDownloadListener = null
   }
 }
 
@@ -139,6 +186,7 @@ export async function checkOnLaunch() {
 
   checking = true
   updateState.hasUpdate = false
+  updateState.downloadState = 'idle'
 
   try {
     const info = await fetchVersionInfo()
@@ -169,6 +217,7 @@ export async function checkManually() {
 
   checking = true
   updateState.hasUpdate = false
+  updateState.downloadState = 'idle'
 
   const loadingToast = showToast({ message: t('update.checking'), forbidClick: true, duration: 0 })
 

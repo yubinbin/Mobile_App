@@ -65,6 +65,7 @@
   "update.downloadingTitle": "Downloading Update",
   "update.downloadFailedMsg": "Download failed, tap to retry",
   "update.cancel": "Cancel",
+  "update.retry": "Retry",
   "update.downloading": "Downloading",
   "update.downloadFailed": "Download failed, please try again",
 

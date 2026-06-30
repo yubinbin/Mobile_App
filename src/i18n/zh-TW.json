@@ -65,6 +65,7 @@
   "update.downloadingTitle": "正在下載新版本",
   "update.downloadFailedMsg": "下載失敗，請重試",
   "update.cancel": "取消",
+  "update.retry": "重試",
   "update.downloading": "正在下載",
   "update.downloadFailed": "下載失敗，請稍後重試",
 
