@@ -6,7 +6,7 @@ import type { CapacitorConfig } from '@capacitor/cli'
 
 const config: CapacitorConfig = {
   appId: '{{appId}}',
-  appName: '{{appName}}',
+  appName: '{{appDisplayNameZhCN}}',
   webDir: 'dist',
   server: {
     androidScheme: 'http',

@@ -11,9 +11,9 @@ export const appName = '{{appNameEn}}'
 export const updateCheckUrl = '{{updateCheckUrl}}'
 export const logoAsset = '{{logoAsset}}'
 export const navProjectTitles = {
-  'zh-CN': '{{navProjectTitleZhCN}}',
-  'zh-HK': '{{navProjectTitleZhTW}}',
-  'en-US': '{{navProjectTitleEn}}',
+  'zh-CN': '{{appDisplayNameZhCN}}',
+  'zh-HK': '{{appDisplayNameZhTW}}',
+  'en-US': '{{appDisplayNameEn}}',
 }
 
 // 以下为 baseUrl 派生地址，无需手动修改
