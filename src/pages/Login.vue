@@ -46,16 +46,17 @@
           <span class="auto-login-text">{{ $t('login.autoLogin') }}</span>
         </van-checkbox>
       </div>
-      <div class="lang-row" @click="showLangPicker = true">
-        <span>{{ $t('user.langSwitch') }}：{{ langLabel }}</span>
-        <van-icon name="arrow-down" size="14" color="#999" />
-      </div>
     </div>
 
     <div class="button-section">
       <van-button type="primary" block round class="login-btn" :loading="loading" @click="doLogin">
         {{ $t('login.button') }}
       </van-button>
+    </div>
+
+    <div class="lang-row" @click="showLangPicker = true">
+      <span>{{ $t('user.langSwitch') }}：{{ langLabel }}</span>
+      <van-icon name="arrow-down" size="14" color="#999" />
     </div>
 
     <div class="footer">
