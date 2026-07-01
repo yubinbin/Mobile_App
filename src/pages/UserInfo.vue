@@ -114,7 +114,7 @@ const handleLogout = () => {
 .menu-group { margin-bottom: 0; }
 
 .menu-img { width: 24px; height: 24px; margin-right: 10px; vertical-align: middle; }
-.menu-text { font-size: 16px; line-height: 24px; color: #334155; vertical-align: middle; }
+.menu-text { font-size: 16px; line-height: 24px; color: #334155; vertical-align: middle; white-space: nowrap; }
 
 .logout-wrap { margin-top: auto; margin-bottom: 55px; padding: 0 16px; }
 :deep(.logout-cell .van-cell__title) { color: #f05050; text-align: center; font-size: 16px; }
