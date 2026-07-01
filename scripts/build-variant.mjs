@@ -43,7 +43,7 @@ if (!cfg) {
 }
 
 console.log(`\n🔧 Building variant: ${variantName}`)
-console.log(`   ${cfg.appName} | ${cfg.appId} | ${cfg.baseUrl}\n`)
+console.log(`   ${cfg.appDisplayNameZhCN} | ${cfg.appId} | ${cfg.baseUrl}\n`)
 
 // ---- 工具函数：模板替换 ----
 function render(templatePath, outputPath) {
