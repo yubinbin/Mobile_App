@@ -1,0 +1,64 @@
+// variants.mjs — 所有变体配置的唯一入口
+// 新增变体：在此文件追加一个配置块 + package.json 加一条 build 命令
+
+export const variants = {
+  'hongsuyun-prod': {
+    appName: '弘塑云',
+    appNameEn: 'hongsuyun',
+    appId: 'cn.com.tmiot.hongsuyun',
+    baseUrl: 'http://47.236.252.168:8209',
+    loginSocket: 'wss://47.236.252.168:8209',
+    projectOID: '11024',
+    ttcVersion: '2.7.0',
+    updateCheckUrl: 'http://47.236.252.168:8209/biz/tmIoTCloud/Interface/updateAppVersion',
+    iconDir: 'tpc',
+    logoAsset: 'logo_hongsuyun.png',
+    navProjectTitle: '弘塑云',
+    iosAppName: '弘塑云',
+  },
+
+  'hongsuyun-test': {
+    appName: '弘塑云',
+    appNameEn: 'hongsuyun',
+    appId: 'cn.com.tmiot.hongsuyun.test',
+    baseUrl: 'http://1.82.232.147:8209',
+    loginSocket: 'wss://1.82.232.147:8209',
+    projectOID: '10994',
+    ttcVersion: '2.7.0',
+    updateCheckUrl: 'http://1.82.232.147:8209/biz/tmIoTCloud/Interface/updateAppVersion',
+    iconDir: 'tpc',
+    logoAsset: 'logo_hongsuyun.png',
+    navProjectTitle: '弘塑云',
+    iosAppName: '弘塑云',
+  },
+
+  'hongshehui-prod': {
+    appName: '弘设汇',
+    appNameEn: 'hongshehui',
+    appId: 'cn.com.tmiot.hongshehui',
+    baseUrl: 'https://tmplascloud.com',
+    loginSocket: 'wss://tmplascloud.com',
+    projectOID: '10238',
+    ttcVersion: '2.6.0',
+    updateCheckUrl: 'https://manage.tmiot.com.cn/app/share/updateAppVersion',
+    iconDir: 'tic',
+    logoAsset: 'logo_hongshehui.png',
+    navProjectTitle: '弘设汇',
+    iosAppName: '弘设汇',
+  },
+
+  'hongshehui-test': {
+    appName: '弘设汇',
+    appNameEn: 'hongshehui',
+    appId: 'cn.com.tmiot.hongshehui.test',
+    baseUrl: 'https://imro.tmiot.com.cn',
+    loginSocket: 'wss://imro.tmiot.com.cn',
+    projectOID: '10591',
+    ttcVersion: '2.6.0',
+    updateCheckUrl: 'https://manage.tmiot.com.cn/app/share/updateAppVersion',
+    iconDir: 'tic',
+    logoAsset: 'logo_hongshehui.png',
+    navProjectTitle: '弘设汇',
+    iosAppName: '弘设汇',
+  },
+}
