@@ -117,10 +117,12 @@ async function fetchVersionInfo() {
     return typeof res.data === 'string' ? JSON.parse(res.data) : res.data
   }
 
+  // Web 开发模式走 Vite 代理，避免跨域
+  const proxyUrl = `/update-api/app/share/updateAppVersion?app=${appName}&platform=${platform}`
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), 5000)
   try {
-    const res = await fetch(url, { signal: controller.signal })
+    const res = await fetch(proxyUrl, { signal: controller.signal })
     return await res.json()
   } finally {
     clearTimeout(timer)
