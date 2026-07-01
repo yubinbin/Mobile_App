@@ -68,6 +68,7 @@ import { showToast, showDialog } from 'vant'
 import { t } from '../i18n'
 import { loginRSA, login, baseUrl, projectOID, ttcVersion, loginSocket, appVersion } from '../utils/urlValues.js'
 import { setToken, setUserInfo, clearAuth } from '../utils/auth.js'
+import { checkOnLaunch } from '../utils/appUpdater.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -143,6 +144,8 @@ const doLogin = async () => {
     }
 
     connectSocket(uid, token)
+
+    checkOnLaunch()
 
     const projectUrl = encodeURIComponent(`${baseUrl}/app/ttcEngineDefalut?ttcVersion=${ttcVersion}&projectOID=${projectOID}&access_token=${token}`)
     window.location.replace(`#/project-view?userOID=${uid}&projectUrl=${projectUrl}`)
