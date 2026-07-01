@@ -236,7 +236,7 @@ const handleForceLogout = () => {
 :deep(.van-field__control::placeholder) { color: #ccc; font-size: 16px; }
 .auto-login { margin-top: 16px; }
 .auto-login-text { font-size: 15px; color: #333; margin-left: 4px; }
-.lang-row { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 16px 0 8px; font-size: 14px; color: #999; cursor: pointer; }
+.lang-row { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 36px 0 8px; font-size: 14px; color: #999; cursor: pointer; }
 :deep(.van-checkbox__icon) { border-color: #ccc; }
 :deep(.van-checkbox__icon--checked .van-icon) { background-color: #2c5aa0; border-color: #2c5aa0; }
 .button-section { padding: 40px 32px 0; }
