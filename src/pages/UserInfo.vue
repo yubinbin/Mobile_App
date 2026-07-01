@@ -18,16 +18,20 @@
       <van-cell-group inset class="menu-group">
         <van-cell is-link @click="showLangPicker = true" style="--van-cell-vertical-padding: 19px;">
           <template #title>
-            <img src="@/assets/images/language.png" class="menu-img" />
-            <span class="menu-text">{{ $t('user.langSwitch') }}</span>
+            <div class="menu-title-wrap">
+              <img src="@/assets/images/language.png" class="menu-img" />
+              <span class="menu-text">{{ $t('user.langSwitch') }}</span>
+            </div>
           </template>
         </van-cell>
       </van-cell-group>
       <van-cell-group inset class="menu-group" style="margin-top: 8px;">
         <van-cell is-link @click="handleCheckUpdate" style="--van-cell-vertical-padding: 19px;">
           <template #title>
-            <img src="@/assets/images/checkUpdate.png" class="menu-img" />
-            <span class="menu-text">{{ $t('update.checkUpdate') }}</span>
+            <div class="menu-title-wrap">
+              <img src="@/assets/images/checkUpdate.png" class="menu-img" />
+              <span class="menu-text">{{ $t('update.checkUpdate') }}</span>
+            </div>
           </template>
           <template #value>
             <span class="version-text">{{ appVersion }}</span>
@@ -38,8 +42,10 @@
       <van-cell-group inset class="menu-group" style="margin-top: 8px;">
         <van-cell is-link @click="router.push('/about')" style="--van-cell-vertical-padding: 19px;">
           <template #title>
-            <img src="@/assets/images/about.png" class="menu-img" />
-            <span class="menu-text">{{ $t('user.about') }}</span>
+            <div class="menu-title-wrap">
+              <img src="@/assets/images/about.png" class="menu-img" />
+              <span class="menu-text">{{ $t('user.about') }}</span>
+            </div>
           </template>
         </van-cell>
       </van-cell-group>
@@ -113,8 +119,9 @@ const handleLogout = () => {
 .content { flex: 1; padding: 20px 0; display: flex; flex-direction: column; }
 .menu-group { margin-bottom: 0; }
 
-.menu-img { width: 24px; height: 24px; margin-right: 10px; vertical-align: middle; }
-.menu-text { font-size: 16px; line-height: 24px; color: #334155; vertical-align: middle; white-space: nowrap; }
+.menu-title-wrap { display: flex; align-items: center; }
+.menu-img { width: 24px; height: 24px; margin-right: 10px; }
+.menu-text { font-size: 16px; line-height: 24px; color: #334155; white-space: nowrap; }
 
 .logout-wrap { margin-top: auto; margin-bottom: 55px; padding: 0 16px; }
 :deep(.logout-cell .van-cell__title) { color: #f05050; text-align: center; font-size: 16px; }
