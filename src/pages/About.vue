@@ -14,19 +14,13 @@
     </div>
     <div class="version">
       <p>{{ $t('about.version') }}:{{ appVersion }}</p>
-      <p class="check-update" @click="handleCheckUpdate">
-    {{ $t('update.checkUpdate') }}
-    <span v-if="updateState.hasUpdate" class="update-dot"></span>
-  </p>
     </div>
   </div>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
-import { checkManually } from '../utils/appUpdater.js'
 import { appVersion } from '../utils/urlValues.js'
-import { updateState } from '../utils/updateState.js'
 
 const router = useRouter()
 
@@ -39,8 +33,6 @@ const items = [
   { key: 'about.fax',      val: 'about.fax.value' },
   { key: 'about.mail',     val: 'about.mail.value' },
 ]
-
-const handleCheckUpdate = () => checkManually()
 </script>
 
 <style scoped>
@@ -59,10 +51,4 @@ const handleCheckUpdate = () => checkManually()
   text-align: center; font-size: 12px; color: gray; line-height: 20px;
 }
 
-.check-update { margin-top: 6px; color: #006dd8; text-decoration: underline; cursor: pointer; }
-
-.update-dot {
-  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
-  background: #FF4444; vertical-align: middle; margin-left: 4px;
-}
 </style>
