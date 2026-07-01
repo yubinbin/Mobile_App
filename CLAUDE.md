@@ -4,10 +4,11 @@
 
 这是一个基于 **Vue 3 + Vite + Capacitor** 的混合移动应用（Android/iOS），核心功能是通过 WebView（iframe）加载远程 TTC 引擎页面，并提供原生能力支持（二维码扫描、版本更新等）。
 
-- **App 名称**: 弘塑云 (HongSuYun) / 弘设汇 (HongSheHui)（通过 `urlValues.js` 切换变体）
-- **包名**: `cn.com.tmiot.tpc`
+- **App 名称**: 弘塑云 (HongSuYun) / 弘设汇 (HongSheHui)（通过 `variants.mjs` 统一管理，一条命令构建）
+- **变体数量**: 4 个（2 产品 × 2 环境），后续可扩展
+- **包名**: 每个变体独立包名（如 `cn.com.tmiot.hongsuyun`、`cn.com.tmiot.tic`）
 - **当前版本**: v1.0.0
-- **分支**: `tpc_v1.0`
+- **分支**: `tpc_v1.0`（统一分支，不再使用多分支管理变体）
 
 ## 技术栈
 
@@ -25,19 +26,31 @@
 ## 项目结构
 
 ```
+├── variants.mjs              # 【变体配置唯一入口】所有变体的 URL、包名、图标等配置
+├── capacitor.config.template.ts  # Capacitor 配置模板 → 生成 capacitor.config.ts
+├── scripts/
+│   └── build-variant.mjs     # 构建引擎：模板替换 + icon 复制 + vite build + cap sync
+├── android/app/
+│   ├── templates/            # Android strings.xml 模板（三语言）
+│   │   ├── strings.template.xml        # 简体中文（默认）
+│   │   ├── strings.template.en.xml     # 英文
+│   │   └── strings.template.zh-rTW.xml # 繁体中文
+│   └── src/
+│       ├── tpc/              # 弘塑云图标资源
+│       └── tic/              # 弘设汇图标资源
 src/
 ├── main.js                  # 入口：注册 Vant 组件、路由、全局 $t
 ├── App.vue                  # 根组件：keep-alive、手势返回、启动更新检查
 ├── router/index.js          # 路由配置 + 导航守卫（认证检查）
 ├── pages/
 │   ├── Login.vue            # 登录页：用户名密码 + RSA 加密 + WebSocket 互踢
-│   ├── ProjectView.vue      # 主页：iframe 加载远程页面 + 扫码功能
+│   ├── ProjectView.vue      # 主页：iframe 加载远程页面 + 扫码功能（动态导航栏标题）
 │   ├── UserInfo.vue         # 用户中心
 │   └── About.vue            # 关于页
 ├── utils/
 │   ├── auth.js              # 认证模块：token 管理、authRequest、WebSocket
 │   ├── appUpdater.js        # 版本更新：检查、下载、安装 APK
-│   ├── urlValues.js         # 环境配置：baseUrl、projectOID、appVersion、appName
+│   ├── urlValues.template.js  # 环境配置模板 → 生成 urlValues.js
 │   ├── navState.js          # iframe 导航状态共享（canGoBack）
 │   ├── scanState.js         # 扫码状态共享
 │   └── swipeBack.js         # 手势返回处理
@@ -48,6 +61,8 @@ src/
 │   └── en.json              # 英文
 └── assets/                  # 图片、Logo、CSS
 ```
+
+> **注意**: `urlValues.js`、`capacitor.config.ts`、`android/app/src/main/res/values/strings.xml`、`values-en/strings.xml`、`values-zh-rTW/strings.xml` 均由 `build-variant.mjs` 生成，已加入 `.gitignore`，**不要手动编辑**。
 
 ## 路由表
 
@@ -106,26 +121,68 @@ src/
 - ProjectView 页面内优先触发 iframe 内部返回（`history.back()`）
 - 登录页和项目页的返回键触发 HomeSwipe（退到后台）
 
-## 环境切换
+## 变体构建系统
 
-`src/utils/urlValues.js` 中通过注释切换环境：
+所有变体配置集中在 `variants.mjs`，通过 `scripts/build-variant.mjs` 一条命令完成构建。**不再需要手动修改源码切换环境或管理多个分支。**
 
-- **弘塑云 生产**（当前启用）：`http://47.236.252.168:8209`，projectOID=11024
-- **弘塑云 测试**：`http://1.82.232.147:8209`，projectOID=10994
-- **弘设汇 生产**：`https://tmplascloud.com`，projectOID=10238
-- **弘设汇 测试**：`https://imro.tmiot.com.cn`，projectOID=10591
+### 变体列表
 
-切换变体时还需修改：`appName`、Logo 图片、`capacitor.config.ts` 中的 `appName`。
+| 变体名 | 产品 | 环境 | 包名 |
+|--------|------|------|------|
+| `hongsuyun-prod` | 弘塑云 | 生产 | `cn.com.tmiot.hongsuyun` |
+| `hongsuyun-test` | 弘塑云 | 测试 | `cn.com.tmiot.hongsuyun.test` |
+| `hongshehui-prod` | 弘设汇 | 生产 | `cn.com.tmiot.tic` |
+| `hongshehui-test` | 弘设汇 | 测试 | `cn.com.tmiot.hongshehui.test` |
+
+### 变体配置字段（variants.mjs）
+
+每个变体包含 14 个字段：`appName`、`appId`、`baseUrl`、`loginSocket`、`projectOID`、`ttcVersion`、`updateCheckUrl`、`iconDir`、`logoAsset`、`appDisplayNameZhCN`、`appDisplayNameZhTW`、`appDisplayNameEn`、`iosAppName`。
+
+### 新增变体步骤
+
+1. 在 `variants.mjs` 的 `variants` 对象中添加一个新配置块
+2. 在 `package.json` 的 `scripts` 中添加对应的 `build:*`、`dev:*`、`android:*` 命令
+3. 如需不同图标，在 `android/app/src/` 下新建图标资源目录并在 `iconDir` 中引用
+
+### 构建流程
+
+`build-variant.mjs` 按顺序执行：
+1. 从 `variants.mjs` 读取变体配置
+2. 替换 `*.template.*` 文件中的 `{{占位符}}` 生成实际文件
+3. 生成 `urlValues.js`、`capacitor.config.ts`、Android `strings.xml`（三语言）
+4. 从变体对应的 `iconDir` 复制图标到 `main/res/`
+5. `--dev` 模式到此停止；非 dev 模式继续执行 `vite build` + `cap sync`
 
 ## 开发命令
 
 ```sh
 pnpm install          # 安装依赖
 npx vite              # 启动开发服务器（HMR，走 Vite 代理）
+
+# 变体构建（一条命令完成配置生成 + 构建 + cap sync）
+pnpm build:hongsuyun-prod     # 弘塑云 生产
+pnpm build:hongsuyun-test     # 弘塑云 测试
+pnpm build:hongshehui-prod    # 弘设汇 生产
+pnpm build:hongshehui-test    # 弘设汇 测试
+
+# 开发模式（只生成配置和复制资源，不执行 vite build 和 cap sync）
+pnpm dev:hongsuyun-test       # 然后手动 npx vite
+pnpm dev:hongshehui-test
+
+# 一键生成 + 打开 Android Studio（连接真机测试）
+pnpm android:hongsuyun-prod
+pnpm android:hongsuyun-test
+pnpm android:hongshehui-prod
+pnpm android:hongshehui-test
+
+# 手动构建
 npx vite build        # 构建生产版本到 dist/
 npx cap sync          # 同步 Capacitor 配置到 Android/iOS
 npx cap open android  # 在 Android Studio 中打开
 npx cap open ios      # 在 Xcode 中打开
+
+# 查看所有变体
+node scripts/build-variant.mjs --list
 ```
 
 ## Vite 代理配置
@@ -134,7 +191,12 @@ npx cap open ios      # 在 Xcode 中打开
 
 ## 关键注意事项
 
+- **变体构建**: 所有变体共用同一套代码，通过 `variants.mjs` + `build-variant.mjs` 切换。修改配置只需改 `variants.mjs` 和对应的 `.template.*` 文件
+- **模板文件**: `*.template.*` 文件是源文件（提交到 Git），生成的同名文件（去掉 `.template`）已加入 `.gitignore`
+- **Android 模板位置**: `android/app/templates/`（在 `res/` 外面，避免 Android 构建误编译导致 Duplicate resources）
 - **keep-alive**: ProjectView 被缓存，切换页面后保持 iframe 状态不丢失
+- **导航栏标题**: `ProjectView.vue` 通过 `navProjectTitles` + 当前 locale 动态渲染，支持三语言
+- **App 桌面名称**: Android 通过 `values/strings.xml` + `values-zh-rTW/strings.xml` + `values-en/strings.xml` 实现随系统语言切换
 - **token 存储**: 仅在内存中，刷新/重启需重新登录（除非自动登录启用）
 - **原生 vs Web**: `authRequest` 在原生平台走 `CapacitorHttp`，Web 端走 `fetch`
 - **WebSocket**: 登录时建立，用于多设备互踢；登出/强制登出时关闭
