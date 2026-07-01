@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { StatusBar, Style } from '@capacitor/status-bar'
 import { App } from '@capacitor/app'
@@ -116,6 +116,11 @@ onMounted(async () => {
     backButtonHandle = await App.addListener('backButton', triggerBack)
   }
   checkOnLaunch()
+})
+
+// 登录后路由跳转到认证页面时，触发更新检查
+watch(() => router.currentRoute.value.path, (path) => {
+  if (path !== '/login') checkOnLaunch()
 })
 
 onUnmounted(() => {
