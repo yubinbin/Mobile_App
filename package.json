@@ -12,7 +12,11 @@
     "build:hongshehui-prod": "node scripts/build-variant.mjs hongshehui-prod",
     "build:hongshehui-test": "node scripts/build-variant.mjs hongshehui-test",
     "dev:hongsuyun-test": "node scripts/build-variant.mjs hongsuyun-test --dev && vite",
-    "dev:hongshehui-test": "node scripts/build-variant.mjs hongshehui-test --dev && vite"
+    "dev:hongshehui-test": "node scripts/build-variant.mjs hongshehui-test --dev && vite",
+    "android:hongsuyun-prod": "node scripts/build-variant.mjs hongsuyun-prod && npx cap open android",
+    "android:hongsuyun-test": "node scripts/build-variant.mjs hongsuyun-test && npx cap open android",
+    "android:hongshehui-prod": "node scripts/build-variant.mjs hongshehui-prod && npx cap open android",
+    "android:hongshehui-test": "node scripts/build-variant.mjs hongshehui-test && npx cap open android"
   },
   "dependencies": {
     "@capacitor-mlkit/barcode-scanning": "^8.1.0",
