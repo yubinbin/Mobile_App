@@ -1,6 +1,6 @@
 <template>
   <div class="project-view-page" :class="{ scanning }">
-    <van-nav-bar v-show="!scanning" :title="$t('nav.projectTitle')" style="--van-nav-bar-background: #006dd8; --van-nav-bar-title-text-color: #fff; --van-nav-bar-icon-color: #fff; --van-nav-bar-height: 44px; --van-nav-bar-title-font-size: 17px;">
+    <van-nav-bar v-show="!scanning" :title="navProjectTitle" style="--van-nav-bar-background: #006dd8; --van-nav-bar-title-text-color: #fff; --van-nav-bar-icon-color: #fff; --van-nav-bar-height: 44px; --van-nav-bar-title-font-size: 17px;">
       <template #left>
         <van-icon v-show="canGoBack" name="arrow-left" size="18" color="#fff" @click="handleBack" />
       </template>
@@ -51,7 +51,7 @@ import { ref, onMounted, onUnmounted, onActivated, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getToken, getUserInfo } from '../utils/auth.js'
 import { t, locale } from '../i18n'
-import { baseUrl, projectOID, ttcVersion } from '../utils/urlValues.js'
+import { baseUrl, projectOID, ttcVersion, navProjectTitle } from '../utils/urlValues.js'
 import { navState } from '../utils/navState.js'
 import { BarcodeScanner } from '@capacitor-mlkit/barcode-scanning'
 import { showToast } from 'vant'
