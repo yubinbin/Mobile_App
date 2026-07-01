@@ -11,22 +11,24 @@
 // export const ttcVersion = '2.6.0' // ttc版本号
 
 // 弘塑云 生产环境（新加坡）
-export const baseUrl = 'http://47.236.252.168:8209'
-export const loginSocket = `wss://47.236.252.168:8209`
-export const projectOID = '11024' // 项目id
-export const ttcVersion = '2.7.0' // ttc版本号
+// export const baseUrl = 'http://47.236.252.168:8209'
+// export const loginSocket = `wss://47.236.252.168:8209`
+// export const projectOID = '11024' // 项目id
+// export const ttcVersion = '2.7.0' // ttc版本号
 
 // 弘塑云 测试环境（国内）
-// export const baseUrl = 'http://1.82.232.147:8209'
-// export const loginSocket = `wss://1.82.232.147:8209`
-// export const projectOID = '10994' // 项目id
-// export const ttcVersion = '2.7.0' // ttc版本号
+export const baseUrl = 'http://1.82.232.147:8209'
+export const loginSocket = `wss://1.82.232.147:8209`
+export const projectOID = '10994' // 项目id
+export const ttcVersion = '2.7.0' // ttc版本号
 
 // 应用版本号（升级时只改这一处）
 export const appVersion = 'v1.0.0'
 // 应用名
 // export const appName = 'hongshehui'
 export const appName = 'hongsuyun'
+// 版本更新检查接口
+export const updateCheckUrl = 'https://manage.tmiot.com.cn'
 
 export const login = `${baseUrl}/app/account/login`
 export const loginRSA = `${baseUrl}/biz/tmIoTCloud/Interface/loginRSA`

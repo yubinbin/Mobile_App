@@ -2,7 +2,7 @@ import { showConfirmDialog, showDialog, showToast } from 'vant'
 import { Capacitor, CapacitorHttp } from '@capacitor/core'
 import { t } from '../i18n'
 import { isLoggedIn } from './auth.js'
-import { baseUrl, appVersion, appName } from './urlValues.js'
+import { baseUrl, appVersion, appName, updateCheckUrl } from './urlValues.js'
 import { updateState } from './updateState.js'
 
 let checking = false
@@ -107,7 +107,7 @@ function getCurrentVersion() {
 /** 调用更新检查接口，5 秒超时（免登录接口） */
 async function fetchVersionInfo() {
   const platform = Capacitor.getPlatform()
-  const url = `https://manage.tmiot.com.cn/app/share/updateAppVersion?app=${appName}&platform=${platform}`
+  const url = `${updateCheckUrl}/app/share/updateAppVersion?app=${appName}&platform=${platform}`
 
   if (Capacitor.isNativePlatform()) {
     const res = await Promise.race([
