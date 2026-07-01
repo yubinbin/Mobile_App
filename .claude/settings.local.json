@@ -24,7 +24,11 @@
       "Bash(git -C D:/work/source/mobile_app add src/App.vue)",
       "Bash(git -C D:/work/source/mobile_app commit -m 'feat: App.vue 启动时自动检查版本更新 *)",
       "Bash(git -C D:/work/source/mobile_app add src/pages/UserInfo.vue)",
-      "Bash(git -C D:/work/source/mobile_app commit -m 'feat: UserInfo 添加检查更新菜单项 *)"
+      "Bash(git -C D:/work/source/mobile_app commit -m 'feat: UserInfo 添加检查更新菜单项 *)",
+      "Bash(git commit *)",
+      "Bash(python -c \"import json; json.load\\(open\\('src/i18n/zh-CN.json','r',encoding='utf-8'\\)\\); print\\('zh-CN: valid'\\)\")",
+      "Bash(python -c \"import json; json.load\\(open\\('src/i18n/zh-TW.json','r',encoding='utf-8'\\)\\); print\\('zh-TW: valid'\\)\")",
+      "Bash(python -c \"import json; json.load\\(open\\('src/i18n/en.json','r',encoding='utf-8'\\)\\); print\\('en.json: valid'\\)\")"
     ]
   }
 }

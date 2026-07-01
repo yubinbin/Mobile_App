@@ -28,7 +28,8 @@ export const appVersion = 'v1.0.0'
 // export const appName = 'hongshehui'
 export const appName = 'hongsuyun'
 // 版本更新检查接口
-export const updateCheckUrl = 'https://manage.tmiot.com.cn'
+// export const updateCheckUrl = 'https://manage.tmiot.com.cn/app/share/updateAppVersion'
+export const updateCheckUrl = 'http://1.82.232.147:8209/biz/tmIoTCloud/Interface/updateAppVersion'
 
 export const login = `${baseUrl}/app/account/login`
 export const loginRSA = `${baseUrl}/biz/tmIoTCloud/Interface/loginRSA`
