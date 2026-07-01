@@ -46,6 +46,10 @@
           <span class="auto-login-text">{{ $t('login.autoLogin') }}</span>
         </van-checkbox>
       </div>
+      <div class="lang-row" @click="showLangPicker = true">
+        <span>{{ $t('user.langSwitch') }}：{{ langLabel }}</span>
+        <van-icon name="arrow-down" size="14" color="#999" />
+      </div>
     </div>
 
     <div class="button-section">
@@ -59,13 +63,17 @@
       <p class="copyright">{{ $t('login.footer') }}</p>
     </div>
   </div>
+
+    <van-popup v-model:show="showLangPicker" round position="bottom">
+      <van-picker :columns="langOptions" :default-index="langIndex" @confirm="onLangConfirm" @cancel="showLangPicker = false" />
+    </van-popup>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { showToast, showDialog } from 'vant'
-import { t } from '../i18n'
+import { setLocale, getLocale, t } from '../i18n'
 import { loginRSA, login, baseUrl, projectOID, ttcVersion, loginSocket, appVersion } from '../utils/urlValues.js'
 import { setToken, setUserInfo, clearAuth } from '../utils/auth.js'
 import { checkOnLaunch } from '../utils/appUpdater.js'
@@ -78,6 +86,23 @@ const password = ref('')
 const autoLogin = ref(false)
 const loading = ref(false)
 const showPwd = ref(false)
+
+const showLangPicker = ref(false)
+
+const langOptions = computed(() => [
+  { text: t('lang.zhCN'), value: 'zh-CN' },
+  { text: t('lang.zhTW'), value: 'zh-HK' },
+  { text: t('lang.en'), value: 'en-US' },
+])
+
+const langIndex = computed(() => langOptions.value.findIndex(o => o.value === getLocale()))
+
+const langLabel = computed(() => langOptions.value.find(o => o.value === getLocale())?.text || '')
+
+const onLangConfirm = ({ selectedOptions }) => {
+  setLocale(selectedOptions[0].value)
+  showLangPicker.value = false
+}
 
 onMounted(() => {
   if (window.loginSocket) {
@@ -210,6 +235,7 @@ const handleForceLogout = () => {
 :deep(.van-field__control::placeholder) { color: #ccc; font-size: 16px; }
 .auto-login { margin-top: 16px; }
 .auto-login-text { font-size: 15px; color: #333; margin-left: 4px; }
+.lang-row { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 16px 0 8px; font-size: 14px; color: #999; cursor: pointer; }
 :deep(.van-checkbox__icon) { border-color: #ccc; }
 :deep(.van-checkbox__icon--checked .van-icon) { background-color: #2c5aa0; border-color: #2c5aa0; }
 .button-section { padding: 40px 32px 0; }
