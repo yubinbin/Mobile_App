@@ -3,7 +3,7 @@
 
 export const variants = {
   'hongsuyun-prod': {
-    appNameEn: 'hongsuyun',
+    appName: 'hongsuyun',
     appId: 'cn.com.tmiot.hongsuyun',
     baseUrl: 'http://47.236.252.168:8209',
     loginSocket: 'wss://47.236.252.168:8209',
@@ -19,7 +19,7 @@ export const variants = {
   },
 
   'hongsuyun-test': {
-    appNameEn: 'hongsuyun',
+    appName: 'hongsuyun',
     appId: 'cn.com.tmiot.hongsuyun.test',
     baseUrl: 'http://1.82.232.147:8209',
     loginSocket: 'wss://1.82.232.147:8209',
@@ -35,7 +35,7 @@ export const variants = {
   },
 
   'hongshehui-prod': {
-    appNameEn: 'hongshehui',
+    appName: 'hongshehui',
     appId: 'cn.com.tmiot.tic',
     baseUrl: 'https://tmplascloud.com',
     loginSocket: 'wss://tmplascloud.com',
@@ -51,7 +51,7 @@ export const variants = {
   },
 
   'hongshehui-test': {
-    appNameEn: 'hongshehui',
+    appName: 'hongshehui',
     appId: 'cn.com.tmiot.hongshehui.test',
     baseUrl: 'https://imro.tmiot.com.cn',
     loginSocket: 'wss://imro.tmiot.com.cn',
