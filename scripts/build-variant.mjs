@@ -70,10 +70,18 @@ render(
   resolve(root, 'capacitor.config.ts')
 )
 
-// ---- 步骤 3: 生成 Android strings.xml ----
+// ---- 步骤 3: 生成 Android strings.xml（三语言） ----
 render(
   resolve(root, 'android/app/src/main/res/values/strings.template.xml'),
   resolve(root, 'android/app/src/main/res/values/strings.xml')
+)
+render(
+  resolve(root, 'android/app/src/main/res/values/strings.template.en.xml'),
+  resolve(root, 'android/app/src/main/res/values-en/strings.xml')
+)
+render(
+  resolve(root, 'android/app/src/main/res/values/strings.template.zh-rTW.xml'),
+  resolve(root, 'android/app/src/main/res/values-zh-rTW/strings.xml')
 )
 
 // ---- 步骤 4: 复制 Android 原生图标 ----

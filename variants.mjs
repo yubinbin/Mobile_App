@@ -16,6 +16,8 @@ export const variants = {
     navProjectTitleZhCN: '弘塑云',
     navProjectTitleZhTW: '弘塑雲',
     navProjectTitleEn: 'HongSuYun',
+    appDisplayNameZhTW: '弘塑雲',
+    appDisplayNameEn: 'HongSuYun',
     iosAppName: '弘塑云',
   },
 
@@ -33,6 +35,8 @@ export const variants = {
     navProjectTitleZhCN: '弘塑云',
     navProjectTitleZhTW: '弘塑雲',
     navProjectTitleEn: 'HongSuYun',
+    appDisplayNameZhTW: '弘塑雲',
+    appDisplayNameEn: 'HongSuYun',
     iosAppName: '弘塑云',
   },
 
@@ -50,6 +54,8 @@ export const variants = {
     navProjectTitleZhCN: '弘设汇',
     navProjectTitleZhTW: '弘設匯',
     navProjectTitleEn: 'HongSheHui',
+    appDisplayNameZhTW: '弘設匯',
+    appDisplayNameEn: 'HongSheHui',
     iosAppName: '弘设汇',
   },
 
@@ -67,6 +73,8 @@ export const variants = {
     navProjectTitleZhCN: '弘设汇',
     navProjectTitleZhTW: '弘設匯',
     navProjectTitleEn: 'HongSheHui',
+    appDisplayNameZhTW: '弘設匯',
+    appDisplayNameEn: 'HongSheHui',
     iosAppName: '弘设汇',
   },
 }
