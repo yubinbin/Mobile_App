@@ -107,7 +107,7 @@ function getCurrentVersion() {
 /** 调用更新检查接口，5 秒超时（免登录接口） */
 async function fetchVersionInfo() {
   const platform = Capacitor.getPlatform()
-  const url = `${updateCheckUrl}/app/share/updateAppVersion?app=${appName}&platform=${platform}`
+  const url = `${updateCheckUrl}?app=${appName}&platform=${platform}`
 
   if (Capacitor.isNativePlatform()) {
     const res = await Promise.race([
@@ -203,8 +203,7 @@ export async function checkOnLaunch() {
     updateState.hasUpdate = true
     updateState.updateInfo = info
     updateState.downloadState = 'idle'
-
-    showUpdateDialog(info)
+    // 启动检查不弹窗，仅设置红点状态，用户手动点击"检查更新"时才会弹窗
   } catch {
     // 启动检查失败，静默忽略
   } finally {
