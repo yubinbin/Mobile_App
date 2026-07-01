@@ -72,15 +72,15 @@ render(
 
 // ---- 步骤 3: 生成 Android strings.xml（三语言） ----
 render(
-  resolve(root, 'android/app/src/main/res/values/strings.template.xml'),
+  resolve(root, 'android/app/templates/strings.template.xml'),
   resolve(root, 'android/app/src/main/res/values/strings.xml')
 )
 render(
-  resolve(root, 'android/app/src/main/res/values/strings.template.en.xml'),
+  resolve(root, 'android/app/templates/strings.template.en.xml'),
   resolve(root, 'android/app/src/main/res/values-en/strings.xml')
 )
 render(
-  resolve(root, 'android/app/src/main/res/values/strings.template.zh-rTW.xml'),
+  resolve(root, 'android/app/templates/strings.template.zh-rTW.xml'),
   resolve(root, 'android/app/src/main/res/values-zh-rTW/strings.xml')
 )
 
