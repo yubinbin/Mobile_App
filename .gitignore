@@ -40,3 +40,8 @@ __screenshots__/
 
 # Superpowers
 .superpowers/
+
+# 由 build-variant.mjs 生成，不提交
+src/utils/urlValues.js
+capacitor.config.ts
+android/app/src/main/res/values/strings.xml
