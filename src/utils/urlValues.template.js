@@ -10,7 +10,11 @@ export const appVersion = 'v1.0.0'
 export const appName = '{{appNameEn}}'
 export const updateCheckUrl = '{{updateCheckUrl}}'
 export const logoAsset = '{{logoAsset}}'
-export const navProjectTitle = '{{navProjectTitle}}'
+export const navProjectTitles = {
+  'zh-CN': '{{navProjectTitleZhCN}}',
+  'zh-HK': '{{navProjectTitleZhTW}}',
+  'en-US': '{{navProjectTitleEn}}',
+}
 
 // 以下为 baseUrl 派生地址，无需手动修改
 export const login = `${baseUrl}/app/account/login`

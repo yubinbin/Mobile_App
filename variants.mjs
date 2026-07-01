@@ -13,7 +13,9 @@ export const variants = {
     updateCheckUrl: 'http://47.236.252.168:8209/biz/tmIoTCloud/Interface/updateAppVersion',
     iconDir: 'tpc',
     logoAsset: 'logo_hongsuyun.png',
-    navProjectTitle: '弘塑云',
+    navProjectTitleZhCN: '弘塑云',
+    navProjectTitleZhTW: '弘塑雲',
+    navProjectTitleEn: 'HongSuYun',
     iosAppName: '弘塑云',
   },
 
@@ -28,7 +30,9 @@ export const variants = {
     updateCheckUrl: 'http://1.82.232.147:8209/biz/tmIoTCloud/Interface/updateAppVersion',
     iconDir: 'tpc',
     logoAsset: 'logo_hongsuyun.png',
-    navProjectTitle: '弘塑云',
+    navProjectTitleZhCN: '弘塑云',
+    navProjectTitleZhTW: '弘塑雲',
+    navProjectTitleEn: 'HongSuYun',
     iosAppName: '弘塑云',
   },
 
@@ -43,7 +47,9 @@ export const variants = {
     updateCheckUrl: 'https://manage.tmiot.com.cn/app/share/updateAppVersion',
     iconDir: 'tic',
     logoAsset: 'logo_hongshehui.png',
-    navProjectTitle: '弘设汇',
+    navProjectTitleZhCN: '弘设汇',
+    navProjectTitleZhTW: '弘設匯',
+    navProjectTitleEn: 'HongSheHui',
     iosAppName: '弘设汇',
   },
 
@@ -58,7 +64,9 @@ export const variants = {
     updateCheckUrl: 'https://manage.tmiot.com.cn/app/share/updateAppVersion',
     iconDir: 'tic',
     logoAsset: 'logo_hongshehui.png',
-    navProjectTitle: '弘设汇',
+    navProjectTitleZhCN: '弘设汇',
+    navProjectTitleZhTW: '弘設匯',
+    navProjectTitleEn: 'HongSheHui',
     iosAppName: '弘设汇',
   },
 }
