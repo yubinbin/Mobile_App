@@ -5,7 +5,7 @@
         <van-icon v-show="canGoBack" name="arrow-left" size="18" color="#fff" @click="handleBack" />
       </template>
       <template #right>
-        <img v-show="!canGoBack" @click="goUserInfo" src="@/assets/images/user.png" class="user-img" />
+        <img @click="goUserInfo" src="@/assets/images/user.png" class="user-img" />
       </template>
     </van-nav-bar>
 
