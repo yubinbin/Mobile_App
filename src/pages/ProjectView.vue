@@ -118,6 +118,9 @@ onActivated(() => {
   // 重新进入项目页时重置历史基准，吸收进出子页造成的 history.length 偏移，
   // 避免 onPopState 计算的 depth 虚高导致 canGoBack 误判
   baseHistoryLength = history.length
+  // 返回首页时重置返回按钮状态，避免从子页面返回后残留旧状态
+  canGoBack.value = false
+  navState.canGoBack = false
 })
 
 onUnmounted(() => {
@@ -158,7 +161,12 @@ async function stopScan() {
   scanning.value = false
 }
 
-const onIframeLoad = () => { loading.value = false }
+const onIframeLoad = () => {
+  loading.value = false
+  // 重置返回按钮状态：iframe 首次加载完成时页面为首页，不应显示返回按钮
+  canGoBack.value = false
+  navState.canGoBack = false
+}
 const onIframeError = () => { error.value = t('error.loadFail'); loading.value = false }
 const handleBack = () => { history.back() }
 const goUserInfo = () => { router.push('/user-info') }
