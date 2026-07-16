@@ -187,17 +187,22 @@ const doLogin = async () => {
 
 const connectSocket = (uid, token) => {
   try {
-    const ws = new WebSocket(`${loginSocket}?token=${token}`)
+    const wsUrl = `${loginSocket}?token=${token}`
+    console.log('[互踢WS] 尝试连接:', wsUrl)
+    const ws = new WebSocket(wsUrl)
     let heartbeat = null
 
     ws.onopen = () => {
-      ws.send(JSON.stringify({ cmd: 'subscribe', room: `${uid}_2` }))
+      const room = `${uid}_2`
+      console.log('[互踢WS] 已连接，订阅房间:', room)
+      ws.send(JSON.stringify({ cmd: 'subscribe', room }))
       heartbeat = setInterval(() => {
         if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ cmd: 'ping' }))
       }, 30000)
     }
 
     ws.onmessage = () => {
+      console.log('[互踢WS] 收到服务器推送，判定异地登录，踢出当前设备')
       clearAuth()
       if (ws) ws.close()
       showDialog({ title: t('dialog.title'), message: t('error.kicked'), confirmButtonText: t('error.reLogin') }).then(() => {
@@ -205,9 +210,18 @@ const connectSocket = (uid, token) => {
       })
     }
 
-    ws.onclose = () => { if (heartbeat) clearInterval(heartbeat) }
+    ws.onerror = (e) => {
+      console.error('[互踢WS] 连接错误，互踢功能将不可用:', e)
+    }
+
+    ws.onclose = (event) => {
+      console.warn('[互踢WS] 连接关闭 code=' + event.code + ' wasClean=' + event.wasClean)
+      if (heartbeat) clearInterval(heartbeat)
+    }
     window.loginSocket = ws
-  } catch {}
+  } catch (e) {
+    console.error('[互踢WS] 建立连接异常:', e)
+  }
 }
 
 onUnmounted(() => {

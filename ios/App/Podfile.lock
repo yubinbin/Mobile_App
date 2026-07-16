@@ -1,9 +1,9 @@
 PODS:
-  - Capacitor (8.4.0):
+  - Capacitor (8.4.1):
     - CapacitorCordova
   - CapacitorApp (8.1.0):
     - Capacitor
-  - CapacitorCordova (8.4.0)
+  - CapacitorCordova (8.4.1)
   - CapacitorMlkitBarcodeScanning (8.1.0):
     - Capacitor
     - GoogleMLKit/BarcodeScanning (~> 8.0.0)
@@ -57,11 +57,11 @@ PODS:
   - PromisesObjC (2.4.1)
 
 DEPENDENCIES:
-  - "Capacitor (from `../../node_modules/.pnpm/@capacitor+ios@8.4.0_@capacitor+core@8.4.0/node_modules/@capacitor/ios`)"
-  - "CapacitorApp (from `../../node_modules/.pnpm/@capacitor+app@8.1.0_@capacitor+core@8.4.0/node_modules/@capacitor/app`)"
-  - "CapacitorCordova (from `../../node_modules/.pnpm/@capacitor+ios@8.4.0_@capacitor+core@8.4.0/node_modules/@capacitor/ios`)"
-  - "CapacitorMlkitBarcodeScanning (from `../../node_modules/.pnpm/@capacitor-mlkit+barcode-scanning@8.1.0_@capacitor+core@8.4.0/node_modules/@capacitor-mlkit/barcode-scanning`)"
-  - "CapacitorStatusBar (from `../../node_modules/.pnpm/@capacitor+status-bar@8.0.2_@capacitor+core@8.4.0/node_modules/@capacitor/status-bar`)"
+  - "Capacitor (from `../../node_modules/.pnpm/@capacitor+ios@8.4.1_@capacitor+core@8.4.1/node_modules/@capacitor/ios`)"
+  - "CapacitorApp (from `../../node_modules/.pnpm/@capacitor+app@8.1.0_@capacitor+core@8.4.1/node_modules/@capacitor/app`)"
+  - "CapacitorCordova (from `../../node_modules/.pnpm/@capacitor+ios@8.4.1_@capacitor+core@8.4.1/node_modules/@capacitor/ios`)"
+  - "CapacitorMlkitBarcodeScanning (from `../../node_modules/.pnpm/@capacitor-mlkit+barcode-scanning@8.1.0_@capacitor+core@8.4.1/node_modules/@capacitor-mlkit/barcode-scanning`)"
+  - "CapacitorStatusBar (from `../../node_modules/.pnpm/@capacitor+status-bar@8.0.2_@capacitor+core@8.4.1/node_modules/@capacitor/status-bar`)"
 
 SPEC REPOS:
   trunk:
@@ -79,20 +79,20 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   Capacitor:
-    :path: "../../node_modules/.pnpm/@capacitor+ios@8.4.0_@capacitor+core@8.4.0/node_modules/@capacitor/ios"
+    :path: "../../node_modules/.pnpm/@capacitor+ios@8.4.1_@capacitor+core@8.4.1/node_modules/@capacitor/ios"
   CapacitorApp:
-    :path: "../../node_modules/.pnpm/@capacitor+app@8.1.0_@capacitor+core@8.4.0/node_modules/@capacitor/app"
+    :path: "../../node_modules/.pnpm/@capacitor+app@8.1.0_@capacitor+core@8.4.1/node_modules/@capacitor/app"
   CapacitorCordova:
-    :path: "../../node_modules/.pnpm/@capacitor+ios@8.4.0_@capacitor+core@8.4.0/node_modules/@capacitor/ios"
+    :path: "../../node_modules/.pnpm/@capacitor+ios@8.4.1_@capacitor+core@8.4.1/node_modules/@capacitor/ios"
   CapacitorMlkitBarcodeScanning:
-    :path: "../../node_modules/.pnpm/@capacitor-mlkit+barcode-scanning@8.1.0_@capacitor+core@8.4.0/node_modules/@capacitor-mlkit/barcode-scanning"
+    :path: "../../node_modules/.pnpm/@capacitor-mlkit+barcode-scanning@8.1.0_@capacitor+core@8.4.1/node_modules/@capacitor-mlkit/barcode-scanning"
   CapacitorStatusBar:
-    :path: "../../node_modules/.pnpm/@capacitor+status-bar@8.0.2_@capacitor+core@8.4.0/node_modules/@capacitor/status-bar"
+    :path: "../../node_modules/.pnpm/@capacitor+status-bar@8.0.2_@capacitor+core@8.4.1/node_modules/@capacitor/status-bar"
 
 SPEC CHECKSUMS:
-  Capacitor: 8273022511838f32d2b245105fdee086195b1304
+  Capacitor: 9c34c6eb2165694e51758f5b425d470cb00f5bea
   CapacitorApp: a4d8d936cc4390859a3766f141048abe55d4076f
-  CapacitorCordova: 71d81f350e6c30bf2a846593b5c480fbd68e9bac
+  CapacitorCordova: eebe6bcf807b1b06f3f48237650f96bbcd0eef09
   CapacitorMlkitBarcodeScanning: 1c052457db2c79a763580ca59ee108627ae87f95
   CapacitorStatusBar: b692a4cf12b3fe3a7b7ece86da62106065d78fdc
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
@@ -107,6 +107,6 @@ SPEC CHECKSUMS:
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   PromisesObjC: 752c3227f599e3467650e47ea36f433eeb10c273
 
-PODFILE CHECKSUM: 855782ae597bc97e2ea13bdeda16baec0db5c692
+PODFILE CHECKSUM: 730970c19a018c4f0a2a6aeda52fe6190af719da
 
 COCOAPODS: 1.16.2
