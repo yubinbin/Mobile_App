@@ -4,7 +4,7 @@
 export const variants = {
   'hongsuyun-prod': {
     appName: 'hongsuyun',
-    appId: 'cn.com.tmiot.hongsuyun',
+    appId: 'cn.com.tmiot.tpc',
     baseUrl: 'http://47.236.252.168:8209',
     loginSocket: 'ws://47.236.252.168:8209',
     projectOID: '11024',
@@ -14,7 +14,7 @@ export const variants = {
     logoAsset: 'logo_hongsuyun.png',
     appDisplayNameZhCN: '弘塑云',
     appDisplayNameZhTW: '弘塑雲',
-    appDisplayNameEn: 'HongSuYun',
+    appDisplayNameEn: 'TM Plas Cloud',
     iosAppName: '弘塑云',
   },
 
@@ -30,7 +30,7 @@ export const variants = {
     logoAsset: 'logo_hongsuyun.png',
     appDisplayNameZhCN: '弘塑云',
     appDisplayNameZhTW: '弘塑雲',
-    appDisplayNameEn: 'HongSuYun',
+    appDisplayNameEn: 'TM Plas Cloud',
     iosAppName: '弘塑云',
   },
 
@@ -62,7 +62,7 @@ export const variants = {
     logoAsset: 'logo_hongshehui.png',
     appDisplayNameZhCN: '弘设汇',
     appDisplayNameZhTW: '弘設匯',
-    appDisplayNameEn: 'HongSheHui',
+    appDisplayNameEn: 'TIC',
     iosAppName: '弘设汇',
   },
 }

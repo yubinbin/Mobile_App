@@ -3,7 +3,7 @@
   "login.password": "Password",
   "login.autoLogin": "Auto Login",
   "login.button": "Login",
-  "login.footer": "copyright © 2021 Ningbo Hongxun Software Development Co., Ltd.",
+  "login.footer": "copyright © 2021 NingBo Techmation Software Co., Ltd.",
 
   "nav.back": "Back",
   "nav.userCenter": "My Profile",
@@ -71,7 +71,7 @@
   "about.platform": "Development Platform",
   "about.platform.value": "tmIoT® IoT Cloud Platform",
   "about.owner": "All Rights Reserved",
-  "about.owner.value": "Ningbo Techmation Software Development Co., Ltd. Xi'an Branch",
+  "about.owner.value": "NingBo Techmation Software Co., Ltd.",
   "about.address": "Address",
   "about.address.value": "Unit A, Baode Yungu International, No. 52 Jinye 1st Road, Zhangba Subdistrict, Xi'an High-tech Zone, Shaanxi Province, China",
   "about.contact": "Contact",
