@@ -134,6 +134,16 @@ src/
 - `.van-nav-bar` 加 padding 时用 `box-sizing: content-box`，避免 padding 吃掉 Vant 的 `--van-nav-bar-height`（44px）把内容压扁。
 - 此类问题**本地/多数真机无法复现**，需在出问题的那台真机上装对应变体验证。
 
+**iOS 端行为（同一份 CSS 为什么安全）**
+
+从 Capacitor 8 iOS 源码逐层确认，该 CSS 对 iOS **无负面影响，且是顺带修复**：
+
+- iOS **不注入** `--safe-area-inset-top`，故回退链落到标准 `env(safe-area-inset-top)`，由 WebKit 原生支持。
+- `CAPBridgeViewController.swift` 中 `view = webView`：WKWebView 即根视图，全屏铺开（含状态栏/刘海区）；配合 `viewport-fit=cover`，`env()` 返回真实安全区高度。
+- `CAPInstanceDescriptor.m` 默认 `contentInsetAdjustmentBehavior = .never`：scrollView **不**自动下移内容，故 `env()` 是唯一偏移来源，**不会双重留白**。
+- 各机型：刘海机（iPhone X+）返回 44–59px，非刘海机 / iPad 返回 20px，nav-bar 均精确避让。
+- 改动前 iOS 的 `.van-nav-bar` 无 padding-top 而 WebView 全屏，故 iOS **本可能也有**顶部栏侵入问题；这次是同时修复两端。真机验证建议 Android + iOS 各看一台。
+
 ## 变体构建系统
 
 所有变体配置集中在 `variants.mjs`，通过 `scripts/build-variant.mjs` 一条命令完成构建。**不再需要手动修改源码切换环境或管理多个分支。**
