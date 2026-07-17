@@ -240,7 +240,7 @@ const handleForceLogout = () => {
 
 <style scoped>
 .login-page { min-height: 100vh; background: #fff; display: flex; flex-direction: column; }
-.safe-area-top { height: env(safe-area-inset-top); }
+.safe-area-top { height: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); }
 .logo-section { display: flex; justify-content: center; padding-top: 80px; padding-bottom: 60px; }
 .logo-img { width: 260px; }
 .form-section { padding: 0 32px; }

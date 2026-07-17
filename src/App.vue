@@ -175,3 +175,14 @@ onUnmounted(() => {
   transform: translateY(100%); opacity: 0;
 }
 </style>
+
+<!-- 全局样式：处理 Android 15+ edge-to-edge / 部分 ROM 状态栏遮挡问题 -->
+<!-- Capacitor SystemBars 在 passthrough 模式下会注入 --safe-area-inset-top（含状态栏高度），
+     WebView 内容会延伸到状态栏下方，需要顶部栏自行避让。
+     env(safe-area-inset-top) 在无刘海机型上返回 0，无法兜底，故优先用注入变量。 -->
+<style>
+.van-nav-bar {
+  padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+  box-sizing: content-box;
+}
+</style>

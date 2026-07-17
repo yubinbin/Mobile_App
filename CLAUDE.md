@@ -121,6 +121,19 @@ src/
 - ProjectView 页面内优先触发 iframe 内部返回（`history.back()`）
 - 登录页和项目页的返回键触发 HomeSwipe（退到后台）
 
+### 7. 状态栏 / 安全区（Android edge-to-edge 兼容）
+
+- `App.vue` 的 `initStatusBar()` 调用 `StatusBar.setOverlaysWebView({ overlay: false })`，但**在部分机型上不足以避开状态栏**（见下）。
+- **真正的兜底在 CSS**：`App.vue` 有一段**非 scoped** 全局样式，给所有 `.van-nav-bar` 加 `padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px))`，覆盖 ProjectView / UserInfo / About 三个页面的顶部栏；Login 的 `.safe-area-top` 占位用同一变量。
+
+**⚠️ 关键陷阱（顶部栏跑进状态栏的根因）**
+
+- `targetSdkVersion = 36` 触发 Android 15+ **强制 edge-to-edge**。Capacitor 8 在「WebView 版本 ≥ 140 **且** `index.html` 带 `viewport-fit=cover`」时（本项目两者都满足）走 **passthrough 模式**：WebView 内容直接铺到状态栏下方，原生**不再**给 WebView 加 padding，完全靠网页自己避让。旧 WebView 机型走 legacy 路径（原生加 padding），所以看起来正常——这就是「**只有极个别手机出问题**」的原因，取决于该机的**系统 WebView 版本**。
+- **不要用标准的 `env(safe-area-inset-top)` 兜底**：在 Android 上它**只反映刘海/挖孔（display cutout），不含普通状态栏高度**，无刘海机型返回 0，占位会塌成 0 高度——等于没改。
+- **必须用 Capacitor 注入的自定义变量 `--safe-area-inset-top`**：Capacitor 8 核心 `SystemBars.java` 通过 `systemBars() | displayCutout()` 计算真实高度（**含状态栏**），注入为 `--safe-area-inset-top`（**不是** `env()`）。写法 `var(--safe-area-inset-top, env(safe-area-inset-top, 0px))` 在三种路径下都正确：passthrough 机型返回真实状态栏高度，legacy 机型返回 0（原生已 padding），iOS 回退到 `env()`。
+- `.van-nav-bar` 加 padding 时用 `box-sizing: content-box`，避免 padding 吃掉 Vant 的 `--van-nav-bar-height`（44px）把内容压扁。
+- 此类问题**本地/多数真机无法复现**，需在出问题的那台真机上装对应变体验证。
+
 ## 变体构建系统
 
 所有变体配置集中在 `variants.mjs`，通过 `scripts/build-variant.mjs` 一条命令完成构建。**不再需要手动修改源码切换环境或管理多个分支。**
@@ -202,4 +215,5 @@ node scripts/build-variant.mjs --list
 - **WebSocket**: 登录时建立，用于多设备互踢；登出/强制登出时关闭
 - **Vant 组件**: 在 `main.js` 中按需注册，不要直接在页面中 import Vant 组件
 - **StatusBar**: 颜色在 `router.afterEach` 中根据路由动态设置
+- **安全区兜底**: 顶部栏避开状态栏靠 `App.vue` 全局 CSS，用 `var(--safe-area-inset-top, env(...))`，**不要只用 `env(safe-area-inset-top)`**（Android 无刘海机型返回 0）。详见「核心架构模式 §7」
 - **扫码前必须**: 检查/请求相机权限，停止后需移除 listener 和 `barcode-scanning` class
