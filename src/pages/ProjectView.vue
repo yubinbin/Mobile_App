@@ -49,7 +49,7 @@ export default { name: 'ProjectView' }
 <script setup>
 import { ref, computed, onMounted, onUnmounted, onActivated, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getToken, getUserInfo } from '../utils/auth.js'
+import { getToken, getUserInfo, verifyToken } from '../utils/auth.js'
 import { t, locale } from '../i18n'
 import { baseUrl, projectOID, ttcVersion, navProjectTitles } from '../utils/urlValues.js'
 import { navState } from '../utils/navState.js'
@@ -106,7 +106,17 @@ watch(locale, () => {
   if (projectUrl.value) projectUrl.value = setLang(projectUrl.value)
 })
 
-onActivated(() => {
+onActivated(async () => {
+  // 先同步重置 UI 状态（导航栏返回箭头、历史基准），避免短暂残留旧状态造成视觉闪烁
+  baseHistoryLength = history.length
+  canGoBack.value = false
+  navState.canGoBack = false
+
+  // ⚠️ 再异步校验 token：必须在更新 projectUrl 之前 await，否则 iframe 用过期 token
+  // 发起请求时远程页面会先一步跳到 SSO 登录页，App 再跳登录就晚了。
+  const status = await verifyToken()
+  if (status === 'invalid') { router.replace('/login'); return }
+
   const token = getToken()
   if (!token) { router.replace('/login'); return }
   // token 变了说明换账号登录，重新加载 iframe
@@ -115,12 +125,6 @@ onActivated(() => {
     const uid = savedUser?.userAID || 'default'
     projectUrl.value = setLang(`${baseUrl}/app/ttcEngineDefalut?ttcVersion=${ttcVersion}&projectOID=${projectOID}&userOID=${uid}&access_token=${token}`)
   }
-  // 重新进入项目页时重置历史基准，吸收进出子页造成的 history.length 偏移，
-  // 避免 onPopState 计算的 depth 虚高导致 canGoBack 误判
-  baseHistoryLength = history.length
-  // 返回首页时重置返回按钮状态，避免从子页面返回后残留旧状态
-  canGoBack.value = false
-  navState.canGoBack = false
 })
 
 onUnmounted(() => {

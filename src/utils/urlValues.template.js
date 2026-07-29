@@ -6,9 +6,8 @@ export const baseUrl = '{{baseUrl}}'
 export const loginSocket = '{{loginSocket}}'
 export const projectOID = '{{projectOID}}'
 export const ttcVersion = '{{ttcVersion}}'
-export const appVersion = 'v1.0.0'
+export const appVersion = 'v1.2.0'
 export const appName = '{{appName}}'
-export const updateCheckUrl = '{{updateCheckUrl}}'
 export const logoAsset = '{{logoAsset}}'
 export const navProjectTitles = {
   'zh-CN': '{{appDisplayNameZhCN}}',
@@ -19,5 +18,5 @@ export const navProjectTitles = {
 // 以下为 baseUrl 派生地址，无需手动修改
 export const login = `${baseUrl}/app/account/login`
 export const loginRSA = `${baseUrl}/biz/tmIoTCloud/Interface/loginRSA`
-export const getProccessData = `${baseUrl}/biz/tmIoTCloud/Interface/getProccessData`
-export const validateToken = `${baseUrl}/app/account/validateToken`
+export const validateToken = `${baseUrl}/biz/account/validateToken`
+export const updateCheckUrl = `${baseUrl}/biz/tmIoTCloud/Interface/updateAppVersion`

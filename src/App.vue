@@ -35,6 +35,7 @@ import { handleHomeSwipe } from './utils/swipeBack.js'
 import { navState } from './utils/navState.js'
 import { updateState } from './utils/updateState.js'
 import { downloadAndInstall, checkOnLaunch, cancelCurrentDownload } from './utils/appUpdater.js'
+import { isLoggedIn, verifyToken } from './utils/auth.js'
 
 function initStatusBar() {
   if (Capacitor.isNativePlatform()) {
@@ -50,7 +51,19 @@ let touchStartX = 0
 let touchStartY = 0
 let touchStartTime = 0
 let backButtonHandle = null
+let appStateHandle = null
 let backLock = false
+
+// App 从后台切回前台时，服务端 session 可能已过期（如停在主页过夜）。
+// 此处向服务端校验 token：明确失效则回登录页（自动登录会无感重登），
+// 网络异常等无法判定的情况保持现状，避免误踢。onActivated 覆盖返回主页路径，此处覆盖直接切回场景。
+async function onAppActive() {
+  if (!isLoggedIn()) return
+  const status = await verifyToken()
+  if (status === 'invalid' && router.currentRoute.value.path !== '/login') {
+    router.replace('/login')
+  }
+}
 
 function onTouchStart(e) {
   touchStartX = e.touches[0].clientX
@@ -114,6 +127,9 @@ onMounted(async () => {
   document.addEventListener('touchend', onTouchEnd, { passive: true })
   if (Capacitor.isNativePlatform()) {
     backButtonHandle = await App.addListener('backButton', triggerBack)
+    appStateHandle = await App.addListener('appStateChange', ({ isActive }) => {
+      if (isActive) onAppActive()
+    })
   }
   checkOnLaunch()
 })
@@ -122,6 +138,7 @@ onUnmounted(() => {
   document.removeEventListener('touchstart', onTouchStart)
   document.removeEventListener('touchend', onTouchEnd)
   backButtonHandle?.remove()
+  appStateHandle?.remove()
 })
 </script>
 

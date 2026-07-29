@@ -1,5 +1,5 @@
 import { Capacitor, CapacitorHttp } from '@capacitor/core'
-import { baseUrl } from './urlValues.js'
+import { baseUrl, validateToken } from './urlValues.js'
 
 let _token = null
 let _userInfo = null
@@ -81,6 +81,60 @@ const authRequestWithProxy = async (url, options = {}) => {
   const headers = { 'content-type': 'application/json', 'yujiang-from-app': 'true', ...options.headers }
   const res = await fetch(proxyUrl, { ...options, headers })
   return validateResponse(res)
+}
+
+// 向服务端校验当前 token 是否仍然有效（失败安全：仅在服务端明确判定失效时返回 false）
+// 用于 App 恢复前台 / 返回主页时，及时发现服务端 session 已过期的情况，
+// 避免 iframe 内远程页面已跳到 SSO 登录页而 App 仍以为已登录。
+// 返回值：'valid' 有效 | 'invalid' 明确失效 | 'unknown' 无法判定（网络错误等，不应踢出）
+export const verifyToken = async () => {
+  const token = getToken()
+  if (!token) return 'invalid'
+
+  const headers = { 'content-type': 'application/json', 'x-access-token': token, 'yujiang-from-app': 'true' }
+  const isInvalidCode = (code) => code === 'tm.err.foil.tokenInvalid' || code === 'tm.err.foil.tokenWhiteListInvalid'
+
+  try {
+    if (Capacitor.isNativePlatform()) {
+      const res = await CapacitorHttp.request({ url: validateToken, method: 'GET', headers })
+      if (res.status === 401) { clearAuth(); return 'invalid' }
+      if (res.status < 200 || res.status >= 300) return 'unknown'
+      let data
+      try {
+        data = typeof res.data === 'string' ? JSON.parse(res.data) : res.data
+      } catch {
+        return 'unknown'
+      }
+      if (data && isInvalidCode(data.code)) { clearAuth(); return 'invalid' }
+      return 'valid'
+    }
+
+    // Web 端：先直连，CORS/网络不通时回退到 Vite 代理（与 authRequest 模式一致）
+    let res
+    try {
+      res = await fetch(validateToken, { headers })
+    } catch (err) {
+      if (err.name === 'TypeError' && err.message.includes('Failed to fetch')) {
+        const proxyUrl = `/api${validateToken.replace(baseUrl, '')}`
+        res = await fetch(proxyUrl, { headers })
+      } else {
+        throw err
+      }
+    }
+    if (res.status === 401) { clearAuth(); return 'invalid' }
+    if (!res.ok) return 'unknown'
+    let data
+    try {
+      data = await res.json()
+    } catch {
+      return 'unknown'
+    }
+    if (data && isInvalidCode(data.code)) { clearAuth(); return 'invalid' }
+    return 'valid'
+  } catch {
+    // 网络异常等无法判定的情况，保持登录态不变，避免误踢
+    return 'unknown'
+  }
 }
 
 // 获取RSA加密后的密码
