@@ -8,7 +8,7 @@ export const variants = {
     appId: 'com.tmiot.tmplascloud', // 应用唯一标识符（即包名/Bundle ID）
     baseUrl: 'https://tmplascloud.net', // 应用基础 URL
     loginSocket: 'wss://tmplascloud.net', // WebSocket 地址
-    projectOID: '11024', // 项目 ID
+    projectOID: '10994', // 项目 ID
     ttcVersion: '2.7.0', // ttc版本号
     iconDir: 'tpc', // 定构建时复制哪套 Android 原生图标到 main/res/
     logoAsset: 'logo_hongsuyun.png', // 登录页显示的Logo图片

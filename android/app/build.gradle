@@ -31,7 +31,7 @@ android {
 
             // 1. 设置唯一的 applicationId (包名)[reference:5]
             // 这是两台手机能否同时安装两个App的关键，必须不同[reference:6]
-            applicationId "cn.com.tmiot.tic"
+            applicationId "com.tmiot.tic"
 
             // 2. 动态设置应用名称[reference:7]
             // 这会在编译时生成一个名为 "app_name" 的字符串资源
@@ -47,7 +47,7 @@ android {
             dimension "version"
 
             // 包名必须和 appOne 不同[reference:9]
-            applicationId "cn.com.tmiot.tpc"
+            applicationId "com.tmiot.tmplascloud"
 
             // 不同的应用名称
             resValue "string", "app_name", "弘塑云"
