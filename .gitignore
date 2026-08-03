@@ -50,3 +50,6 @@ android/app/src/main/res/values-zh-rTW/strings.xml
 android/app/src/main/res/values/ic_launcher_background.xml
 android/app/src/main/res/mipmap-*/
 android/app/src/main/ic_launcher-playstore.png
+
+# Android release 构建产物（baseline profiles / output-metadata / apk）
+android/app/*/release/
