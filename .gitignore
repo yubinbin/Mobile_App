@@ -53,3 +53,7 @@ android/app/src/main/ic_launcher-playstore.png
 
 # Android release 构建产物（baseline profiles / output-metadata / apk）
 android/app/*/release/
+
+# 由 cap sync 生成，不提交（内含 pnpm 存储路径，因安装环境而异）
+android/capacitor.settings.gradle
+ios/App/Podfile
