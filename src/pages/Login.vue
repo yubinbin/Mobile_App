@@ -75,7 +75,8 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { showToast, showDialog } from 'vant'
 import { setLocale, getLocale, t } from '../i18n'
-import { loginRSA, login, baseUrl, projectOID, ttcVersion, loginSocket, appVersion, logoAsset } from '../utils/urlValues.js'
+import { loginRSA, login, loginSocket, appVersion, logoAsset } from '../utils/urlValues.js'
+import { buildProjectUrl } from '../utils/projectUrl.js'
 import { setToken, setUserInfo, clearAuth } from '../utils/auth.js'
 import { checkOnLaunch } from '../utils/appUpdater.js'
 
@@ -175,7 +176,7 @@ const doLogin = async () => {
 
     checkOnLaunch()
 
-    const projectUrl = encodeURIComponent(`${baseUrl}/app/ttcEngineDefalut?ttcVersion=${ttcVersion}&projectOID=${projectOID}&access_token=${token}`)
+    const projectUrl = encodeURIComponent(buildProjectUrl(token, uid))
     window.location.replace(`#/project-view?userOID=${uid}&projectUrl=${projectUrl}`)
   } catch (err) {
     console.error('login error:', err)
@@ -260,5 +261,5 @@ const handleForceLogout = () => {
 .login-btn:active { opacity: 0.9; }
 .footer { margin-top: auto; padding-bottom: 40px; text-align: center; }
 .version { font-size: 14px; color: #333; margin-bottom: 8px; }
-.copyright { font-size: 14px; color: #333; }
+.copyright { font-size: 12px; color: #333; }
 </style>

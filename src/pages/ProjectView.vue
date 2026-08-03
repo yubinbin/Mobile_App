@@ -51,7 +51,8 @@ import { ref, computed, onMounted, onUnmounted, onActivated, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getToken, getUserInfo, verifyToken } from '../utils/auth.js'
 import { t, locale } from '../i18n'
-import { baseUrl, projectOID, ttcVersion, navProjectTitles } from '../utils/urlValues.js'
+import { baseUrl, navProjectTitles } from '../utils/urlValues.js'
+import { buildProjectUrl } from '../utils/projectUrl.js'
 import { navState } from '../utils/navState.js'
 import { BarcodeScanner } from '@capacitor-mlkit/barcode-scanning'
 import { showToast } from 'vant'
@@ -96,7 +97,7 @@ onMounted(() => {
   } else {
     const savedUser = getUserInfo()
     const uid = userOID || savedUser?.userAID || 'default'
-    projectUrl.value = setLang(`${baseUrl}/app/ttcEngineDefalut?ttcVersion=${ttcVersion}&projectOID=${projectOID}&userOID=${uid}&access_token=${token}`)
+    projectUrl.value = buildProjectUrl(token, uid)
   }
   window.addEventListener('message', onMessage)
   loading.value = false
@@ -123,7 +124,7 @@ onActivated(async () => {
   if (projectUrl.value && !projectUrl.value.includes(token)) {
     const savedUser = getUserInfo()
     const uid = savedUser?.userAID || 'default'
-    projectUrl.value = setLang(`${baseUrl}/app/ttcEngineDefalut?ttcVersion=${ttcVersion}&projectOID=${projectOID}&userOID=${uid}&access_token=${token}`)
+    projectUrl.value = buildProjectUrl(token, uid)
   }
 })
 

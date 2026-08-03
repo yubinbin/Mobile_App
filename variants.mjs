@@ -4,12 +4,30 @@
 export const variants = {
   // 弘塑云-生产环境-国际版
   'hongsuyun-prod': {
-    appName: 'hongsuyun', // 服务端根据 app 参数区分是哪个 App，返回对应的最新版本信息
+    appName: 'hongsuyun-prod', // 服务端根据 app 参数区分是哪个 App，返回对应的最新版本信息
     appId: 'com.tmiot.tmplascloud', // 应用唯一标识符（即包名/Bundle ID）
-    baseUrl: 'https://tmplascloud.net', // 应用基础 URL
-    loginSocket: 'wss://tmplascloud.net', // WebSocket 地址
-    projectOID: '10994', // 项目 ID
-    ttcVersion: '2.7.0', // ttc版本号
+    baseUrl: 'https://tpc.tmplascloud.net', // 应用基础 URL
+    loginSocket: 'wss://tpc.tmplascloud.net', // WebSocket 地址
+    projectUrl: 'https://tpc.tmplascloud.net/wx', // 项目 URL（为空时回退用 projectOID + ttcVersion 拼接）
+    projectOID: '', // 项目 ID
+    ttcVersion: '', // ttc版本号
+    iconDir: 'tpc', // 定构建时复制哪套 Android 原生图标到 main/res/
+    logoAsset: 'logo_hongsuyun_net.png', // 登录页显示的Logo图片
+    appDisplayNameZhCN: '弘塑云', // APP名称和顶部栏显示的名称
+    appDisplayNameZhTW: '弘塑雲',
+    appDisplayNameEn: 'TM Plas Cloud',
+    iosAppName: 'TM Plas Cloud',
+  },
+
+  // 弘塑云-生产环境-国内版
+  'hongsuyun-cn': {
+    appName: 'hongsuyun-cn', // 服务端根据 app 参数区分是哪个 App，返回对应的最新版本信息
+    appId: 'com.tmiot.tpc', // 应用唯一标识符（即包名/Bundle ID）
+    baseUrl: 'https://tpc.tmplascloud.com', // 应用基础 URL
+    loginSocket: 'wss://tpc.tmplascloud.com', // WebSocket 地址
+    projectUrl: 'https://tpc.tmplascloud.com/wx', // 项目 URL
+    projectOID: '', // 项目 ID
+    ttcVersion: '', // ttc版本号
     iconDir: 'tpc', // 定构建时复制哪套 Android 原生图标到 main/res/
     logoAsset: 'logo_hongsuyun.png', // 登录页显示的Logo图片
     appDisplayNameZhCN: '弘塑云', // APP名称和顶部栏显示的名称
@@ -26,6 +44,7 @@ export const variants = {
     loginSocket: 'ws://1.82.232.147:8209',
     projectOID: '10994',
     ttcVersion: '2.7.0',
+    projectUrl: '', // 项目 URL（为空时回退用 projectOID + ttcVersion 拼接）
     iconDir: 'tpc',
     logoAsset: 'logo_hongsuyun.png',
     appDisplayNameZhCN: '弘塑云',
@@ -42,6 +61,7 @@ export const variants = {
     loginSocket: 'wss://tmplascloud.com',
     projectOID: '10238',
     ttcVersion: '2.6.0',
+    projectUrl: '', // 项目 URL（为空时回退用 projectOID + ttcVersion 拼接）
     iconDir: 'tic',
     logoAsset: 'logo_hongshehui.png',
     appDisplayNameZhCN: '弘设汇',
@@ -58,6 +78,7 @@ export const variants = {
     loginSocket: 'wss://imro.tmiot.com.cn',
     projectOID: '10591',
     ttcVersion: '2.6.0',
+    projectUrl: '', // 项目 URL（为空时回退用 projectOID + ttcVersion 拼接）
     iconDir: 'tic',
     logoAsset: 'logo_hongshehui.png',
     appDisplayNameZhCN: '弘设汇',

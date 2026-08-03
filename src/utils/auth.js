@@ -1,5 +1,6 @@
 import { Capacitor, CapacitorHttp } from '@capacitor/core'
 import { baseUrl, validateToken } from './urlValues.js'
+import { webFetch } from './webFetch.js'
 
 let _token = null
 let _userInfo = null
@@ -109,18 +110,8 @@ export const verifyToken = async () => {
       return 'valid'
     }
 
-    // Web 端：先直连，CORS/网络不通时回退到 Vite 代理（与 authRequest 模式一致）
-    let res
-    try {
-      res = await fetch(validateToken, { headers })
-    } catch (err) {
-      if (err.name === 'TypeError' && err.message.includes('Failed to fetch')) {
-        const proxyUrl = `/api${validateToken.replace(baseUrl, '')}`
-        res = await fetch(proxyUrl, { headers })
-      } else {
-        throw err
-      }
-    }
+    // Web 端：走统一 webFetch（dev 直走 Vite 代理避免跨域，生产直连失败再回退代理）
+    const res = await webFetch(validateToken, { headers })
     if (res.status === 401) { clearAuth(); return 'invalid' }
     if (!res.ok) return 'unknown'
     let data

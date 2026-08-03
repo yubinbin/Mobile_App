@@ -51,6 +51,7 @@ src/
 │   ├── auth.js              # 认证模块：token 管理、authRequest、WebSocket
 │   ├── appUpdater.js        # 版本更新：检查、下载、安装 APK
 │   ├── urlValues.template.js  # 环境配置模板 → 生成 urlValues.js
+│   ├── projectUrl.js        # iframe 项目链接统一构建（Login / ProjectView 共用）
 │   ├── navState.js          # iframe 导航状态共享（canGoBack）
 │   ├── scanState.js         # 扫码状态共享
 │   └── swipeBack.js         # 手势返回处理
@@ -159,7 +160,9 @@ src/
 
 ### 变体配置字段（variants.mjs）
 
-每个变体包含 14 个字段：`appName`、`appId`、`baseUrl`、`loginSocket`、`projectOID`、`ttcVersion`、`updateCheckUrl`、`iconDir`、`logoAsset`、`appDisplayNameZhCN`、`appDisplayNameZhTW`、`appDisplayNameEn`、`iosAppName`。
+每个变体包含 14 个字段：`appName`、`appId`、`baseUrl`、`loginSocket`、`projectOID`、`ttcVersion`、`projectUrl`、`iconDir`、`logoAsset`、`appDisplayNameZhCN`、`appDisplayNameZhTW`、`appDisplayNameEn`、`iosAppName`。
+
+> **iframe 项目链接优先级**：非空 `projectUrl` 直接作为 iframe 链接；为空时回退为 `${baseUrl}/app/ttcEngineDefalut?ttcVersion=...&projectOID=...` 拼接。两种情况统一追加 `userOID`、`access_token`、`lang`。逻辑集中在 `src/utils/projectUrl.js` 的 `buildProjectUrl()`，Login 和 ProjectView 共用，勿在页面内重复拼接。
 
 ### 新增变体步骤
 
@@ -210,7 +213,9 @@ node scripts/build-variant.mjs --list
 
 ## Vite 代理配置
 
-开发时 `/api` 前缀的请求代理到测试环境 `http://1.82.232.147:8209`，自动添加 `yujiang-from-app: true` 请求头。
+开发时 `/api` 前缀的请求代理到**当前生成的 `urlValues.js` 中的 `baseUrl`**（`vite.config.js` 启动时动态读取，与当前变体环境一致），自动添加 `yujiang-from-app: true` 请求头。`urlValues.js` 未生成时回退到测试环境 `http://1.82.232.147:8209`。
+
+Web 端 API 请求统一走 `src/utils/webFetch.js`：dev 模式直走代理（避免浏览器跨域），生产构建先直连、CORS 不通时回退代理。**注意**：在浏览器本地调试生产变体时也会走代理，生产环境直接请求仍会显示跨域是正常现象（已被代理兜底）。
 
 ## 关键注意事项
 
