@@ -31,11 +31,6 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ''),
         headers: { 'yujiang-from-app': 'true' },
       },
-      '/update-api': {
-        target: 'https://manage.tmiot.com.cn',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/update-api/, ''),
-      },
     },
   },
 })

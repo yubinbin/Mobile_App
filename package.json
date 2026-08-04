@@ -14,6 +14,7 @@
     "build:hongshehui-test": "node scripts/build-variant.mjs hongshehui-test",
     "dev:hongsuyun-cn": "node scripts/build-variant.mjs hongsuyun-cn --dev && vite",
     "dev:hongsuyun-prod": "node scripts/build-variant.mjs hongsuyun-prod --dev && vite",
+    "dev:hongsuyun-test": "node scripts/build-variant.mjs hongsuyun-test --dev && vite",
     "android:hongsuyun-prod": "node scripts/build-variant.mjs hongsuyun-prod && npx cap open android",
     "android:hongsuyun-test": "node scripts/build-variant.mjs hongsuyun-test && npx cap open android",
     "android:hongshehui-prod": "node scripts/build-variant.mjs hongshehui-prod && npx cap open android",

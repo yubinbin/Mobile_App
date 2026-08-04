@@ -118,7 +118,7 @@ async function fetchVersionInfo() {
   }
 
   // Web 开发模式走 Vite 代理，避免跨域
-  const proxyUrl = `/update-api/app/share/updateAppVersion?app=${appName}&platform=${platform}`
+  const proxyUrl = `/api/biz/tmIoTCloud/Interface/updateAppVersion?app=${appName}&platform=${platform}`
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), 5000)
   try {
