@@ -9,7 +9,7 @@ export const variants = {
     baseUrl: 'https://tpc.tmplascloud.net', // 应用基础 URL
     loginSocket: 'wss://tpc.tmplascloud.net', // WebSocket 地址
     projectUrl: 'https://tpc.tmplascloud.net/wx', // 项目 URL（为空时回退用 projectOID + ttcVersion 拼接）
-    projectOID: '', // 项目 ID
+    projectOID: '11197', // 项目 ID（必填，用于登录时判断用户是否有项目权限）
     ttcVersion: '', // ttc版本号
     iconDir: 'tpc', // 定构建时复制哪套 Android 原生图标到 main/res/
     logoAsset: 'logo_hongsuyun_net.png', // 登录页显示的Logo图片
@@ -26,7 +26,7 @@ export const variants = {
     baseUrl: 'https://tpc.tmplascloud.com', // 应用基础 URL
     loginSocket: 'wss://tpc.tmplascloud.com', // WebSocket 地址
     projectUrl: 'https://tpc.tmplascloud.com/wx', // 项目 URL
-    projectOID: '', // 项目 ID
+    projectOID: '', // 项目 ID（必填，用于登录时判断用户是否有项目权限）
     ttcVersion: '', // ttc版本号
     iconDir: 'tpc_cn', // 定构建时复制哪套 Android 原生图标到 main/res/
     logoAsset: 'logo_hongsuyun.png', // 登录页显示的Logo图片
@@ -42,7 +42,7 @@ export const variants = {
     appId: 'com.tmiot.tpc',
     baseUrl: 'https://ttc.tmiotstudio.com',
     loginSocket: 'ws://ttc.tmiotstudio.com',
-    projectOID: '11275',
+    projectOID: '11275', // 项目 ID（必填，用于登录时判断用户是否有项目权限）
     ttcVersion: '2.7.0',
     projectUrl: '', // 项目 URL（为空时回退用 projectOID + ttcVersion 拼接）
     iconDir: 'tpc_cn',

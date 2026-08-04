@@ -75,7 +75,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { showToast, showDialog } from 'vant'
 import { setLocale, getLocale, t } from '../i18n'
-import { loginRSA, login, loginSocket, appVersion, logoAsset } from '../utils/urlValues.js'
+import { loginRSA, login, projectOID, loginSocket, appVersion, logoAsset } from '../utils/urlValues.js'
 import { buildProjectUrl } from '../utils/projectUrl.js'
 import { webFetch } from '../utils/webFetch.js'
 import { setToken, setUserInfo, clearAuth } from '../utils/auth.js'
@@ -142,7 +142,7 @@ const doLogin = async () => {
     const bytes = await rsaRes.arrayBuffer()
     const rsaPwd = new TextDecoder().decode(bytes)
 
-    const params = { userAID: uid, encryptedPassword: rsaPwd, rememberMe: true, loginType: 'userID', _: Date.now().toString(), terminalType: 2 }
+    const params = { userAID: uid, encryptedPassword: rsaPwd, rememberMe: true, loginType: 'userID', _: Date.now().toString(), terminalType: 2, projectOID }
     const loginRes = await webFetch(login, {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'yujiang-from-app': 'true' },
