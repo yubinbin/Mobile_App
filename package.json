@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "build:hongsuyun-prod": "node scripts/build-variant.mjs hongsuyun-prod",
     "build:hongsuyun-cn": "node scripts/build-variant.mjs hongsuyun-cn",
+    "build:hongsuyun-test": "node scripts/build-variant.mjs hongsuyun-test",
     "build:hongshehui-prod": "node scripts/build-variant.mjs hongshehui-prod",
     "build:hongshehui-test": "node scripts/build-variant.mjs hongshehui-test",
     "dev:hongsuyun-cn": "node scripts/build-variant.mjs hongsuyun-cn --dev && vite",

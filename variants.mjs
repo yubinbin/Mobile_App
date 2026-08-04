@@ -28,7 +28,7 @@ export const variants = {
     projectUrl: 'https://tpc.tmplascloud.com/wx', // 项目 URL
     projectOID: '', // 项目 ID
     ttcVersion: '', // ttc版本号
-    iconDir: 'tpc', // 定构建时复制哪套 Android 原生图标到 main/res/
+    iconDir: 'tpc_cn', // 定构建时复制哪套 Android 原生图标到 main/res/
     logoAsset: 'logo_hongsuyun.png', // 登录页显示的Logo图片
     appDisplayNameZhCN: '弘塑云', // APP名称和顶部栏显示的名称
     appDisplayNameZhTW: '弘塑雲',
@@ -38,14 +38,14 @@ export const variants = {
 
   // 弘塑云-测试环境
   'hongsuyun-test': {
-    appName: 'hongsuyun',
-    appId: 'cn.com.tmiot.hongsuyun.test',
-    baseUrl: 'http://1.82.232.147:8209',
-    loginSocket: 'ws://1.82.232.147:8209',
-    projectOID: '10994',
+    appName: 'hongsuyun-test',
+    appId: 'com.tmiot.tpc',
+    baseUrl: 'https://ttc.tmiotstudio.com',
+    loginSocket: 'ws://ttc.tmiotstudio.com',
+    projectOID: '11275',
     ttcVersion: '2.7.0',
     projectUrl: '', // 项目 URL（为空时回退用 projectOID + ttcVersion 拼接）
-    iconDir: 'tpc',
+    iconDir: 'tpc_cn',
     logoAsset: 'logo_hongsuyun.png',
     appDisplayNameZhCN: '弘塑云',
     appDisplayNameZhTW: '弘塑雲',

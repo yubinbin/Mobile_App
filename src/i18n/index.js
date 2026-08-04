@@ -25,8 +25,14 @@ const locale = ref(getDefault())
 
 VantLocale.use(locale.value, vantLocales[locale.value])
 
-export function t(key) {
-  return messages[locale.value]?.[key] ?? key
+export function t(key, params) {
+  let msg = messages[locale.value]?.[key] ?? key
+  if (params) {
+    for (const [k, v] of Object.entries(params)) {
+      msg = msg.replaceAll(`{${k}}`, v)
+    }
+  }
+  return msg
 }
 
 export function setLocale(lang) {

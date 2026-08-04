@@ -7,6 +7,7 @@
 
   "nav.back": "返回",
   "nav.userCenter": "个人中心",
+  "nav.exitApp": "再按一次退出{appName}",
 
   "user.userId": "用户ID",
   "user.username": "用户名",

@@ -44,11 +44,24 @@ android {
         }
 
         // 定义第二个App
-        tpc {
+        tpc_prod {
             dimension "version"
 
             // 包名必须和 appOne 不同[reference:9]
             applicationId "com.tmiot.tmplascloud"
+
+            // 不同的应用名称
+            resValue "string", "app_name", "tmPlasCloud"
+
+            // 指向不同的图标资源
+            manifestPlaceholders = [app_icon: "@mipmap/ic_launcher"]
+        }
+
+        tpc_cn {
+            dimension "version"
+
+            // 包名必须和 appOne 不同[reference:9]
+            applicationId "com.tmiot.tpc"
 
             // 不同的应用名称
             resValue "string", "app_name", "弘塑云"
