@@ -5,10 +5,10 @@
 这是一个基于 **Vue 3 + Vite + Capacitor** 的混合移动应用（Android/iOS），核心功能是通过 WebView（iframe）加载远程 TTC 引擎页面，并提供原生能力支持（二维码扫描、版本更新等）。
 
 - **App 名称**: 弘塑云 (HongSuYun) / 弘设汇 (HongSheHui)（通过 `variants.mjs` 统一管理，一条命令构建）
-- **变体数量**: 4 个（2 产品 × 2 环境），后续可扩展
-- **包名**: 每个变体独立包名（如 `cn.com.tmiot.hongsuyun`、`cn.com.tmiot.tic`）
+- **变体数量**: 5 个（弘塑云 × 生产国际/生产国内/测试 + 弘设汇 × 生产/测试），后续可扩展
+- **包名**: 每个变体独立包名，来源是 `variants.mjs` 的 `appId`（经 `build.gradle.template` 的 `{{appId}}` 注入 Android `applicationId`）
 - **当前版本**: v1.0.0
-- **分支**: `tpc_v1.0`（统一分支，不再使用多分支管理变体）
+- **分支**: `v1.2.0`（统一分支，不再使用多分支管理变体）
 
 ## 技术栈
 
@@ -31,12 +31,14 @@
 ├── scripts/
 │   └── build-variant.mjs     # 构建引擎：模板替换 + icon 复制 + vite build + cap sync
 ├── android/app/
-│   ├── templates/            # Android strings.xml 模板（三语言）
+│   ├── templates/            # Android 生成文件模板
+│   │   ├── build.gradle.template       # applicationId 由 {{appId}} 注入
 │   │   ├── strings.template.xml        # 简体中文（默认）
 │   │   ├── strings.template.en.xml     # 英文
 │   │   └── strings.template.zh-rTW.xml # 繁体中文
 │   └── src/
-│       ├── tpc/              # 弘塑云图标资源
+│       ├── tpc/              # 弘塑云-国际版图标资源
+│       ├── tpc_cn/           # 弘塑云-国内版图标资源
 │       └── tic/              # 弘设汇图标资源
 src/
 ├── main.js                  # 入口：注册 Vant 组件、路由、全局 $t
@@ -63,7 +65,7 @@ src/
 └── assets/                  # 图片、Logo、CSS
 ```
 
-> **注意**: `urlValues.js`、`capacitor.config.ts`、`android/app/src/main/res/values/strings.xml`、`values-en/strings.xml`、`values-zh-rTW/strings.xml` 均由 `build-variant.mjs` 生成，已加入 `.gitignore`，**不要手动编辑**。
+> **注意**: `urlValues.js`、`capacitor.config.ts`、`android/app/build.gradle`、`android/app/src/main/res/values/strings.xml`、`values-en/strings.xml`、`values-zh-rTW/strings.xml` 均由 `build-variant.mjs` 生成，已加入 `.gitignore`，**不要手动编辑**。
 
 ## 路由表
 
@@ -109,6 +111,18 @@ src/
 - 支持可选更新（Vant ConfirmDialog）和强制更新（不可关闭的 Dialog）
 - Android 原生下载安装（ApkInstaller 插件），其他平台降级为浏览器打开
 
+**下载状态是事件驱动的**（`src/utils/appUpdater.js` + `android/.../ApkInstallerPlugin.java`）：
+- `plugin.download` **只代表"已入队"**（原生标准 Promise 方法，入队成功即 resolve），不能据此判断完成
+- 真实进度/结果由原生 **`progress`** / **`downloadComplete`** 事件通知，JS 据此更新 `updateState.downloadState`
+- 两个事件都带 `downloadId`，JS 按 `currentDownloadId` 过滤，忽略旧下载残留事件
+- 取消走原生 `cancelDownload`（`dm.remove` 真正移除任务 + **epoch 代际计数**作废旧轮询线程），防止旧下载继续下载、触发安装或串台
+- 每次下载用**唯一文件名** `update-<epoch>.apk`，避免二次下载抢同一文件
+- 下载中再点「检查更新」会被拦截并提示「正在下载」（`appUpdater.js` 的 `downloading` 独立标志）
+
+**⚠️ Capacitor 两个坑**（详见 `ApkInstallerPlugin.java` 的 `parseDownloadId`，都是真机踩出来的）：
+- `PluginCall.getLong(name)` **只接受 `Long` 类型**，JS 整数被解析成 `Integer` 会返回 null；传 id 需用 `getInt` 或从 `call.getData().opt()` 按类型兜底
+- 原生方法若用 `@PluginMethod(returnType = RETURN_CALLBACK)`，JS 代理返回的是**回调句柄而非 Promise**（`await` 立即返回、无 `.catch`）；只需"入队成功"信号时用默认 Promise 类型
+
 ### 5. 导航守卫
 
 - `router.beforeEach` 检查认证状态
@@ -151,16 +165,19 @@ src/
 
 ### 变体列表
 
-| 变体名 | 产品 | 环境 | 包名 |
+| 变体名 | 产品 | 环境 | 包名（`appId`） |
 |--------|------|------|------|
-| `hongsuyun-prod` | 弘塑云 | 生产 | `cn.com.tmiot.hongsuyun` |
-| `hongsuyun-test` | 弘塑云 | 测试 | `cn.com.tmiot.hongsuyun.test` |
+| `hongsuyun-prod` | 弘塑云 | 生产-国际 | `com.tmiot.tmplascloud` |
+| `hongsuyun-cn` | 弘塑云 | 生产-国内 | `com.tmiot.tpc` |
+| `hongsuyun-test` | 弘塑云 | 测试 | `com.tmiot.tpc`（与国内版同包名，**不能同机共存**） |
 | `hongshehui-prod` | 弘设汇 | 生产 | `cn.com.tmiot.tic` |
 | `hongshehui-test` | 弘设汇 | 测试 | `cn.com.tmiot.hongshehui.test` |
 
 ### 变体配置字段（variants.mjs）
 
-每个变体包含 14 个字段：`appName`、`appId`、`baseUrl`、`loginSocket`、`projectOID`、`ttcVersion`、`projectUrl`、`iconDir`、`logoAsset`、`appDisplayNameZhCN`、`appDisplayNameZhTW`、`appDisplayNameEn`、`iosAppName`。
+每个变体包含 12 个字段：`appName`、`appId`、`baseUrl`、`loginSocket`、`projectOID`、`ttcVersion`、`projectUrl`、`iconDir`、`logoAsset`、`appDisplayNameZhCN`、`appDisplayNameZhTW`、`appDisplayNameEn`。
+
+> **`appId` 同时驱动 Android 包名**（经 `build.gradle.template` 的 `{{appId}}` 注入 `applicationId`）和 `capacitor.config.ts` 的 Bundle ID。旧的 `iosAppName` 字段已确认**无任何代码消费**（iOS 显示名硬编码在 `ios/App/App/Info.plist`），属死配置，不要再依赖它。
 
 > **iframe 项目链接优先级**：非空 `projectUrl` 直接作为 iframe 链接；为空时回退为 `${baseUrl}/app/ttcEngineDefalut?ttcVersion=...&projectOID=...` 拼接。两种情况统一追加 `userOID`、`access_token`、`lang`。逻辑集中在 `src/utils/projectUrl.js` 的 `buildProjectUrl()`，Login 和 ProjectView 共用，勿在页面内重复拼接。
 
@@ -172,12 +189,13 @@ src/
 
 ### 构建流程
 
-`build-variant.mjs` 按顺序执行：
+`build-variant.mjs` 按顺序执行（`render()` 遍历 cfg 替换 `{{key}}`）：
 1. 从 `variants.mjs` 读取变体配置
-2. 替换 `*.template.*` 文件中的 `{{占位符}}` 生成实际文件
-3. 生成 `urlValues.js`、`capacitor.config.ts`、Android `strings.xml`（三语言）
-4. 从变体对应的 `iconDir` 复制图标到 `main/res/`
-5. `--dev` 模式到此停止；非 dev 模式继续执行 `vite build` + `cap sync`
+2. 生成 `urlValues.js`
+3. 生成 `capacitor.config.ts`
+4. 生成 `android/app/build.gradle`（`applicationId` = `{{appId}}`）
+5. 生成 Android `strings.xml`（三语言）+ 从变体对应的 `iconDir` 复制图标到 `main/res/`
+6. `--dev` 模式到此停止；非 dev 模式继续执行 `vite build` + `cap sync`
 
 ## 开发命令
 
@@ -186,12 +204,14 @@ pnpm install          # 安装依赖
 npx vite              # 启动开发服务器（HMR，走 Vite 代理）
 
 # 变体构建（一条命令完成配置生成 + 构建 + cap sync）
-pnpm build:hongsuyun-prod     # 弘塑云 生产
+pnpm build:hongsuyun-prod     # 弘塑云 生产-国际
+pnpm build:hongsuyun-cn       # 弘塑云 生产-国内
 pnpm build:hongsuyun-test     # 弘塑云 测试
 pnpm build:hongshehui-prod    # 弘设汇 生产
 pnpm build:hongshehui-test    # 弘设汇 测试
 
 # 开发模式（只生成配置和复制资源，不执行 vite build 和 cap sync）
+pnpm dev:hongsuyun-cn         # 然后手动 npx vite
 pnpm dev:hongsuyun-test       # 然后手动 npx vite
 pnpm dev:hongshehui-test
 
@@ -222,6 +242,8 @@ Web 端 API 请求统一走 `src/utils/webFetch.js`：dev 模式直走代理（�
 - **变体构建**: 所有变体共用同一套代码，通过 `variants.mjs` + `build-variant.mjs` 切换。修改配置只需改 `variants.mjs` 和对应的 `.template.*` 文件
 - **模板文件**: `*.template.*` 文件是源文件（提交到 Git），生成的同名文件（去掉 `.template`）已加入 `.gitignore`
 - **Android 模板位置**: `android/app/templates/`（在 `res/` 外面，避免 Android 构建误编译导致 Duplicate resources）
+- **Android 包名**: 来自 `variants.mjs` 的 `appId`（经 `build.gradle.template` 注入 `applicationId`），不是写死在 build.gradle；改包名只改 `variants.mjs`
+- **版本更新下载**: 事件驱动（`progress`/`downloadComplete`）+ `downloadId` 过滤 + 原生 `cancelDownload` + 唯一文件名，涉及 `appUpdater.js` 和 `ApkInstallerPlugin.java` **两端需同步改**，详见「核心架构模式 §4」（含 Capacitor 的 `getLong`/`RETURN_CALLBACK` 两个坑）
 - **keep-alive**: ProjectView 被缓存，切换页面后保持 iframe 状态不丢失
 - **导航栏标题**: `ProjectView.vue` 通过 `navProjectTitles` + 当前 locale 动态渲染，支持三语言
 - **App 桌面名称**: Android 通过 `values/strings.xml` + `values-zh-rTW/strings.xml` + `values-en/strings.xml` 实现随系统语言切换

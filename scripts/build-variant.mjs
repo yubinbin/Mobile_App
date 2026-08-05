@@ -70,7 +70,13 @@ render(
   resolve(root, 'capacitor.config.ts')
 )
 
-// ---- 步骤 3: 生成 Android strings.xml（三语言） ----
+// ---- 步骤 3: 生成 Android build.gradle（applicationId 来自 cfg.appId） ----
+render(
+  resolve(root, 'android/app/templates/build.gradle.template'),
+  resolve(root, 'android/app/build.gradle')
+)
+
+// ---- 步骤 4: 生成 Android strings.xml（三语言） ----
 render(
   resolve(root, 'android/app/templates/strings.template.xml'),
   resolve(root, 'android/app/src/main/res/values/strings.xml')
@@ -84,7 +90,7 @@ render(
   resolve(root, 'android/app/src/main/res/values-zh-rTW/strings.xml')
 )
 
-// ---- 步骤 4: 复制 Android 原生图标 ----
+// ---- 步骤 5: 复制 Android 原生图标 ----
 const srcIconDir = resolve(root, 'android/app/src', cfg.iconDir)
 const dstMain = resolve(root, 'android/app/src/main')
 
@@ -119,7 +125,7 @@ if (existsSync(srcIconDir)) {
   console.warn(`  ⚠ Icon directory not found: ${srcIconDir}`)
 }
 
-// ---- 步骤 5: 构建 (--dev 模式跳过) ----
+// ---- 步骤 6: 构建 (--dev 模式跳过) ----
 if (isDev) {
   console.log('\n✅ Dev setup complete. Run `npx vite` to start dev server.')
 } else {

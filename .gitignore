@@ -44,6 +44,7 @@ __screenshots__/
 # 由 build-variant.mjs 生成，不提交
 src/utils/urlValues.js
 capacitor.config.ts
+android/app/build.gradle
 android/app/src/main/res/values/strings.xml
 android/app/src/main/res/values-en/strings.xml
 android/app/src/main/res/values-zh-rTW/strings.xml
