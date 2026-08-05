@@ -23,6 +23,7 @@
       </div>
     </div>
   </transition>
+  <UpdateDialog />
 </template>
 
 <script setup>
@@ -35,6 +36,7 @@ import { handleHomeSwipe } from './utils/swipeBack.js'
 import { navState } from './utils/navState.js'
 import { updateState } from './utils/updateState.js'
 import { downloadAndInstall, checkOnLaunch, cancelCurrentDownload } from './utils/appUpdater.js'
+import UpdateDialog from './components/UpdateDialog.vue'
 import { isLoggedIn, verifyToken } from './utils/auth.js'
 
 function initStatusBar() {

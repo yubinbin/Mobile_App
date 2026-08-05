@@ -1,4 +1,4 @@
-import { showConfirmDialog, showDialog, showToast } from 'vant'
+import { showToast } from 'vant'
 import { Capacitor, CapacitorHttp } from '@capacitor/core'
 import { t } from '../i18n'
 import { isLoggedIn } from './auth.js'
@@ -163,56 +163,11 @@ async function fetchVersionInfo() {
   }
 }
 
-/** 弹出更新弹窗（可选 / 强制） */
+/** 弹出更新弹窗（可选 / 强制）——由 UpdateDialog.vue 组件渲染卡片内容 */
 function showUpdateDialog(info) {
-  const current = getCurrentVersion()
-  const msgLines = [
-    `${t('update.currentVersion')}：${current}`,
-    `\n${info.version}`,
-  ]
-
-  if (info.changelog) {
-    msgLines.push(`\n${t('update.changelog')}：\n${info.changelog}`)
-  }
-
-  if (info.forceUpdate) {
-    msgLines.push(`\n${t('update.forceMsg')}`)
-  }
-
-  const message = msgLines.join('\n')
-
-  if (info.forceUpdate) {
-    // 强制更新：不可关闭，返回键关闭后重新弹出
-    function forceShow() {
-      showDialog({
-        title: t('update.forceTitle'),
-        message,
-        confirmButtonText: t('update.updateNow'),
-        allowClose: false,
-        closeOnPopstate: false,
-      })
-        .then(() => {
-          downloadAndInstall(info.updateUrl)
-        })
-        .catch(() => {
-          // 返回键关闭后重新弹出
-          setTimeout(forceShow, 200)
-        })
-    }
-    forceShow()
-  } else {
-    // 可选更新
-    showConfirmDialog({
-      title: t('update.newVersion'),
-      message,
-      confirmButtonText: t('update.updateNow'),
-      cancelButtonText: t('update.later'),
-    })
-      .then(() => {
-        downloadAndInstall(info.updateUrl)
-      })
-      .catch(() => {})
-  }
+  updateState.updateInfo = info
+  updateState.forceUpdate = !!info.forceUpdate
+  updateState.updateDialogVisible = true
 }
 
 /** 启动时自动检查（静默，失败不提示） */
