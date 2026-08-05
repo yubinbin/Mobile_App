@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { computed, watch } from 'vue'
+import { computed, watch, onUnmounted } from 'vue'
 import { t, getLocale } from '../i18n'
 import { updateState } from '../utils/updateState.js'
 import { downloadAndInstall, formatBytes } from '../utils/appUpdater.js'
@@ -79,6 +79,7 @@ const sizeText = computed(() => {
 
 // 确认：关闭弹框并触发下载（复用既有 downloadAndInstall，不改下载架构）
 let confirmedClose = false
+let reopenTimer = null
 function onConfirm() {
   confirmedClose = true
   updateState.updateDialogVisible = false
@@ -96,14 +97,24 @@ function onClose() {
 watch(
   () => updateState.updateDialogVisible,
   (nowVisible) => {
-    if (nowVisible) return
+    if (nowVisible) {
+      // 弹框打开：清除待执行的重新弹出定时器，并重置 confirmedClose
+      clearTimeout(reopenTimer)
+      confirmedClose = false
+      return
+    }
     if (confirmedClose) return
     if (!forceUpdate.value) return
-    setTimeout(() => {
-      updateState.updateDialogVisible = true
+    clearTimeout(reopenTimer)
+    reopenTimer = setTimeout(() => {
+      // 触发时再校验一次强制更新状态，避免状态已变化仍强制弹回
+      if (forceUpdate.value) updateState.updateDialogVisible = true
     }, 200)
   }
 )
+
+// 组件卸载时清除待执行的重新弹出定时器，避免泄漏
+onUnmounted(() => clearTimeout(reopenTimer))
 </script>
 
 <style scoped>
