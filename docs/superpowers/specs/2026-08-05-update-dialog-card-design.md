@@ -37,7 +37,7 @@
 
 - **横幅渐变**: `linear-gradient(135deg, #2c5aa0, #006dd8)`（与下载进度条渐变一致）
 - **版本徽章**: 半透明白胶囊（`rgba(255,255,255,0.22)` 背景、白色文字、圆角胶囊）
-- **更新日志**: 圆点列表，`max-height: ~120px` + `overflow-y: auto`
+- **更新日志**: 圆点列表，`max-height: ~120px` + `overflow-y: auto`；**内容按当前语言从 `changelog_zh_cn` / `changelog_zh_tw` / `changelog_en` 中选取**（「更新内容」标签本身由 `t('update.changelog')` 本地化）
 - **强制提示条**: 红底浅红 `#fef2f2` / 文字 `#d92d20`，圆角小卡
 - **按钮**: 复用 Vant Dialog 底部按钮（`confirm` / `cancel`）
 
@@ -108,8 +108,36 @@ checkManually / checkOnLaunch 检查到新版本
 
 **计算字段**（从 `updateState.updateInfo` 派生）：
 - `version` / `currentVersion`: 新版本号、`urlValues.appVersion`
-- `changelogLines`: `info.changelog` 按 `\n` 拆行 → `trim` → 过滤空行；无有效行则隐藏整个「更新内容」区
+- `changelogLines`: 按当前语言从三个 changelog 字段中取值（见下方映射）→ 按 `\n` 拆行 → `trim` → 过滤空行；无有效行则隐藏整个「更新内容」区
 - `sizeText`: `info.fileSize` 经 `formatBytes()` 格式化；无 `fileSize` 则隐藏
+
+**changelog 字段映射**（接口已把 `changelog` 拆分为三个语言字段）：
+
+```js
+// locale 取值：'zh-CN' | 'zh-HK' | 'en-US'（见 src/i18n/index.js）
+const CHANGELOG_FIELD_MAP = {
+  'zh-CN': 'changelog_zh_cn',
+  'zh-HK': 'changelog_zh_tw',   // 繁体字段仍叫 _zh_tw
+  'en-US': 'changelog_en',
+}
+
+function pickChangelog(info, locale) {
+  const preferred = CHANGELOG_FIELD_MAP[locale]
+  const candidates = [
+    preferred,
+    'changelog_zh_cn',   // 回退顺序：默认简体 → 英文 → 繁体
+    'changelog_en',
+    'changelog_zh_tw',
+    'changelog',         // 兼容旧接口的单字段
+  ]
+  for (const key of candidates) {
+    if (info && info[key]) return info[key]
+  }
+  return ''
+}
+```
+
+`changelogLines = pickChangelog(updateInfo, getLocale()).split('\n').map(s => s.trim()).filter(Boolean)`
 
 **状态来源**: `updateState.updateDialogVisible`（v-model）、`updateState.forceUpdate`。
 
@@ -141,7 +169,8 @@ checkManually / checkOnLaunch 检查到新版本
 
 | 场景 | 处理 |
 |------|------|
-| `changelog` 为空 / 全为空白行 | 隐藏「更新内容」区 |
+| 当前语言 changelog 字段为空 | 依次回退到 `changelog_zh_cn` → `changelog_en` → `changelog_zh_tw` → 旧 `changelog` 字段 |
+| 所有 changelog 字段均为空 / 空白行 | 隐藏「更新内容」区 |
 | `fileSize` 缺失或非法 | 隐藏「更新包」行 |
 | 日志很多（超出高度） | 列表内部滚动，弹框高度可控 |
 | 强制更新被系统返回键关闭 | 200ms 后重新弹出（沿用现有语义） |
@@ -156,6 +185,7 @@ checkManually / checkOnLaunch 检查到新版本
 | 日志多行 | 逐条圆点展示，超出滚动 |
 | 有 fileSize | 显示「更新包 45.2 MB」 |
 | 无 changelog / 无 fileSize | 对应区域隐藏 |
+| 切换语言 | 「更新内容」正文随语言切换（取 `changelog_zh_cn` / `changelog_zh_tw` / `changelog_en` 对应字段） |
 | 点「立即更新」 | 弹框关闭 → 底部下载进度条出现（原有逻辑） |
 | 点「稍后再说」 | 弹框关闭，红点保持 |
 | 三语言 | 标题、按钮、更新包文案均随语言切换 |
