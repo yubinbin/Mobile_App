@@ -48,7 +48,7 @@ function pickChangelog(info, locale) {
   const preferred = CHANGELOG_FIELD_MAP[locale]
   const candidates = [preferred, 'changelog_zh_cn', 'changelog_en', 'changelog_zh_tw', 'changelog']
   for (const key of candidates) {
-    if (info && info[key]) return info[key]
+    if (info && typeof info[key] === 'string' && info[key]) return info[key]
   }
   return ''
 }
@@ -84,7 +84,7 @@ function onConfirm() {
   confirmedClose = true
   updateState.updateDialogVisible = false
   if (info.value?.updateUrl) {
-    downloadAndInstall(info.value.updateUrl)
+    downloadAndInstall(info.value.updateUrl).catch(() => {})
   }
 }
 
@@ -118,7 +118,7 @@ onUnmounted(() => clearTimeout(reopenTimer))
 </script>
 
 <style scoped>
-.update-dialog :deep(.van-dialog) {
+.update-dialog {
   overflow: hidden;
 }
 .update-dialog :deep(.van-dialog__header) {
