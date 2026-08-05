@@ -16,7 +16,6 @@ export const variants = {
     appDisplayNameZhCN: '弘塑云', // APP名称和顶部栏显示的名称
     appDisplayNameZhTW: '弘塑雲',
     appDisplayNameEn: 'TM Plas Cloud',
-    iosAppName: 'TM Plas Cloud',
   },
 
   // 弘塑云-生产环境-国内版
@@ -33,7 +32,6 @@ export const variants = {
     appDisplayNameZhCN: '弘塑云', // APP名称和顶部栏显示的名称
     appDisplayNameZhTW: '弘塑雲',
     appDisplayNameEn: 'TM Plas Cloud',
-    iosAppName: '弘塑云',
   },
 
   // 弘塑云-测试环境
@@ -45,12 +43,11 @@ export const variants = {
     projectOID: '11275', // 项目 ID（必填，用于登录时判断用户是否有项目权限）
     ttcVersion: '2.7.0',
     projectUrl: '', // 项目 URL（为空时回退用 projectOID + ttcVersion 拼接）
-    iconDir: 'tpc_cn',
-    logoAsset: 'logo_hongsuyun.png',
+    iconDir: 'tpc',
+    logoAsset: 'logo_hongsuyun_net.png',
     appDisplayNameZhCN: '弘塑云',
     appDisplayNameZhTW: '弘塑雲',
     appDisplayNameEn: 'TM Plas Cloud',
-    iosAppName: '弘塑云',
   },
 
   // 弘设汇-生产环境
@@ -67,7 +64,6 @@ export const variants = {
     appDisplayNameZhCN: '弘设汇',
     appDisplayNameZhTW: '弘設匯',
     appDisplayNameEn: 'TIC',
-    iosAppName: '弘设汇',
   },
 
   // 弘设汇-测试环境
@@ -84,6 +80,5 @@ export const variants = {
     appDisplayNameZhCN: '弘设汇',
     appDisplayNameZhTW: '弘設匯',
     appDisplayNameEn: 'TIC',
-    iosAppName: '弘设汇',
   },
 }
