@@ -175,7 +175,9 @@ src/
 
 ### 变体配置字段（variants.mjs）
 
-每个变体包含 12 个字段：`appName`、`appId`、`baseUrl`、`loginSocket`、`projectOID`、`ttcVersion`、`projectUrl`、`iconDir`、`logoAsset`、`appDisplayNameZhCN`、`appDisplayNameZhTW`、`appDisplayNameEn`。
+每个变体包含 14 个字段：`appName`、`appVersion`、`versionCode`、`appId`、`baseUrl`、`loginSocket`、`projectOID`、`ttcVersion`、`projectUrl`、`iconDir`、`logoAsset`、`appDisplayNameZhCN`、`appDisplayNameZhTW`、`appDisplayNameEn`。
+
+> **版本号唯一入口**：`APP_VERSION` / `VERSION_CODE` 定义在 `variants.mjs` 顶部，各变体通过 `appVersion: APP_VERSION` / `versionCode: VERSION_CODE` 引用。`{{appVersion}}` 注入 Android `versionName` 与 web 端 `appVersion`（模板 `'v{{appVersion}}'` 自动加 `v` 前缀）；`{{versionCode}}` 注入 Android `versionCode`。发版只需改顶部两个常量，5 个变体同步生效。
 
 > **`appId` 同时驱动 Android 包名**（经 `build.gradle.template` 的 `{{appId}}` 注入 `applicationId`）和 `capacitor.config.ts` 的 Bundle ID。旧的 `iosAppName` 字段已确认**无任何代码消费**（iOS 显示名硬编码在 `ios/App/App/Info.plist`），属死配置，不要再依赖它。
 
