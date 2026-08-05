@@ -346,7 +346,7 @@ function showUpdateDialog(info) {
 - [ ] **Step 2: 删除不再使用的代码与 import**
 
 在 `src/utils/appUpdater.js`：
-- 删除 `getCurrentVersion()` 函数（`showUpdateDialog` 是它唯一的调用方，已删除）
+- **保留 `getCurrentVersion()`** —— 它仍被 `checkOnLaunch` 和 `checkManually` 用于版本比较（旧版本文档误称它只被 showUpdateDialog 使用，实施时已更正）
 - 修改 import：`import { showConfirmDialog, showDialog, showToast } from 'vant'` → `import { showToast } from 'vant'`
 - 保留 `t`、`updateState` 等 import（`t` 仍在 `checkManually` 使用）
 
