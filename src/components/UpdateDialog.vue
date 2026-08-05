@@ -11,9 +11,9 @@
     @cancel="onClose"
   >
     <template #title>
-      <div class="update-banner">
-        <p class="update-banner-title">{{ title }}</p>
-        <span class="update-banner-version">v{{ version }}</span>
+      <div class="update-header">
+        <p class="update-header-title">{{ title }}</p>
+        <span class="update-header-version">v{{ version }}</span>
       </div>
     </template>
     <div class="update-content">
@@ -119,84 +119,93 @@ onUnmounted(() => clearTimeout(reopenTimer))
 
 <style scoped>
 .update-dialog {
+  /* 弹框内按钮主色统一定为品牌蓝 */
+  --van-primary-color: #006dd8;
   overflow: hidden;
 }
 .update-dialog :deep(.van-dialog__header) {
   padding: 0;
   margin: 0;
 }
-.update-banner {
+.update-dialog :deep(.van-dialog__footer) {
+  padding-top: 10px;
+}
+.update-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px 14px;
+  border-bottom: 1px solid #eef0f3;
+}
+.update-header-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  color: #2c5aa0;
+}
+.update-header-version {
+  display: inline-block;
   background: linear-gradient(135deg, #2c5aa0, #006dd8);
   color: #fff;
-  padding: 18px 16px 14px;
-  text-align: center;
-}
-.update-banner-title {
-  margin: 0 0 4px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #fff;
-}
-.update-banner-version {
-  display: inline-block;
-  background: rgba(255, 255, 255, 0.22);
   border-radius: 999px;
-  padding: 2px 12px;
+  padding: 3px 12px;
   font-size: 13px;
   font-weight: 600;
+  line-height: 1.5;
 }
 .update-content {
-  padding: 14px 16px 4px;
+  padding: 14px 22px 12px;
   text-align: left;
 }
 .update-current {
-  margin: 0 0 10px;
-  font-size: 12px;
-  color: #8a9099;
-}
-.update-changelog-label {
-  margin: 0 0 4px;
-  padding-top: 10px;
-  border-top: 1px solid #f0f1f3;
+  margin: 0 0 14px;
   font-size: 12px;
   color: #9aa0a8;
+}
+.update-changelog-label {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2430;
 }
 .update-changelog-list {
   margin: 0;
   padding: 0;
   list-style: none;
-  max-height: 120px;
+  max-height: 150px;
   overflow-y: auto;
 }
 .update-changelog-list li {
   position: relative;
-  padding-left: 14px;
-  margin-bottom: 6px;
-  font-size: 13px;
+  padding-left: 18px;
+  margin-bottom: 10px;
+  font-size: 14px;
   color: #3f4650;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 .update-changelog-list li::before {
   content: '';
   position: absolute;
-  left: 0;
-  top: 8px;
-  width: 5px;
-  height: 5px;
+  left: 2px;
+  top: 9px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: #2c5aa0;
+  background: linear-gradient(135deg, #2c5aa0, #006dd8);
 }
 .update-size {
-  margin: 10px 0 0;
+  margin: 12px 0 0;
   font-size: 12px;
   color: #9aa0a8;
 }
 .update-force {
-  margin: 10px 0 0;
+  margin: 12px 0 0;
   background: #fef2f2;
   color: #d92d20;
   border-radius: 6px;
-  padding: 6px 10px;
+  padding: 8px 10px;
   font-size: 12px;
   line-height: 1.5;
 }
