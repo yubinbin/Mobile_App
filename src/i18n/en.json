@@ -56,6 +56,7 @@
   "update.forceMsg": "This version is no longer supported. Please update now.",
   "update.currentVersion": "Current Version",
   "update.changelog": "What's New",
+  "update.packageSize": "Update Size",
   "update.updateNow": "Update Now",
   "update.later": "Later",
   "update.checking": "Checking for updates...",

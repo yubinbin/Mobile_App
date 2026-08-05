@@ -6,10 +6,12 @@ import { baseUrl, appVersion, appName, updateCheckUrl } from './urlValues.js'
 import { updateState } from './updateState.js'
 
 let checking = false
-let currentDownloadListener = null
+let downloading = false
+let currentDownloadCleanup = null
+let currentDownloadId = null
 
 /** Format byte count to human-readable string */
-function formatBytes(bytes) {
+export function formatBytes(bytes) {
   if (bytes == null || isNaN(bytes)) return ''
   const n = Number(bytes)
   if (n < 1024) return n + ' B'
@@ -19,10 +21,12 @@ function formatBytes(bytes) {
 
 /** Cancel the current download — removes the native listener and resets Vue state */
 export function cancelCurrentDownload() {
-  if (currentDownloadListener) {
-    currentDownloadListener.remove()
-    currentDownloadListener = null
+  // 真正取消原生下载：防止其继续下载、触发安装，或遗留事件干扰下一次下载
+  const plugin = Capacitor.Plugins.ApkInstaller
+  if (plugin && currentDownloadId != null) {
+    plugin.cancelDownload({ downloadId: currentDownloadId }).catch(() => {})
   }
+  currentDownloadCleanup?.()
   updateState.downloadState = 'idle'
   updateState.downloadProgress = 0
   updateState.downloadedSize = ''
@@ -32,7 +36,7 @@ export function cancelCurrentDownload() {
 /** Android 原生下载 APK 并触发安装，非 Android 降级为系统浏览器打开 */
 export async function downloadAndInstall(url) {
   // Re-entrancy guard: ignore duplicate calls while a download is in progress
-  if (updateState.downloadState === 'downloading') return
+  if (downloading) return
 
   if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== 'android') {
     window.open(url, '_system')
@@ -45,6 +49,7 @@ export async function downloadAndInstall(url) {
     return
   }
 
+  downloading = true
   updateState.downloadState = 'downloading'
   updateState.downloadProgress = 0
   updateState.downloadedSize = ''
@@ -55,30 +60,59 @@ export async function downloadAndInstall(url) {
     updateState.totalSize = formatBytes(updateState.updateInfo.fileSize)
   }
 
-  const listener = await plugin.addListener('progress', ({ percent }) => {
-    // Guard: skip updates when download was cancelled
-    if (updateState.downloadState !== 'downloading') return
-    updateState.downloadProgress = percent
-    // Calculate downloadedSize from percentage if totalSize is known
-    if (updateState.updateInfo?.fileSize) {
-      const downloaded = (updateState.updateInfo.fileSize * percent) / 100
-      updateState.downloadedSize = formatBytes(downloaded)
-    }
-  })
-  currentDownloadListener = listener
+  let progressListener = null
+  let doneListener = null
+  let finished = false
 
-  try {
-    await plugin.download({ url })
-    updateState.downloadState = 'completed'
-    updateState.downloadProgress = 100
-  } catch {
-    // Only mark as failed if the download was not cancelled
-    if (updateState.downloadState === 'downloading') {
+  // 收尾：移除监听、复位 downloading。由完成事件或取消触发。
+  const cleanup = () => {
+    progressListener?.remove()
+    doneListener?.remove()
+    currentDownloadCleanup = null
+    downloading = false
+    currentDownloadId = null
+  }
+
+  // 真实下载结束（成功/失败）时更新状态并收尾
+  const finish = (success) => {
+    if (finished) return
+    finished = true
+    if (success) {
+      updateState.downloadState = 'completed'
+      updateState.downloadProgress = 100
+    } else {
       updateState.downloadState = 'failed'
     }
-  } finally {
-    listener.remove()
-    currentDownloadListener = null
+    cleanup()
+  }
+
+  try {
+    progressListener = await plugin.addListener('progress', ({ percent, downloadId }) => {
+      // 忽略上一次下载（取消后仍在跑）遗留的事件
+      if (downloadId != null && downloadId !== currentDownloadId) return
+      // Guard: skip updates when download was cancelled
+      if (updateState.downloadState !== 'downloading') return
+      updateState.downloadProgress = percent
+      // Calculate downloadedSize from percentage if totalSize is known
+      if (updateState.updateInfo?.fileSize) {
+        const downloaded = (updateState.updateInfo.fileSize * percent) / 100
+        updateState.downloadedSize = formatBytes(downloaded)
+      }
+    })
+
+    doneListener = await plugin.addListener('downloadComplete', ({ success, downloadId }) => {
+      // 忽略上一次下载遗留的完成事件
+      if (downloadId != null && downloadId !== currentDownloadId) return
+      finish(!!success)
+    })
+    currentDownloadCleanup = cleanup
+
+    // 注意：plugin.download 只代表"已入队"，真实下载进度/结果由 progress / downloadComplete 事件通知。
+    const { downloadId } = await plugin.download({ url })
+    currentDownloadId = downloadId
+  } catch (err) {
+    // 入队失败或 addListener 抛错（极端情况），避免 downloading 标志泄漏
+    finish(false)
   }
 }
 
@@ -185,6 +219,7 @@ function showUpdateDialog(info) {
 export async function checkOnLaunch() {
   if (!isLoggedIn()) return
   if (checking) return
+  if (downloading) return
 
   checking = true
   updateState.hasUpdate = false
@@ -215,6 +250,10 @@ export async function checkOnLaunch() {
 export async function checkManually() {
   if (!isLoggedIn()) return
   if (checking) return
+  if (downloading) {
+    showToast(t('update.downloading'))
+    return
+  }
 
   checking = true
   updateState.hasUpdate = false
