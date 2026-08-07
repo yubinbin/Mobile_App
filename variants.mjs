@@ -3,8 +3,8 @@
 
 // 版本号唯一入口：发版只需改这里，5 个变体同步生效
 // APP_VERSION 不含 v 前缀（web 端 appVersion 由模板自动加 v），VERSION_CODE 为 Android 版本号（每次发版递增）
-export const APP_VERSION = '4.3.3'
-export const VERSION_CODE = 3
+export const APP_VERSION = '4.3.0'
+export const VERSION_CODE = 1
 
 export const variants = {
   // 弘塑云-生产环境-国际版
