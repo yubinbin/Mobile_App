@@ -11,3 +11,6 @@ capacitor-cordova-ios-plugins
 # Generated Config files
 App/App/capacitor.config.json
 App/App/config.xml
+
+# Xcode 打开工程时自动生成的临时 workspace
+App/App.xcodeproj/project.xcworkspace/
