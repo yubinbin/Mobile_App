@@ -4,25 +4,6 @@
       <component :is="Component" />
     </keep-alive>
   </router-view>
-  <transition name="slide-up">
-    <div v-if="updateState.downloadState === 'downloading' || updateState.downloadState === 'failed'" class="download-bar">
-      <div class="download-bar-content">
-        <p class="download-title">{{ $t('update.downloadingTitle') }}</p>
-        <div class="download-progress-wrap">
-          <div class="download-progress-bar">
-            <div class="download-progress-fill" :style="{ width: updateState.downloadProgress + '%' }"></div>
-          </div>
-          <span class="download-progress-text">{{ updateState.downloadProgress }}%</span>
-        </div>
-        <p v-if="updateState.downloadedSize" class="download-size">{{ updateState.downloadedSize }} / {{ updateState.totalSize }}</p>
-        <p v-if="updateState.downloadState === 'failed'" class="download-failed-msg">{{ $t('update.downloadFailedMsg') }}</p>
-        <div class="download-actions">
-          <van-button v-if="updateState.downloadState === 'downloading'" size="small" plain round @click="cancelDownload">{{ $t('update.cancel') }}</van-button>
-          <van-button v-if="updateState.downloadState === 'failed'" size="small" type="primary" round @click="retryDownload">{{ $t('update.retry') }}</van-button>
-        </div>
-      </div>
-    </div>
-  </transition>
   <UpdateDialog />
 </template>
 
@@ -34,8 +15,7 @@ import { App } from '@capacitor/app'
 import { Capacitor } from '@capacitor/core'
 import { handleHomeSwipe } from './utils/swipeBack.js'
 import { navState } from './utils/navState.js'
-import { updateState } from './utils/updateState.js'
-import { downloadAndInstall, checkOnLaunch, cancelCurrentDownload } from './utils/appUpdater.js'
+import { checkOnLaunch } from './utils/appUpdater.js'
 import UpdateDialog from './components/UpdateDialog.vue'
 import { isLoggedIn, verifyToken } from './utils/auth.js'
 
@@ -113,16 +93,6 @@ function triggerBack() {
   backLock = false
 }
 
-function cancelDownload() {
-  cancelCurrentDownload()
-}
-
-function retryDownload() {
-  if (updateState.updateInfo?.updateUrl) {
-    downloadAndInstall(updateState.updateInfo.updateUrl)
-  }
-}
-
 onMounted(async () => {
   initStatusBar()
   document.addEventListener('touchstart', onTouchStart, { passive: true })
@@ -143,57 +113,6 @@ onUnmounted(() => {
   appStateHandle?.remove()
 })
 </script>
-
-<style scoped>
-.download-bar {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 10000;
-  background: #fff; border-radius: 16px 16px 0 0;
-  box-shadow: 0 -2px 12px rgba(0,0,0,0.15);
-  padding: 20px 24px calc(20px + env(safe-area-inset-bottom));
-}
-
-.download-title {
-  font-size: 15px; font-weight: 600; color: #333; margin: 0 0 12px;
-}
-
-.download-progress-wrap {
-  display: flex; align-items: center; gap: 12px; margin-bottom: 8px;
-}
-
-.download-progress-bar {
-  flex: 1; height: 6px; background: #e5e5e5; border-radius: 3px; overflow: hidden;
-}
-
-.download-progress-fill {
-  height: 100%; background: linear-gradient(90deg, #2c5aa0, #006dd8);
-  border-radius: 3px; transition: width 0.3s ease;
-}
-
-.download-progress-text {
-  font-size: 14px; color: #2c5aa0; font-weight: 600; min-width: 40px; text-align: right;
-}
-
-.download-size {
-  font-size: 12px; color: #999; margin: 0 0 8px;
-}
-
-.download-failed-msg {
-  font-size: 13px; color: #FF4444; margin: 0 0 8px;
-}
-
-.download-actions {
-  display: flex; justify-content: flex-end; gap: 8px;
-}
-
-/* 滑入/滑出动画 */
-.slide-up-enter-active, .slide-up-leave-active {
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.slide-up-enter-from, .slide-up-leave-to {
-  transform: translateY(100%); opacity: 0;
-}
-</style>
 
 <!-- 全局样式：处理 Android 15+ edge-to-edge / 部分 ROM 状态栏遮挡问题 -->
 <!-- Capacitor SystemBars 在 passthrough 模式下会注入 --safe-area-inset-top（含状态栏高度），
