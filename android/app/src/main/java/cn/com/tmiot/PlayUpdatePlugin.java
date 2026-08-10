@@ -34,6 +34,9 @@ import com.google.android.play.core.install.model.UpdateAvailability;
 // 自定 requestCode，避免与 Capacitor 内部活动请求码冲突；
 // 需字面量写进注解（注解值不允许前向引用同类的 static final 字段）
 @CapacitorPlugin(name = "PlayUpdate", requestCodes = { 9981 })
+// 整个类刻意使用 Capacitor 过时的 saved-call API（saveCall/getSavedCall/freeSavedCall/handleOnActivityResult）：
+// Play Core 直连 startActivityForResult 的结果只有过时 handleOnActivityResult 能接（见类注释），故类级别抑制 deprecation 告警
+@SuppressWarnings("deprecation")
 public class PlayUpdatePlugin extends Plugin {
 
     private static final int REQUEST_CODE_UPDATE = 9981;
@@ -109,7 +112,6 @@ public class PlayUpdatePlugin extends Plugin {
      * 路由到本插件的 handleOnActivityResult（过时但仍是 Play Core 直连 startActivityForResult 的唯一通道）。
      */
     @Override
-    @SuppressWarnings("deprecation")
     protected void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
         // 非本插件的请求码直接忽略，避免串台
         if (requestCode != REQUEST_CODE_UPDATE) return;
