@@ -64,7 +64,6 @@
   "update.checkFailed": "Update check failed, please try again",
   "update.checkUpdate": "Check Update",
   "update.downloading": "Downloading",
-  "update.downloadFailed": "Download failed, please try again",
 
   "about.platform": "Development Platform",
   "about.platform.value": "tmIoT® IoT Cloud Platform",

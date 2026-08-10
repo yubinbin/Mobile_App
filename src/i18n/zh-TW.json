@@ -64,7 +64,6 @@
   "update.checkFailed": "檢查更新失敗，請稍後重試",
   "update.checkUpdate": "檢查更新",
   "update.downloading": "正在下載",
-  "update.downloadFailed": "下載失敗，請稍後重試",
 
   "about.platform": "開發平臺",
   "about.platform.value": "tmIoT® 物聯網雲平台",

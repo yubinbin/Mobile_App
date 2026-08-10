@@ -133,6 +133,8 @@ public class PlayUpdatePlugin extends Plugin {
         } else {
             call.reject("update failed resultCode=" + resultCode);
         }
+        // 释放已结算的 call，避免进程重建重复投递 onActivityResult 时重结算旧 call
+        freeSavedCall();
     }
 
     @PluginMethod()

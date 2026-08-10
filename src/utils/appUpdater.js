@@ -207,7 +207,9 @@ async function startPlayUpdate(info) {
         if (installStatus === 'DOWNLOADED') {
           plugin.completeUpdate().catch(() => {})
         } else if (installStatus === 'FAILED' || installStatus === 'CANCELED') {
+          // 失败/取消为终态：同时解绑 JS 监听，避免重试后监听叠加
           updateState.updateInProgress = false
+          cleanupUpdateListeners()
         }
       })
     }
