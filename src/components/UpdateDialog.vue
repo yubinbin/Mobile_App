@@ -13,7 +13,7 @@
     <template #title>
       <div class="update-header">
         <p class="update-header-title">{{ title }}</p>
-        <span class="update-header-version">v{{ version }}</span>
+        <span v-if="version" class="update-header-version">v{{ version }}</span>
       </div>
     </template>
     <div class="update-content">
@@ -34,7 +34,7 @@
 import { computed, watch, onUnmounted } from 'vue'
 import { t, getLocale } from '../i18n'
 import { updateState } from '../utils/updateState.js'
-import { downloadAndInstall, formatBytes } from '../utils/appUpdater.js'
+import { confirmUpdate, formatBytes } from '../utils/appUpdater.js'
 import { appVersion } from '../utils/urlValues.js'
 
 const CHANGELOG_FIELD_MAP = {
@@ -77,15 +77,13 @@ const sizeText = computed(() => {
   return formatBytes(info.value.fileSize)
 })
 
-// 确认：关闭弹框并触发下载（复用既有 downloadAndInstall，不改下载架构）
+// 确认：关闭弹框并触发渠道化更新（Play 走 In-app Updates，store 走浏览器打开 updateUrl）
 let confirmedClose = false
 let reopenTimer = null
 function onConfirm() {
   confirmedClose = true
   updateState.updateDialogVisible = false
-  if (info.value?.updateUrl) {
-    downloadAndInstall(info.value.updateUrl).catch(() => {})
-  }
+  confirmUpdate().catch(() => {})
 }
 
 function onClose() {
