@@ -654,9 +654,11 @@ async function startPlayUpdate(info) {
       })
     })
     if (type === 'flexible') {
-      // FLEXIBLE：下载完成触发安装；失败/取消复位拦截标志
-      flexStateListener = await plugin.addListener('stateChange', ({ downloadStatus, installStatus }) => {
-        if (downloadStatus === 'DOWNLOADED') {
+      // FLEXIBLE：下载完成触发安装；失败/取消复位拦截标志。
+      // 注意：以权威的 installStatus === 'DOWNLOADED' 为触发条件（play-core 的 downloadStatus 由
+      // installStatus 派生，在安装期仍为 DOWNLOADED，用它判断会重复拉起 completeUpdate）。
+      flexStateListener = await plugin.addListener('stateChange', ({ installStatus }) => {
+        if (installStatus === 'DOWNLOADED') {
           plugin.completeUpdate().catch(() => {})
         } else if (installStatus === 'FAILED' || installStatus === 'CANCELED') {
           updateState.updateInProgress = false

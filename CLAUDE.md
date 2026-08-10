@@ -51,7 +51,7 @@ src/
 │   └── About.vue            # 关于页
 ├── utils/
 │   ├── auth.js              # 认证模块：token 管理、authRequest、WebSocket
-│   ├── appUpdater.js        # 版本更新：检查、下载、安装 APK
+│   ├── appUpdater.js        # 版本更新：检查、渠道分发（Play In-app Updates / store 浏览器）
 │   ├── urlValues.template.js  # 环境配置模板 → 生成 urlValues.js
 │   ├── projectUrl.js        # iframe 项目链接统一构建（Login / ProjectView 共用）
 │   ├── navState.js          # iframe 导航状态共享（canGoBack）
@@ -107,21 +107,23 @@ src/
 ### 4. 版本更新
 
 - 启动时自动检查（静默），用户中心可手动检查
-- 接口：`GET https://manage.tmiot.com.cn/app/share/updateAppVersion?app=<name>&platform=<platform>`
 - 支持可选更新（Vant ConfirmDialog）和强制更新（不可关闭的 Dialog）
-- Android 原生下载安装（ApkInstaller 插件），其他平台降级为浏览器打开
+- 更新按渠道分流（`variants.mjs` 的 `updateChannel`）：
+  - **`play`**（仅 `hongsuyun-prod`）：走 **Google Play In-app Updates**，升级由 Play 商店原生流程完成（IMMEDIATE / FLEXIBLE）
+  - **`store`**（国内版 / 测试版）：点「立即更新」用**系统浏览器**打开后端 `updateUrl`，不再应用内下载安装 APK
+- 前端逻辑集中在 `src/utils/appUpdater.js`：`confirmUpdate()` 按 `updateChannel` 分发（`UpdateDialog` 确认时调用），`checkOnLaunch` / `checkManually` 对应启动静默检查与手动检查
+- Play 原生桥接：`android/app/src/main/java/cn/com/tmiot/PlayUpdatePlugin.java`（依赖 `com.google.android.play:app-update`）
 
-**下载状态是事件驱动的**（`src/utils/appUpdater.js` + `android/.../ApkInstallerPlugin.java`）：
-- `plugin.download` **只代表"已入队"**（原生标准 Promise 方法，入队成功即 resolve），不能据此判断完成
-- 真实进度/结果由原生 **`progress`** / **`downloadComplete`** 事件通知，JS 据此更新 `updateState.downloadState`
-- 两个事件都带 `downloadId`，JS 按 `currentDownloadId` 过滤，忽略旧下载残留事件
-- 取消走原生 `cancelDownload`（`dm.remove` 真正移除任务 + **epoch 代际计数**作废旧轮询线程），防止旧下载继续下载、触发安装或串台
-- 每次下载用**唯一文件名** `update-<epoch>.apk`，避免二次下载抢同一文件
-- 下载中再点「检查更新」会被拦截并提示「正在下载」（`appUpdater.js` 的 `downloading` 独立标志）
+**Play 变体（`updateChannel === 'play'`）流程**：
+- `PlayUpdate.getUpdateInfo()` 查询是否有新版本，**以 Play API 为准**；后端接口（`GET https://manage.tmiot.com.cn/app/share/updateAppVersion?app=<name>&platform=<platform>`）仅在该变体有记录时补充 changelog / force，缺失则用通用文案并隐藏版本徽标
+- force 映射：`true → IMMEDIATE`（全屏强制，用户取消会**重新拉起**保持「不可退出」）；`false → FLEXIBLE`（后台下载 + 提示安装）
+- `stateChange` 事件（`installStatus`）：`DOWNLOADED` → JS 调 `completeUpdate()` 触发安装；`FAILED` / `CANCELED` → 显式复位 `updateState.updateInProgress`（拦截重复检查标志）；`INSTALLED` 由应用更新重启后清零
+- 无 Play 服务 / 非商店安装设备 → `getUpdateInfo()` reject，`checkOnLaunch` 静默忽略（不设红点）、`checkManually` 提示「已是最新版本」
+- `startUpdate` 失败（除用户主动取消非强制更新）→ 回退系统浏览器打开 Play 商店页 `https://play.google.com/store/apps/details?id=<packageName>`
 
-**⚠️ Capacitor 两个坑**（详见 `ApkInstallerPlugin.java` 的 `parseDownloadId`，都是真机踩出来的）：
-- `PluginCall.getLong(name)` **只接受 `Long` 类型**，JS 整数被解析成 `Integer` 会返回 null；传 id 需用 `getInt` 或从 `call.getData().opt()` 按类型兜底
-- 原生方法若用 `@PluginMethod(returnType = RETURN_CALLBACK)`，JS 代理返回的是**回调句柄而非 Promise**（`await` 立即返回、无 `.catch`）；只需"入队成功"信号时用默认 Promise 类型
+**⚠️ Play 插件两个适配点**（详见 `PlayUpdatePlugin.java` 注释，都是真机踩出来的）：
+- play-core 2.1.0 起**不再有 `DownloadStatus` 类**，下载子状态并入 `installStatus()`，`downloadStatus` 事件字段由 `installStatus()` 派生；且**安装期 `installStatus` 仍为 `DOWNLOADED`**，JS 端须以权威的 `installStatus === 'DOWNLOADED'` 为触发条件，否则会重复拉起 `completeUpdate()`
+- Capacitor 8 的 `@ActivityCallback` 只接收经 Capacitor 自己 launcher 启动的结果，而 Play Core 的 `startUpdateFlowForResult` 走 Activity 原生 `startActivityForResult`，结果落在过时的 `handleOnActivityResult`；需把请求码**字面量**声明进 `@CapacitorPlugin(requestCodes = { ... })`（注解值不允许前向引用同类 static final 字段），Bridge 按请求码路由到本插件
 
 ### 5. 导航守卫
 
@@ -245,7 +247,7 @@ Web 端 API 请求统一走 `src/utils/webFetch.js`：dev 模式直走代理（�
 - **模板文件**: `*.template.*` 文件是源文件（提交到 Git），生成的同名文件（去掉 `.template`）已加入 `.gitignore`
 - **Android 模板位置**: `android/app/templates/`（在 `res/` 外面，避免 Android 构建误编译导致 Duplicate resources）
 - **Android 包名**: 来自 `variants.mjs` 的 `appId`（经 `build.gradle.template` 注入 `applicationId`），不是写死在 build.gradle；改包名只改 `variants.mjs`
-- **版本更新下载**: 事件驱动（`progress`/`downloadComplete`）+ `downloadId` 过滤 + 原生 `cancelDownload` + 唯一文件名，涉及 `appUpdater.js` 和 `ApkInstallerPlugin.java` **两端需同步改**，详见「核心架构模式 §4」（含 Capacitor 的 `getLong`/`RETURN_CALLBACK` 两个坑）
+- **版本更新渠道化**: 更新按 `variants.mjs` 的 `updateChannel` 分流——`play`（仅 hongsuyun-prod）走 Google Play In-app Updates（`PlayUpdatePlugin`），`store` 变体点「立即更新」用系统浏览器打开后端 `updateUrl`。改更新逻辑涉及 `appUpdater.js`（`confirmUpdate` 分发）与 `PlayUpdatePlugin.java` **两端需同步改**，详见「核心架构模式 §4」（含 play-core 2.x `installStatus` 派生 / Capacitor `requestCodes` 两个适配点）
 - **keep-alive**: ProjectView 被缓存，切换页面后保持 iframe 状态不丢失
 - **导航栏标题**: `ProjectView.vue` 通过 `navProjectTitles` + 当前 locale 动态渲染，支持三语言
 - **App 桌面名称**: Android 通过 `values/strings.xml` + `values-zh-rTW/strings.xml` + `values-en/strings.xml` 实现随系统语言切换

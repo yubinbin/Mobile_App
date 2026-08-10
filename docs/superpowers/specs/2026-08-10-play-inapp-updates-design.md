@@ -87,7 +87,7 @@
      - force 按 `updatePriority` 推断：`>= 3` → `true`（IMMEDIATE），否则 `false`（FLEXIBLE）
   3. 弹 `UpdateDialog`（通用标题文案）
   4. 确认 → `startUpdate({ type: force ? 'immediate' : 'flexible', force })`；失败 → 回退浏览器打开 `https://play.google.com/store/apps/details?id=<packageName>`
-- **flexible 安装态**：监听 `stateChange`，`DOWNLOADED` → `completeUpdate()`；期间置 `updateState.updateInProgress = true`，`checkManually`/`checkOnLaunch` 据此拦截并提示，`INSTALLED`/失败后复位
+- **flexible 安装态**：监听 `stateChange`，`DOWNLOADED` → `completeUpdate()`；期间置 `updateState.updateInProgress = true`，`checkManually`/`checkOnLaunch` 据此拦截并提示；`FAILED`/`CANCELED` 显式复位 `updateInProgress`，`INSTALLED` 由应用更新重启后清零
 
 ### 非 Play 变体（`updateChannel === 'store'`）
 - 保持现有后端版本比较逻辑（`fetchVersionInfo` + `compareVersion`）
