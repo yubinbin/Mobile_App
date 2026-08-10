@@ -9,8 +9,10 @@ let checking = false
 let updateCancelledListener = null
 let flexStateListener = null
 
-const isPlayChannel = () => updateChannel === 'play'
+// In-app Updates 是 Android-only：play 渠道仅在 Android 原生生效。
+// iOS 上 hongsuyun-prod 仍走 store 逻辑（后端检查 + window.open(updateUrl)），避免跳过 App Store 更新检测。
 const isNativeAndroid = () => Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android'
+const isPlayChannel = () => updateChannel === 'play' && isNativeAndroid()
 
 /** Format byte count to human-readable string */
 export function formatBytes(bytes) {
@@ -229,7 +231,8 @@ async function startPlayUpdate(info) {
 export async function confirmUpdate() {
   const info = updateState.updateInfo
   if (!info) return
-  if (isPlayChannel() && isNativeAndroid()) {
+  // isPlayChannel 已隐含 Android 原生（In-app Updates 仅 Android），无需再判平台
+  if (isPlayChannel()) {
     await startPlayUpdate(info)
   } else if (info.updateUrl) {
     window.open(info.updateUrl, '_system')

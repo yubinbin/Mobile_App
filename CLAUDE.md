@@ -109,7 +109,7 @@ src/
 - 启动时自动检查（静默），用户中心可手动检查
 - 支持可选更新（Vant ConfirmDialog）和强制更新（不可关闭的 Dialog）
 - 更新按渠道分流（`variants.mjs` 的 `updateChannel`）：
-  - **`play`**（仅 `hongsuyun-prod`）：走 **Google Play In-app Updates**，升级由 Play 商店原生流程完成（IMMEDIATE / FLEXIBLE）
+  - **`play`**（仅 `hongsuyun-prod`，**仅 Android 原生生效**）：走 **Google Play In-app Updates**，升级由 Play 商店原生流程完成（IMMEDIATE / FLEXIBLE）。iOS 上该变体 `isPlayChannel()` 为 false，回落到 `store` 逻辑（后端检查 + `window.open(updateUrl)` 打开 App Store 链接），避免跳过 App Store 更新检测
   - **`store`**（国内版 / 测试版）：点「立即更新」用**系统浏览器**打开后端 `updateUrl`，不再应用内下载安装 APK
 - 前端逻辑集中在 `src/utils/appUpdater.js`：`confirmUpdate()` 按 `updateChannel` 分发（`UpdateDialog` 确认时调用），`checkOnLaunch` / `checkManually` 对应启动静默检查与手动检查
 - Play 原生桥接：`android/app/src/main/java/cn/com/tmiot/PlayUpdatePlugin.java`（依赖 `com.google.android.play:app-update`）
