@@ -9,6 +9,7 @@ export const ttcVersion = '{{ttcVersion}}'
 export const projectUrl = '{{projectUrl}}'
 export const appVersion = 'v{{appVersion}}'
 export const appName = '{{appName}}'
+export const updateChannel = '{{updateChannel}}' // 'play'=Google Play，'store'=浏览器打开 updateUrl
 export const logoAsset = '{{logoAsset}}'
 export const navProjectTitles = {
   'zh-CN': '{{appDisplayNameZhCN}}',

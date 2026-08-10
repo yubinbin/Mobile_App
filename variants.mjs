@@ -23,6 +23,7 @@ export const variants = {
     appDisplayNameZhCN: '弘塑云', // APP名称和顶部栏显示的名称
     appDisplayNameZhTW: '弘塑雲',
     appDisplayNameEn: 'tmPlasCloud',
+    updateChannel: 'play', // 更新渠道：'play'=Google Play（In-app Updates），'store'=浏览器打开 updateUrl
   },
 
   // 弘塑云-生产环境-国内版
@@ -41,6 +42,7 @@ export const variants = {
     appDisplayNameZhCN: '弘塑云', // APP名称和顶部栏显示的名称
     appDisplayNameZhTW: '弘塑雲',
     appDisplayNameEn: 'tmPlasCloud',
+    updateChannel: 'store', // 更新渠道：'play'=Google Play（In-app Updates），'store'=浏览器打开 updateUrl
   },
 
   // 弘塑云-测试环境
@@ -59,6 +61,7 @@ export const variants = {
     appDisplayNameZhCN: '弘塑云',
     appDisplayNameZhTW: '弘塑雲',
     appDisplayNameEn: 'tmPlasCloud',
+    updateChannel: 'store', // 更新渠道：'play'=Google Play（In-app Updates），'store'=浏览器打开 updateUrl
   },
 
   // 弘设汇-生产环境
@@ -77,6 +80,7 @@ export const variants = {
     appDisplayNameZhCN: '弘设汇',
     appDisplayNameZhTW: '弘設匯',
     appDisplayNameEn: 'TIC',
+    updateChannel: 'store', // 更新渠道：'play'=Google Play（In-app Updates），'store'=浏览器打开 updateUrl
   },
 
   // 弘设汇-测试环境
@@ -95,5 +99,6 @@ export const variants = {
     appDisplayNameZhCN: '弘设汇',
     appDisplayNameZhTW: '弘設匯',
     appDisplayNameEn: 'TIC',
+    updateChannel: 'store', // 更新渠道：'play'=Google Play（In-app Updates），'store'=浏览器打开 updateUrl
   },
 }
