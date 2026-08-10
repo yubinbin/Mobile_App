@@ -50,7 +50,7 @@
 
 ### 前端
 - `src/utils/appUpdater.js`：删除 `downloadAndInstall`、`cancelCurrentDownload`、`downloading` 标志、`progress`/`downloadComplete` 事件监听、`currentDownloadId/currentDownloadCleanup`
-- `src/utils/updateState.js`：删除 `downloadState`、`downloadProgress`、`downloadedSize`、`totalSize`
+- `src/utils/updateState.js`：删除 `downloadState`、`downloadProgress`、`downloadedSize`、`totalSize`；新增 `updateInProgress: false`（Play flexible 更新进行中，用于拦截重复手动检查）
 - `src/App.vue`：删除 `download-bar` 进度条 UI（模板 + 样式）与 `cancelDownload()`/`retryDownload()` 函数及对应 import
 - `src/components/UpdateDialog.vue`：确认动作改为渠道分发（见 §前端流程）
 
@@ -87,7 +87,7 @@
      - force 按 `updatePriority` 推断：`>= 3` → `true`（IMMEDIATE），否则 `false`（FLEXIBLE）
   3. 弹 `UpdateDialog`（通用标题文案）
   4. 确认 → `startUpdate({ type: force ? 'immediate' : 'flexible', force })`；失败 → 回退浏览器打开 `https://play.google.com/store/apps/details?id=<packageName>`
-- **flexible 安装态**：监听 `stateChange`，`DOWNLOADED` → `completeUpdate()`；期间置 `updateState` 状态避免重复手动检查
+- **flexible 安装态**：监听 `stateChange`，`DOWNLOADED` → `completeUpdate()`；期间置 `updateState.updateInProgress = true`，`checkManually`/`checkOnLaunch` 据此拦截并提示，`INSTALLED`/失败后复位
 
 ### 非 Play 变体（`updateChannel === 'store'`）
 - 保持现有后端版本比较逻辑（`fetchVersionInfo` + `compareVersion`）
@@ -138,6 +138,6 @@
 | `android/app/src/main/java/cn/com/tmiot/MainActivity.java` | 换注册插件 |
 | `android/app/src/main/res/xml/file_paths.xml` | 删除 |
 | `src/utils/appUpdater.js` | 删下载链路 + 渠道化 check/confirm |
-| `src/utils/updateState.js` | 删下载状态字段 |
+| `src/utils/updateState.js` | 删下载状态字段，新增 `updateInProgress` |
 | `src/App.vue` | 删 download-bar |
 | `src/components/UpdateDialog.vue` | onConfirm 分发 + 版本徽标隐藏 |
