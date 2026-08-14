@@ -35,13 +35,13 @@ export const variants = {
     baseUrl: 'https://tpc.tmplascloud.com', // 应用基础 URL
     loginSocket: 'wss://tpc.tmplascloud.com', // WebSocket 地址
     projectUrl: 'https://tpc.tmplascloud.com/wx', // 项目 URL
-    projectOID: '', // 项目 ID（必填，用于登录时判断用户是否有项目权限）
+    projectOID: '10491', // 项目 ID（必填，用于登录时判断用户是否有项目权限）
     ttcVersion: '', // ttc版本号
     iconDir: 'tpc_cn', // 定构建时复制哪套 Android 原生图标到 main/res/
     logoAsset: 'logo_hongsuyun.png', // 登录页显示的Logo图片
     appDisplayNameZhCN: '弘塑云', // APP名称和顶部栏显示的名称
     appDisplayNameZhTW: '弘塑雲',
-    appDisplayNameEn: 'tmPlasCloud',
+    appDisplayNameEn: '弘塑云',
     updateChannel: 'store', // 更新渠道：'play'=Google Play（In-app Updates），'store'=浏览器打开 updateUrl
   },
 
