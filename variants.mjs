@@ -4,7 +4,7 @@
 // 版本号唯一入口：发版只需改这里，5 个变体同步生效
 // APP_VERSION 不含 v 前缀（web 端 appVersion 由模板自动加 v），VERSION_CODE 为 Android 版本号（每次发版递增）
 export const APP_VERSION = '4.3.0'
-export const VERSION_CODE = 1
+export const VERSION_CODE = 3
 
 export const variants = {
   // 弘塑云-生产环境-国际版
@@ -20,8 +20,8 @@ export const variants = {
     ttcVersion: '', // ttc版本号
     iconDir: 'tpc', // 定构建时复制哪套 Android 原生图标到 main/res/
     logoAsset: 'logo_hongsuyun_net.png', // 登录页显示的Logo图片
-    appDisplayNameZhCN: '弘塑云', // APP名称和顶部栏显示的名称
-    appDisplayNameZhTW: '弘塑雲',
+    appDisplayNameZhCN: 'tmPlasCloud', // APP名称和顶部栏显示的名称
+    appDisplayNameZhTW: 'tmPlasCloud',
     appDisplayNameEn: 'tmPlasCloud',
     updateChannel: 'play', // 更新渠道：'play'=Google Play（In-app Updates），'store'=浏览器打开 updateUrl
   },
