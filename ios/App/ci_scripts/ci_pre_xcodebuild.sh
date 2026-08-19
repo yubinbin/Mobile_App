@@ -10,7 +10,7 @@ npm install -g pnpm
 
 # 安装依赖、构建前端
 pnpm install
-pnpm build:hongsuyun-prod
+pnpm build:hongsuyun-cn
 
 # Capacitor同步资源到ios
 npx cap sync ios
