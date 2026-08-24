@@ -110,7 +110,7 @@ src/
 - 支持可选更新（Vant ConfirmDialog）和强制更新（不可关闭的 Dialog）
 - 更新按渠道分流（`variants.mjs` 的 `updateChannel`）：
   - **`play`**（仅 `hongsuyun-prod`，**仅 Android 原生生效**）：走 **Google Play In-app Updates**，升级由 Play 商店原生流程完成（IMMEDIATE / FLEXIBLE）。iOS 上该变体 `isPlayChannel()` 为 false，回落到 `store` 逻辑（后端检查 + `window.open(updateUrl)` 打开 App Store 链接），避免跳过 App Store 更新检测
-  - **`store`**（国内版 / 测试版）：点「立即更新」用**系统浏览器**打开后端 `updateUrl`，不再应用内下载安装 APK
+  - **`store`**（国内版 / 测试版）：点「立即更新」用**系统浏览器**打开后端 `updateUrl`，不再应用内下载安装 APK。**iOS 同样走此逻辑**：在数据库把该 App 的 `updateUrl` 配成 App Store 链接（如 `https://apps.apple.com/app/id6796174875`）即可跳转 App Store，改库即时生效、无需发版
 - 前端逻辑集中在 `src/utils/appUpdater.js`：`confirmUpdate()` 按 `updateChannel` 分发（`UpdateDialog` 确认时调用），`checkOnLaunch` / `checkManually` 对应启动静默检查与手动检查
 - Play 原生桥接：`android/app/src/main/java/cn/com/tmiot/PlayUpdatePlugin.java`（依赖 `com.google.android.play:app-update`）
 
@@ -179,7 +179,7 @@ src/
 
 每个变体包含 14 个字段：`appName`、`appVersion`、`versionCode`、`appId`、`baseUrl`、`loginSocket`、`projectOID`、`ttcVersion`、`projectUrl`、`iconDir`、`logoAsset`、`appDisplayNameZhCN`、`appDisplayNameZhTW`、`appDisplayNameEn`。
 
-> **版本号唯一入口**：`APP_VERSION` / `VERSION_CODE` 定义在 `variants.mjs` 顶部，各变体通过 `appVersion: APP_VERSION` / `versionCode: VERSION_CODE` 引用。`{{appVersion}}` 注入 Android `versionName` 与 web 端 `appVersion`（模板 `'v{{appVersion}}'` 自动加 `v` 前缀）；`{{versionCode}}` 注入 Android `versionCode`。发版只需改顶部两个常量，5 个变体同步生效。
+> **版本号按变体独立**：`appVersion` / `versionCode` 是每个变体各自的字段，定义在各变体配置块内，各变体取值可以不同，发版时分别修改对应变体。`{{appVersion}}` 注入 Android `versionName` 与 web 端 `appVersion`（模板 `'v{{appVersion}}'` 自动加 `v` 前缀）；`{{versionCode}}` 注入 Android `versionCode`。
 
 > **`appId` 同时驱动 Android 包名**（经 `build.gradle.template` 的 `{{appId}}` 注入 `applicationId`）和 `capacitor.config.ts` 的 Bundle ID。旧的 `iosAppName` 字段已确认**无任何代码消费**（iOS 显示名硬编码在 `ios/App/App/Info.plist`），属死配置，不要再依赖它。
 
