@@ -20,6 +20,7 @@ export const variants = {
     appDisplayNameZhTW: 'tmPlasCloud',
     appDisplayNameEn: 'tmPlasCloud',
     updateChannel: 'play', // 更新渠道：'play'=Google Play（In-app Updates），'store'=浏览器打开 updateUrl
+    jpushAppKey : '9ed85134f6598d3746e83e5b', // 极光推送 AppKey
   },
 
   // 弘塑云-生产环境-国内版
@@ -39,6 +40,7 @@ export const variants = {
     appDisplayNameZhTW: '弘塑雲',
     appDisplayNameEn: '弘塑云',
     updateChannel: 'store', // 更新渠道：'play'=Google Play（In-app Updates），'store'=浏览器打开 updateUrl
+    jpushAppKey : '9ed85134f6598d3746e83e5b', // 极光推送 AppKey
   },
 
   // 弘塑云-测试环境
@@ -58,6 +60,7 @@ export const variants = {
     appDisplayNameZhTW: '弘塑雲',
     appDisplayNameEn: 'tmPlasCloud',
     updateChannel: 'store', // 更新渠道：'play'=Google Play（In-app Updates），'store'=浏览器打开 updateUrl
+    jpushAppKey : '9ed85134f6598d3746e83e5b', // 极光推送 AppKey
   },
 
   // 弘设汇-生产环境
@@ -68,7 +71,7 @@ export const variants = {
     appId: 'cn.com.tmiot.tic',
     baseUrl: 'https://tmplascloud.com',
     loginSocket: 'wss://tmplascloud.com',
-    projectOID: '10238',
+    projectOID: '11390',//'10238',
     ttcVersion: '2.6.0',
     projectUrl: '', // 项目 URL（为空时回退用 projectOID + ttcVersion 拼接）
     iconDir: 'tic',
@@ -77,6 +80,7 @@ export const variants = {
     appDisplayNameZhTW: '弘設匯',
     appDisplayNameEn: 'TIC',
     updateChannel: 'store', // 更新渠道：'play'=Google Play（In-app Updates），'store'=浏览器打开 updateUrl
+    jpushAppKey : '9ed85134f6598d3746e83e5b', // 极光推送 AppKey
   },
 
   // 弘设汇-测试环境
@@ -96,5 +100,6 @@ export const variants = {
     appDisplayNameZhTW: '弘設匯',
     appDisplayNameEn: 'TIC',
     updateChannel: 'store', // 更新渠道：'play'=Google Play（In-app Updates），'store'=浏览器打开 updateUrl
+    jpushAppKey : '9ed85134f6598d3746e83e5b', // 极光推送 AppKey
   },
 }

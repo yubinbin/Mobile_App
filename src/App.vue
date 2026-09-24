@@ -18,6 +18,7 @@ import { navState } from './utils/navState.js'
 import { checkOnLaunch } from './utils/appUpdater.js'
 import UpdateDialog from './components/UpdateDialog.vue'
 import { isLoggedIn, verifyToken } from './utils/auth.js'
+import { initializeJPush } from './utils/jpush.js'
 
 function initStatusBar() {
   if (Capacitor.isNativePlatform()) {
@@ -104,6 +105,7 @@ onMounted(async () => {
     })
   }
   checkOnLaunch()
+  initializeJPush()
 })
 
 onUnmounted(() => {

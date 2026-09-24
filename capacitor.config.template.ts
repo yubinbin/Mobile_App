@@ -11,7 +11,14 @@ const config: CapacitorConfig = {
   server: {
     androidScheme: 'http',
     cleartext: true
-  }
+  },
+  plugins: {
+    JPush: {
+      // your application appKey on JPush
+      appKey: '{{jpushAppKey}}',
+      channel: '',
+    },
+  },
 }
 
 export default config
