@@ -1,6 +1,8 @@
 // variants.mjs — 所有变体配置的唯一入口
 // 新增变体：在此文件追加一个配置块 + package.json 加一条 build 命令
 // 版本号说明：appVersion / versionCode 为每个变体独立字段，各变体可不同，发版时分别修改
+// iOS 版本号：可选字段 iosMarketingVersion / iosBuildNumber，不填则回退 appVersion / versionCode，
+//            用于让 iOS 与 Android 各自独立发版（iOS 版本号只增不减，回退会导致 App Store 无法上传）
 
 export const variants = {
   // 弘塑云-生产环境-国际版
@@ -28,6 +30,8 @@ export const variants = {
     appName: 'hongsuyun-cn', // 服务端根据 app 参数区分是哪个 App，返回对应的最新版本信息
     appVersion: '4.1.4', // App 版本号（versionName，web 端 appVersion 自动加 v 前缀）——每变体独立维护
     versionCode: 1, // Android 版本号（每次发版递增）——每变体独立维护
+    iosMarketingVersion: '4.1.14', // iOS 版本号（CFBundleShortVersionString）——iOS 已发版为 4.1.14，须高于已上架版本
+    iosBuildNumber: 1, // iOS 构建号（CFBundleVersion）——每次提审递增，可省略（回退 versionCode）
     appId: 'com.tmiot.tpc', // 应用唯一标识符（即包名/Bundle ID）
     baseUrl: 'https://tpc.tmplascloud.com', // 应用基础 URL
     loginSocket: 'wss://tpc.tmplascloud.com', // WebSocket 地址

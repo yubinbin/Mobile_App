@@ -40,6 +40,12 @@
 │       ├── tpc/              # 弘塑云-国际版图标资源
 │       ├── tpc_cn/           # 弘塑云-国内版图标资源
 │       └── tic/              # 弘设汇图标资源
+├── ios/App/
+│   ├── App/templates/        # iOS 生成文件模板
+│   │   ├── AppDelegate.swift.template        # 含 jpushn 三段推送通知转发
+│   │   ├── Info.plist.template               # CFBundleDisplayName ← appDisplayNameZhCN
+│   │   └── InfoPlist.strings.template.en     # 英文系统显示名 ← appDisplayNameEn
+│   └── App.xcodeproj/project.pbxproj         # 入库，仅被脚本精准替换包名/版本号
 src/
 ├── main.js                  # 入口：注册 Vant 组件、路由、全局 $t
 ├── App.vue                  # 根组件：keep-alive、手势返回、启动更新检查
@@ -65,7 +71,9 @@ src/
 └── assets/                  # 图片、Logo、CSS
 ```
 
-> **注意**: `urlValues.js`、`capacitor.config.ts`、`android/app/build.gradle`、`android/app/src/main/res/values/strings.xml`、`values-en/strings.xml`、`values-zh-rTW/strings.xml` 均由 `build-variant.mjs` 生成，已加入 `.gitignore`，**不要手动编辑**。
+> **注意**: `urlValues.js`、`capacitor.config.ts`、`android/app/build.gradle`、`android/app/src/main/res/values/strings.xml`、`values-en/strings.xml`、`values-zh-rTW/strings.xml`、`ios/App/App/AppDelegate.swift`、`ios/App/App/Info.plist`、`ios/App/App/en.lproj/InfoPlist.strings` 均由 `build-variant.mjs` 生成，已加入 `.gitignore`，**不要手动编辑**。
+>
+> **克隆仓库后**须先跑一次 `pnpm dev:<variant>` 或 `pnpm build:<variant>` 生成上述文件，否则 Xcode 会因缺 `Info.plist` 打不开工程。`ios/App/App.xcodeproj/project.pbxproj` **不在忽略之列**（仅被脚本精准替换值，仍需入库）。
 
 ## 路由表
 
@@ -177,11 +185,13 @@ src/
 
 ### 变体配置字段（variants.mjs）
 
-每个变体包含 14 个字段：`appName`、`appVersion`、`versionCode`、`appId`、`baseUrl`、`loginSocket`、`projectOID`、`ttcVersion`、`projectUrl`、`iconDir`、`logoAsset`、`appDisplayNameZhCN`、`appDisplayNameZhTW`、`appDisplayNameEn`。
+每个变体包含 14 个必填字段：`appName`、`appVersion`、`versionCode`、`appId`、`baseUrl`、`loginSocket`、`projectOID`、`ttcVersion`、`projectUrl`、`iconDir`、`logoAsset`、`appDisplayNameZhCN`、`appDisplayNameZhTW`、`appDisplayNameEn`；以及 2 个可选字段 `iosMarketingVersion`、`iosBuildNumber`（不填回退 `appVersion` / `versionCode`）。
 
 > **版本号按变体独立**：`appVersion` / `versionCode` 是每个变体各自的字段，定义在各变体配置块内，各变体取值可以不同，发版时分别修改对应变体。`{{appVersion}}` 注入 Android `versionName` 与 web 端 `appVersion`（模板 `'v{{appVersion}}'` 自动加 `v` 前缀）；`{{versionCode}}` 注入 Android `versionCode`。
 
-> **`appId` 同时驱动 Android 包名**（经 `build.gradle.template` 的 `{{appId}}` 注入 `applicationId`）和 `capacitor.config.ts` 的 Bundle ID。旧的 `iosAppName` 字段已确认**无任何代码消费**（iOS 显示名硬编码在 `ios/App/App/Info.plist`），属死配置，不要再依赖它。
+> **iOS 版本号独立于 Android**：`iosMarketingVersion` → pbxproj 的 `MARKETING_VERSION`（即 `CFBundleShortVersionString`），`iosBuildNumber` → `CURRENT_PROJECT_VERSION`（即 `CFBundleVersion`）。**不填则回退 Android 的 `appVersion` / `versionCode`**，会让 iOS 跟随 Android 发版节奏——若 iOS 已上架版本高于 `appVersion`，回退会导致版本号倒退、**App Store 拒绝上传**。当前 `hongsuyun-cn` 的 iOS 已发版为 `4.1.14`，故该变体显式配置了 `iosMarketingVersion: '4.1.14'`。
+
+> **`appId` 同时驱动三处**：Android 包名（`build.gradle.template` 的 `{{appId}}` → `applicationId`）、iOS Bundle ID（脚本精准替换 pbxproj 的 `PRODUCT_BUNDLE_IDENTIFIER`）、`capacitor.config.ts` 的 Bundle ID。旧的 `iosAppName` 字段已确认**无任何代码消费**，属死配置，不要再依赖它。
 
 > **iframe 项目链接优先级**：非空 `projectUrl` 直接作为 iframe 链接；为空时回退为 `${baseUrl}/app/ttcEngineDefalut?ttcVersion=...&projectOID=...` 拼接。两种情况统一追加 `userOID`、`access_token`、`lang`。逻辑集中在 `src/utils/projectUrl.js` 的 `buildProjectUrl()`，Login 和 ProjectView 共用，勿在页面内重复拼接。
 
@@ -199,7 +209,12 @@ src/
 3. 生成 `capacitor.config.ts`
 4. 生成 `android/app/build.gradle`（`applicationId` = `{{appId}}`）
 5. 生成 Android `strings.xml`（三语言）+ 从变体对应的 `iconDir` 复制图标到 `main/res/`
-6. `--dev` 模式到此停止；非 dev 模式继续执行 `vite build` + `cap sync`
+6. 生成 iOS `AppDelegate.swift`、`Info.plist`、`en.lproj/InfoPlist.strings`
+7. 精准替换 `ios/App/App.xcodeproj/project.pbxproj` 的三个值（共 6 处：Debug / Release 各一处）：
+   `PRODUCT_BUNDLE_IDENTIFIER` ← `appId`、`MARKETING_VERSION` ← `iosMarketingVersion ?? appVersion`、`CURRENT_PROJECT_VERSION` ← `iosBuildNumber ?? versionCode`
+8. `--dev` 模式到此停止；非 dev 模式继续执行 `vite build` + `cap sync`
+
+> **pbxproj 为什么不做整文件模板**：Xcode 会频繁重写 `project.pbxproj`（改签名、加文件、动 Build Settings 都会），整文件模板化一旦过期，下次构建就会**覆盖丢掉整个工程的设置**。因此只做「值替换」——幂等、可反复执行，Xcode 改工程结构也不受影响。
 
 ## 开发命令
 
@@ -246,11 +261,16 @@ Web 端 API 请求统一走 `src/utils/webFetch.js`：dev 模式直走代理（�
 - **变体构建**: 所有变体共用同一套代码，通过 `variants.mjs` + `build-variant.mjs` 切换。修改配置只需改 `variants.mjs` 和对应的 `.template.*` 文件
 - **模板文件**: `*.template.*` 文件是源文件（提交到 Git），生成的同名文件（去掉 `.template`）已加入 `.gitignore`
 - **Android 模板位置**: `android/app/templates/`（在 `res/` 外面，避免 Android 构建误编译导致 Duplicate resources）
+- **iOS 模板位置**: `ios/App/App/templates/`（`.template` 后缀不会被 Xcode 编译；pbxproj 是显式文件引用，不会扫目录，安全）
+- **iOS 推送（jpushn）**: `AppDelegate.swift` 由模板整文件生成，内含插件要求的三段通知转发（注册成功 / 注册失败 / `applicationDidBecomeActive` 内 post `didBecomeActiveNotification`）。**代码到位 ≠ 能收推送**，硬前置条件：① Xcode 里给 target 开 **Push Notifications** capability 并生成 `App.entitlements`（脚本不代管，属签名配置）；② Apple 开发者后台为**每个 Bundle ID** 单独开通 Push Notifications 能力。缺任一条，`didRegisterForRemoteNotificationsWithDeviceToken` 不会被系统回调，deviceToken 永远拿不到。改动 AppDelegate 请改模板，**不要直接编辑生成物**
+- **iOS 图标**: 目前**未**模板化，各变体图标需在 Xcode 的 Asset Catalog 手动替换（`Assets.xcassets/AppIcon.appiconset`）。Android 侧才是 `iconDir` 自动复制
 - **Android 包名**: 来自 `variants.mjs` 的 `appId`（经 `build.gradle.template` 注入 `applicationId`），不是写死在 build.gradle；改包名只改 `variants.mjs`
 - **版本更新渠道化**: 更新按 `variants.mjs` 的 `updateChannel` 分流——`play`（仅 hongsuyun-prod）走 Google Play In-app Updates（`PlayUpdatePlugin`），`store` 变体点「立即更新」用系统浏览器打开后端 `updateUrl`。改更新逻辑涉及 `appUpdater.js`（`confirmUpdate` 分发）与 `PlayUpdatePlugin.java` **两端需同步改**，详见「核心架构模式 §4」（含 play-core 2.x `installStatus` 派生 / Capacitor `requestCodes` 两个适配点）
 - **keep-alive**: ProjectView 被缓存，切换页面后保持 iframe 状态不丢失
 - **导航栏标题**: `ProjectView.vue` 通过 `navProjectTitles` + 当前 locale 动态渲染，支持三语言
-- **App 桌面名称**: Android 通过 `values/strings.xml` + `values-zh-rTW/strings.xml` + `values-en/strings.xml` 实现随系统语言切换
+- **App 桌面名称**: Android 通过 `values/strings.xml` + `values-zh-rTW/strings.xml` + `values-en/strings.xml` 实现随系统语言切换。iOS 通过 `Info.plist` 的 `CFBundleDisplayName`（← `appDisplayNameZhCN`，中文/繁体系统回退值）+ `en.lproj/InfoPlist.strings`（← `appDisplayNameEn`，仅英文系统覆盖）实现。**iOS 目前只有 en 一份本地化**，`zh-Hans` / `zh-Hant` 无法区分（繁体系统会显示简体名），如需精确区分须在 Xcode 里新增语言目录并改 pbxproj 的 `knownRegions`
+- **`hongsuyun-cn` 的 `appDisplayNameEn` 是中文**（`'弘塑云'`），故其英文系统显示名也会是中文——这是既有配置，需要改就改 `variants.mjs`
+- **`ios/App/ci_scripts/ci_pre_xcodebuild.sh` 第 13 行硬编码 `pnpm build:hongsuyun-cn`**：Xcode Cloud 上无论构建哪个 App 都会跑国内版变体，多 App 上架前需按变体参数化
 - **token 存储**: 仅在内存中，刷新/重启需重新登录（除非自动登录启用）
 - **原生 vs Web**: `authRequest` 在原生平台走 `CapacitorHttp`，Web 端走 `fetch`
 - **WebSocket**: 登录时建立，用于多设备互踢；登出/强制登出时关闭

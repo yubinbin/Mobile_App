@@ -125,7 +125,55 @@ if (existsSync(srcIconDir)) {
   console.warn(`  ⚠ Icon directory not found: ${srcIconDir}`)
 }
 
-// ---- 步骤 6: 构建 (--dev 模式跳过) ----
+// ---- 步骤 6: 生成 iOS 文件（模板 → 工程内实际文件） ----
+// AppDelegate.swift 由模板整文件生成，内含 capacitor-plugin-jpushn 所需的三个通知转发
+render(
+  resolve(root, 'ios/App/App/templates/AppDelegate.swift.template'),
+  resolve(root, 'ios/App/App/AppDelegate.swift')
+)
+render(
+  resolve(root, 'ios/App/App/templates/Info.plist.template'),
+  resolve(root, 'ios/App/App/Info.plist')
+)
+render(
+  resolve(root, 'ios/App/App/templates/InfoPlist.strings.template.en'),
+  resolve(root, 'ios/App/App/en.lproj/InfoPlist.strings')
+)
+
+// ---- 步骤 7: 写入 iOS Bundle ID 与版本号（pbxproj 精准替换） ----
+// pbxproj 会被 Xcode 频繁重写，整文件模板化一旦过期就会覆盖丢工程设置，
+// 因此这里只替换三处赋值行的值：幂等、可反复执行、Xcode 改工程结构也不受影响。
+// iOS 版本号可独立于 Android：变体提供 iosMarketingVersion / iosBuildNumber 时优先，
+// 否则回退 appVersion / versionCode（回退会让 iOS 版本号跟随 Android 发版节奏）。
+const iosMarketingVersion = cfg.iosMarketingVersion ?? cfg.appVersion
+const iosBuildNumber = cfg.iosBuildNumber ?? cfg.versionCode
+
+const pbxprojPath = resolve(root, 'ios/App/App.xcodeproj/project.pbxproj')
+if (existsSync(pbxprojPath)) {
+  let pbx = readFileSync(pbxprojPath, 'utf-8')
+  let touched = 0
+  const pbxPatches = [
+    ['PRODUCT_BUNDLE_IDENTIFIER', cfg.appId],
+    ['MARKETING_VERSION', iosMarketingVersion],
+    ['CURRENT_PROJECT_VERSION', iosBuildNumber],
+  ]
+  for (const [key, value] of pbxPatches) {
+    const re = new RegExp(`${key} = [^;\\n]+;`, 'g')
+    const hits = pbx.match(re)
+    if (!hits) {
+      console.warn(`  ⚠ pbxproj: 未找到 ${key}，跳过（请检查工程文件是否被改坏）`)
+      continue
+    }
+    pbx = pbx.replace(re, `${key} = ${value};`)
+    touched += hits.length
+  }
+  writeFileSync(pbxprojPath, pbx, 'utf-8')
+  console.log(`  ✓ Patched: ios/App/App.xcodeproj/project.pbxproj (${touched} 处)`)
+} else {
+  console.warn(`  ⚠ project.pbxproj not found: ${pbxprojPath}`)
+}
+
+// ---- 步骤 8: 构建 (--dev 模式跳过) ----
 if (isDev) {
   console.log('\n✅ Dev setup complete. Run `npx vite` to start dev server.')
 } else {

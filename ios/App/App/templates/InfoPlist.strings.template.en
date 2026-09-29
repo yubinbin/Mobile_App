@@ -1,0 +1,4 @@
+/* App 桌面显示名（英文系统）
+   由 ios/App/App/templates/InfoPlist.strings.template.en 生成，请勿直接编辑。
+   源字段：variants.mjs 的 appDisplayNameEn */
+CFBundleDisplayName = "{{appDisplayNameEn}}";

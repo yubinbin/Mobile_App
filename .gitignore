@@ -52,6 +52,13 @@ android/app/src/main/res/values/ic_launcher_background.xml
 android/app/src/main/res/mipmap-*/
 android/app/src/main/ic_launcher-playstore.png
 
+# iOS（同样由 build-variant.mjs 从 ios/App/App/templates/ 生成，不提交）
+# 注意：克隆仓库后须先跑一次 `pnpm build:<variant>` 或 `pnpm dev:<variant>` 生成这些文件，
+#       否则 Xcode 打开工程会因缺 Info.plist 报错。pbxproj 不在忽略之列（仅被精准替换值，仍入库）。
+ios/App/App/AppDelegate.swift
+ios/App/App/Info.plist
+ios/App/App/en.lproj/InfoPlist.strings
+
 # Android release 构建产物（baseline profiles / output-metadata / apk）
 # 用 **/ 同时覆盖顶层 android/app/release/ 与变体子目录 android/app/*/release/
 android/app/**/release/

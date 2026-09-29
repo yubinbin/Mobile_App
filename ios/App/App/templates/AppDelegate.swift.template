@@ -1,3 +1,21 @@
+//
+//  AppDelegate.swift
+//
+//  ⚠️ 此文件由 ios/App/App/templates/AppDelegate.swift.template 生成，请勿直接编辑。
+//     改这里没用 —— 修改模板文件，然后重新执行 `pnpm build:<variant>`（或 `pnpm dev:<variant>`）。
+//     生成物已加入 .gitignore。
+//
+//  推送说明（capacitor-plugin-jpushn iOS 接入要求）：
+//   1. 必须在 Xcode 中开启 Push Notifications capability 并生成 App.entitlements；
+//      未开启时系统不会回调 didRegisterForRemoteNotificationsWithDeviceToken，
+//      deviceToken 永远拿不到，下面两个回调形同虚设。
+//   2. 下面三段通知转发缺一不可 —— 极光插件通过它们接收回调：
+//      · capacitorDidRegisterForRemoteNotifications     → 拿到 deviceToken
+//      · capacitorDidFailToRegisterForRemoteNotifications → 注册失败原因
+//      · didBecomeActiveNotification                    → 回到前台时上报/设置 badge
+//   3. Apple 开发者后台需为每个 Bundle ID 单独开通 Push Notifications 能力。
+//
+
 import UIKit
 import Capacitor
 
@@ -27,6 +45,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+
+        // 转发 active 通知给 capacitor-plugin-jpushn（极光 SDK 依赖它做前台上报 / badge 处理）
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "didBecomeActiveNotification"), object: nil)
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -44,6 +65,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Feel free to add additional processing here, but if you want the App API to support
         // tracking app url opens, make sure to keep this call
         return ApplicationDelegateProxy.shared.application(application, continue: userActivity, restorationHandler: restorationHandler)
+    }
+
+    // MARK: - Remote Notifications (capacitor-plugin-jpushn)
+
+    /// 注册远程通知成功 —— 必须转发给 Capacitor，极光插件靠它拿 deviceToken
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        NotificationCenter.default.post(name: .capacitorDidRegisterForRemoteNotifications, object: deviceToken)
+    }
+
+    /// 注册远程通知失败 —— 转发给 Capacitor，供 JS 侧定位（模拟器 / 无网络 / 未开 capability）
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        NotificationCenter.default.post(name: .capacitorDidFailToRegisterForRemoteNotifications, object: error)
     }
 
 }

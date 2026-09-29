@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+    此文件由 ios/App/App/templates/Info.plist.template 生成，请勿直接编辑。
+    修改模板后重新执行 `pnpm build:<variant>`（或 `pnpm dev:<variant>`）。生成物已加入 .gitignore。
+    占位符来源：variants.mjs 的 appDisplayNameZhCN（中文/繁体系统回退显示名；
+    英文系统由 en.lproj/InfoPlist.strings 覆盖为 appDisplayNameEn）。
+-->
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>弘塑云</string>
+	<string>{{appDisplayNameZhCN}}</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
